@@ -79,21 +79,20 @@ public class EchoServer extends AbstractServer
 				String userName = ne.getParams().get("username");
 				String password = ne.getParams().get("password");
 				System.out.println("Starting login process");
-				ResultSet res = stmt.executeQuery("SELECT count(*) FROM users WHERE username = '"+userName+"';"); //Check If username exists
+				ResultSet res = stmt.executeQuery("SELECT * FROM users WHERE username = '"+userName+"' LIMIT 1;"); //Check If username exists
 				int rcount = getRowCount(res);
+				System.out.println("rcount is "+rcount);
 				if (rcount == 0) 
 				{ //If not exists  
-					System.out.printf("User %s Tried To Log In\n",res.getString(1));
+					System.out.println("User "+userName+" tried to login");
 					client.sendToClient("NoSuchUser");
 				}
 				else
 				{			  
-					ResultSet result = stmt.executeQuery("SELECT COUNT(*) FROM users WHERE username= '"+userName+"' AND password='"+password+"';");
-					result.next();
-					if (result.getInt(1) == 0) //If not exists 
-					{   
+					res = stmt.executeQuery("SELECT * FROM users WHERE username='"+userName+"' AND password='"+password+"' LIMIT 1;");
+					rcount = getRowCount(res);
+					if (rcount == 0) 
 						client.sendToClient("UserOrPassIncorrect");
-					}
 					else 
 					{ //If  exists					
 						client.sendToClient("LoginOK");
@@ -122,7 +121,7 @@ public class EchoServer extends AbstractServer
 
 	}
 	
-	 private int getRowCount(ResultSet resultSet) 
+	 private int getRowCount(ResultSet resultSet) //helper method to see if a select query has any matching rows
 	 {
 	        if (resultSet == null) {
 	            return 0;

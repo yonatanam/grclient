@@ -102,7 +102,6 @@ public class LoginController extends  AbstractController
 			{ 
 				try
 				{		 
-					loginGUI.dispose(); //remove login window
 					Map<String, String> params = new LinkedHashMap<String,String>();
 					params.put("username",  user);
 					params.put("password", password);
@@ -124,7 +123,7 @@ public class LoginController extends  AbstractController
 		String str = message.toString();
 		if(str.equals("UserOrPassIncorrect"))					//if user or password incorrect show warning message 
 		{														//and increase counter by 1
-			JOptionPane.showMessageDialog(null,"User Or Password Incorrect!\n" + loginCounter + "(out of 3) try","Error", JOptionPane.ERROR_MESSAGE);   
+			JOptionPane.showMessageDialog(null,"User Or Password Incorrect!\n" + loginCounter + "(out of 3) attempts","Error", JOptionPane.ERROR_MESSAGE);   
 			loginCounter++;
 			if (loginCounter==4)								//if user entered wrong details 3 times
 			{													//Show warning message, close program and send notification to the administrator

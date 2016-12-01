@@ -30,7 +30,7 @@ public class ClientController extends  AbstractController {
 		this.clientModel = cModel;
 		cGUI.addOKActionListener(new OKListener());
 		cGUI.addCancelActionListener(new CancelListener() );
-		
+
 	}
 
 	class OKListener implements ActionListener
@@ -45,21 +45,35 @@ public class ClientController extends  AbstractController {
 				int port = clientGUI.getPort();
 				clientModel.setHost(host);
 				clientModel.setPort(port);	
+				System.out.println("Attempting to connect to host "+host+" at port "+port);
+
 				App.client = new Client(host,port); 
 				clientGUI.dispose(); //remove the current window to display login window
-				//create a new login controller and gui
-				LoginGUI loginGUI = new LoginGUI();
-				LoginModel loginModel = new LoginModel();
-				LoginController loginController = new LoginController(loginGUI,loginModel);
+				
+				//Check connection to server
+				if (App.client.isConnected())
+				{
+					//create a new login controller and gui
+					LoginGUI loginGUI = new LoginGUI();
+					LoginModel loginModel = new LoginModel();
+					LoginController loginController = new LoginController(loginGUI,loginModel);
 
-			} catch (NumberFormatException e) 
+				}
+				else
+				{
+					clientGUI.displayWarnningMessage("Faild to connect. check IP and port!");
+					clientGUI.clearFields();
+				}
+			}
+
+			catch (NumberFormatException e) 
 			{
 				clientGUI.displayWarnningMessage("Faild to connect. check IP and port!");
 				clientGUI.clearFields();
 			} 
 			catch (IOException e) 
 			{
-				clientGUI.displayWarnningMessage("Connection problem. check IP and Port.");
+				clientGUI.displayWarnningMessage("Connection problem. check IP and Port. "+ e);
 
 			}
 		}
@@ -69,9 +83,9 @@ public class ClientController extends  AbstractController {
 		@Override
 		public void actionPerformed(ActionEvent ev)
 		{
-		clientGUI.dispose();
-		//TODO Add clean up functions here if needed
+			clientGUI.dispose();
+			//TODO Add clean up functions here if needed
 		}
 	}
-	
+
 }

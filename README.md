@@ -58,6 +58,9 @@ Server gets the message and handles it via handleMessageFromClient in EchoServer
 Send response to client via sendToClient -> Client catches response via handleMessageFromServer
 ============================
 
+
+
+
 =============================
 Important notes and shortcuts
 =============================

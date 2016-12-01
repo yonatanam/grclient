@@ -52,9 +52,15 @@ This way there is no mess at the GUI class and all the logic is in the controlle
 =============================
 Example of login procedure:
 
-Login GUI -> LoginController -> LoginListener button for the "Login button"
-Once the Login button is clicked: Basic validation (Non empty fields) -> Envelope creation (message to server) -> send Envelope to server using sendToServer from AbstractController(which implements ObservableClient [OCSF] method) ->
-Server gets the message and handles it via handleMessageFromClient in EchoServer ->Send response to client via sendToClient -> Client catches response via handleMessageFromServer
+1. Login GUI
+2. LoginController
+3. LoginListener button for the "Login button"
+4. Once the Login button is clicked: Basic validation (Non empty fields)
+5. Envelope creation (message to server)
+6. send Envelope to server using sendToServer from AbstractController(which implements ObservableClient [OCSF] method)
+7. Server gets the message and handles it via handleMessageFromClient in EchoServer
+8. Send response to client via sendToClient
+9. Client catches response via handleMessageFromServer
 ============================
 
 =============================

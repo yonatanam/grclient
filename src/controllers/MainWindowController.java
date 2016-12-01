@@ -37,8 +37,8 @@ public class MainWindowController extends  AbstractController {
 		this.lc = lc;
 		this.mwGui = mwGui;
 		tempL = this;
-		mwGui.addbtnManageFilesActionListener(new ManageFilesListener());
-		mwGui.addbtnManageGroupsActionListener(new ManageGroupListener());
+		mwGui.addButtonReadFromWorkerActionListener(new ReadFromWorkerListener());
+		mwGui.addButtonWriteToWorkerActionListener(new WriteToWorkerListener());
 	}
 	
 	
@@ -46,10 +46,10 @@ public class MainWindowController extends  AbstractController {
 	 * Inner class where button Manage Files pressed , implements action listener which opens the manage files window.
 	 *
 	 */
-	class ManageFilesListener implements ActionListener
+	class ReadFromWorkerListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Button1");
+			
 			mwGui.dispose();
 			//ManageFilesGUI mfg = new ManageFilesGUI();
 			//ManageFilesController mfc = new ManageFilesController(user,lc,mfg);
@@ -61,10 +61,10 @@ public class MainWindowController extends  AbstractController {
 	 * Inner class where button Manage Groups pressed , implements action listener which opens the manage groups window.
 	 *
 	 */
-	class ManageGroupListener implements ActionListener
+	class WriteToWorkerListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Button2");
+			
 			mwGui.dispose();
 			//ManageGroupsGUI mgg = new ManageGroupsGUI();
 			//ManageGroupsController mgc = new ManageGroupsController(user,lc,mgg);

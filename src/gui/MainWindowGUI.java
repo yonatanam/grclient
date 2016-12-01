@@ -52,9 +52,9 @@ public class MainWindowGUI extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JButton btnHome;
-	private JButton btnManageFiles;
-	private JButton btnManageGroups;
+	private JButton buttonHome;
+	private JButton buttonReadFromDB;
+	private JButton buttonWriteToDB;
 	private JPanel panel;
 	/**
 	 * Launch the application.
@@ -79,7 +79,6 @@ public class MainWindowGUI extends JFrame {
 
 		setResizable(false);
 		setTitle("Good Reading");
-		//setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindowGUI.class.getResource("/images/logo2.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
@@ -93,29 +92,25 @@ public class MainWindowGUI extends JFrame {
 		contentPane.add(label);
 		
 		JLabel lblLogo = new JLabel("Logo");
-		//lblLogo.setIcon(new ImageIcon(MainWindowGUI.class.getResource("/images/bar.png")));
 		lblLogo.setBounds(0, 0, 794, 79);
 		contentPane.add(lblLogo);
 		
-		btnHome = new JButton("Home");
-		//btnHome.setIcon(new ImageIcon(MainWindowGUI.class.getResource("/images/School_Building_with_Flag_32.png")));
-		btnHome.setForeground(SystemColor.control);
-		btnHome.setBackground(SystemColor.activeCaptionBorder);
-		btnHome.setFont(new Font("Tahoma", Font.BOLD, 20));
-		btnHome.setBounds(10, 81, 252, 79);
-		contentPane.add(btnHome);
+		buttonHome = new JButton("Home");
+		buttonHome.setForeground(SystemColor.control);
+		buttonHome.setBackground(SystemColor.activeCaptionBorder);
+		buttonHome.setFont(new Font("Tahoma", Font.BOLD, 15));
+		buttonHome.setBounds(10, 81, 252, 79);
+		contentPane.add(buttonHome);
 		
-		btnManageFiles = new JButton("Button 1");
-		//btnManageFiles.setIcon(new ImageIcon(MainWindowGUI.class.getResource("/images/Three_Document_Folders_32.png")));
-		btnManageFiles.setFont(new Font("Tahoma", Font.BOLD, 20));
-		btnManageFiles.setBounds(268, 81, 252, 79);
-		contentPane.add(btnManageFiles);
+		buttonReadFromDB = new JButton("Read from Worker Table");
+		buttonReadFromDB.setFont(new Font("Tahoma", Font.BOLD, 15));
+		buttonReadFromDB.setBounds(268, 81, 252, 79);
+		contentPane.add(buttonReadFromDB);
 		
-		btnManageGroups = new JButton("Button 2");
-		//btnManageGroups.setIcon(new ImageIcon(MainWindowGUI.class.getResource("/images/College_Classroom_32.png")));
-		btnManageGroups.setFont(new Font("Tahoma", Font.BOLD, 20));
-		btnManageGroups.setBounds(528, 81, 252, 79);
-		contentPane.add(btnManageGroups);
+		buttonWriteToDB = new JButton("Write to Worker Table");
+		buttonWriteToDB.setFont(new Font("Tahoma", Font.BOLD, 15));
+		buttonWriteToDB.setBounds(528, 81, 252, 79);
+		contentPane.add(buttonWriteToDB);
 		
 		JLabel lblIPersonalBox = new JLabel("Some text here");
 		lblIPersonalBox.setForeground(new Color(51, 51, 255));
@@ -135,18 +130,18 @@ public class MainWindowGUI extends JFrame {
 
 	// Action Listeners
 	
-	public void addbtnHomeActionListener(ActionListener e)
+	public void addButtonHomeActionListener(ActionListener e)
 	{
-		btnHome.addActionListener(e);
+		buttonHome.addActionListener(e);
 	}
 	
-	public void addbtnManageFilesActionListener(ActionListener e)
+	public void addButtonReadFromWorkerActionListener(ActionListener e)
 	{
-		btnManageFiles.addActionListener(e);
+		buttonReadFromDB.addActionListener(e);
 	}
 	
-	public void addbtnManageGroupsActionListener(ActionListener e)
+	public void addButtonWriteToWorkerActionListener(ActionListener e)
 	{
-		btnManageGroups.addActionListener(e);
+		buttonWriteToDB.addActionListener(e);
 	}
 }

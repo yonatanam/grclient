@@ -105,7 +105,7 @@ public class MainWindowGUI extends JFrame {
 		btnHome.setBounds(10, 81, 252, 79);
 		contentPane.add(btnHome);
 		
-		btnManageFiles = new JButton("Button 11");
+		btnManageFiles = new JButton("Button 1");
 		//btnManageFiles.setIcon(new ImageIcon(MainWindowGUI.class.getResource("/images/Three_Document_Folders_32.png")));
 		btnManageFiles.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnManageFiles.setBounds(268, 81, 252, 79);

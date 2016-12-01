@@ -45,22 +45,22 @@ public class Client extends ObservableClient
 	 */
 	public synchronized void handleMessageFromServer(Object message)  
 	{
-
-		((LoginController)currController).handleDBResult(message);
-		if(message instanceof String ){ 
-
-			if(((String)message).equals("UserOrPassIncorrect") )
-			{
-				((LoginController)currController).handleDBResult(message);
-			}
-			if(((String)message).equals("NoUser") ){
-				JOptionPane.showMessageDialog(null,"No Such User!","Error", JOptionPane.ERROR_MESSAGE);
-			}
-			if(((String)message).equals("UserOrPassIncorrectChange") ){
-
-				JOptionPane.showMessageDialog(null,"User Or Passwod Incorrect","Error", JOptionPane.ERROR_MESSAGE);
-			}
+		//Envelope envelope = (Envelope)message;
+		//switch (envelope.getParams().get("msg"))
+		String msg = (String)message;
+		switch (msg)
+		{
+		case "LoginOK":
+			((LoginController)currController).handleDBResult(message);
+			break;
+		case "UserOrPassIncorrect":
+			((LoginController)currController).handleDBResult(message);
+			break;
+		case "NoUser":
+			JOptionPane.showMessageDialog(null,"No Such User!","Error", JOptionPane.ERROR_MESSAGE);
+			break;
 		}
+		System.out.println("Handle message from server" + message);
 		notify();   
 	}
 

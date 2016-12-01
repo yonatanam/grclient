@@ -42,7 +42,6 @@ public class EchoServer extends AbstractServer
 	private Connection conn;
 	private ServerController controller;
 	public int LoginCounter=0;
-	public String UserNameGlobal;
 	ResultSet rs;
 	//Class variables *************************************************
 	/**
@@ -71,43 +70,38 @@ public class EchoServer extends AbstractServer
 	 * @param client The connection from which the message originated.
 	 */
 
-	public void handleMessageFromClient
-	(Object msg, ConnectionToClient client)
+	public void handleMessageFromClient (Object msg, ConnectionToClient client)
 	{
-		User user = null;
 		Envelope ne=(Envelope) msg;
-
 		try {
 			Statement stmt = conn.createStatement();  
-			if(ne.getTask().equals("searchLogin")) //Login
+			if (ne.getParams().get("msg").equals("LoginOK")) //Login
 			{
-				UserNameGlobal=((LoginModel)ne.getObject()).getUserName();//user name
-				System.out.println("Login");
-
-				ResultSet res = stmt.executeQuery("SELECT count(*) FROM users WHERE uname = '"+((LoginModel)ne.getObject()).getUserName()+"';"); //Check If username exists
+				String userName = ne.getParams().get("username");
+				String password = ne.getParams().get("password");
+				System.out.println("Starting login process");
+				ResultSet res = stmt.executeQuery("SELECT count(*) FROM users WHERE username = '"+userName+" AND password = "+password+"';"); //Check If username exists
 				res.next();
-				if ( res.getInt(1) == 0) { //If not exists  
+				if (res.getInt(1) == 0) 
+				{ //If not exists  
 					System.out.printf("User %s Tried To Log In\n",res.getString(1));
-					client.sendToClient("NoUser");}
-				else{			  
-					ResultSet result = stmt.executeQuery("SELECT COUNT(*) FROM users WHERE uname= '"+((LoginModel)ne.getObject()).getUserName()+"' AND password='"+((LoginModel)ne.getObject()).getPassword()+"';");
+					client.sendToClient("NoSuchUser");
+				}
+				else
+				{			  
+					ResultSet result = stmt.executeQuery("SELECT COUNT(*) FROM users WHERE username= '"+((LoginModel)ne.getObject()).getUserName()+"' AND password='"+((LoginModel)ne.getObject()).getPassword()+"';");
 					result.next();
-					if 
-					( 
-							result.getInt(1) == 0){ //If not exists   
+					if (result.getInt(1) == 0) //If not exists 
+					{   
 						client.sendToClient("UserOrPassIncorrect");
 					}
 					else 
-					{ //If  exists
-						ArrayList<Object> LoginObj = new ArrayList<Object>();
-						LoginObj.add(user);  
-						client.sendToClient(LoginObj);
+					{ //If  exists					
+						client.sendToClient("LoginOK");
 					}
 				}
 
 			}//end Login		  
-
-
 			/**An example for Server communication function
 		  if(ne.getTask().equals("OpenFileInClient")){//Send file to client 
 			  String fname = ((File)ne.getObject()).getFName();
@@ -129,10 +123,6 @@ public class EchoServer extends AbstractServer
 
 	}
 
-
-	
-
-	
 	public Connection getConn() {
 		return conn;
 	}

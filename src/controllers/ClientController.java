@@ -40,11 +40,11 @@ public class ClientController extends  AbstractController {
 		{
 			try 
 			{
-				//TODO Check connection to DB here
 				String host = new String (clientGUI.getHost());
 				int port = clientGUI.getPort();
 				clientModel.setHost(host);
 				clientModel.setPort(port);	
+				
 				System.out.println("Attempting to connect to host "+host+" at port "+port);
 
 				App.client = new Client(host,port); 
@@ -53,6 +53,7 @@ public class ClientController extends  AbstractController {
 				//Check connection to server
 				if (App.client.isConnected())
 				{
+					System.out.println("Connected to "+host+" successfuly!");
 					//create a new login controller and gui
 					LoginGUI loginGUI = new LoginGUI();
 					LoginModel loginModel = new LoginModel();

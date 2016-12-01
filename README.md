@@ -25,7 +25,7 @@ GUI package
 -LoginGUI
 -MainWindowGUI
 
-Models - "Abstract" classes - belong to both client and server
+Models - "Abstract" classes - all inherit from AbstractModel - used for sending objects to and from the server
 -AbstractModel - to send Objects to server we need Serializable 
 -ClientModel - host and port config
 -LoginModel - username and password config

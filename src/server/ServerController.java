@@ -36,7 +36,6 @@ public class ServerController
 			{
 				echoServer.listen(); //Start listening for connections
 				echoServer.setController(serverController);
-
 			} 
 			catch (Exception ex) 
 			{
@@ -59,23 +58,18 @@ public class ServerController
 		catch (Exception ex) 
 		{
 			//TODO  handle the error
-
 		}
-
 		try 
 		{
 			conn = DriverManager.getConnection(database,username,password);
 			System.out.println("SQL connection succeed");
 			return true;
-
 		} catch (SQLException ex) 
 		{/* handle any errors*/
-
 			//TODO change to log4j
 			System.out.println("SQL Exception: "+ ex.getMessage());
 			return false;
 		}
-
 	}
 	/************************************************Getters and setters***************************************/
 

@@ -108,9 +108,12 @@ public class LoginController extends  AbstractController
 					params.put("msg",  "LoginOK");
 					Envelope envelope = new Envelope(loginModel,params);
 					sendToServer(envelope);
-					App.client.setCurrObj(getLoginController());
+					App.client.setCurrentController(getLoginController());
 				}
-				catch(Exception e){}
+				catch(Exception e)
+				{
+				System.out.println("Exception at sending login user info to server "+ e );
+				}
 			}//else
 		}
 	}
@@ -130,7 +133,6 @@ public class LoginController extends  AbstractController
 				JOptionPane.showMessageDialog(null,"3rd Login Try\nTerminating!","Error", JOptionPane.ERROR_MESSAGE); 
 				loginGUI.dispose();
 				//Block user here
-				//sendToServer(en);
 				loginCounter=1;							//reset counter	
 			}//if counter			
 		}//if	 

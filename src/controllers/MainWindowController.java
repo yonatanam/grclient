@@ -11,7 +11,7 @@ import client.App;
 
 import models.User;
 import gui.MainWindowGUI;
-
+import gui.ReadWorkerGUI;
 
 
 /**
@@ -49,10 +49,10 @@ public class MainWindowController extends  AbstractController {
 	class ReadFromWorkerListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
-			
+			System.out.println("READ FROM WORKER DB!!");
 			mwGui.dispose();
-			//ManageFilesGUI mfg = new ManageFilesGUI();
-			//ManageFilesController mfc = new ManageFilesController(user,lc,mfg);
+			ReadWorkerGUI rwg = new ReadWorkerGUI();
+			ReadWorkerController rwc = new ReadWorkerController(rwg);
 		}
 	}
 	

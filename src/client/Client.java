@@ -26,8 +26,8 @@ import controllers.*;
 public class Client extends ObservableClient
 {
 
-	private Object currController;
-	private User currUser = null;
+	private Object currentController;
+	private User currentUser = null;
 
 
 	public Client(String host, int port)  throws IOException 
@@ -46,15 +46,13 @@ public class Client extends ObservableClient
 	public synchronized void handleMessageFromServer(Object message)  
 	{
 		String msg = (String)message;
-		System.out.println("Message is : "+msg);
 		switch (msg)
 		{
 		case "LoginOK":
-			((LoginController)currController).handleDBResult(message);
+			((LoginController)currentController).handleDBResult(message);
 			break;
 		case "UserOrPassIncorrect":
-			System.out.println("Client bad username/password");
-			((LoginController)currController).handleDBResult(message);
+			((LoginController)currentController).handleDBResult(message);
 			break;
 		case "NoSuchUser":
 			JOptionPane.showMessageDialog(null,"No Such User!","Error", JOptionPane.ERROR_MESSAGE);
@@ -79,22 +77,22 @@ public class Client extends ObservableClient
 
 
 
-	public Object getCurrObj() {
-		return currController;
+	public Object getCurrentController() {
+		return currentController;
 	}
 
-	public User getCurrUser() {
-		return currUser;
-	}
-
-
-	public  void setCurrUser(User currUser) {
-		this.currUser = currUser;
+	public User getCurrentUser() {
+		return currentUser;
 	}
 
 
-	public void setCurrObj(Object currObj) {
-		this.currController = currObj;
+	public  void setCurrentUser(User currUser) {
+		this.currentUser = currUser;
+	}
+
+
+	public void setCurrentController(Object currObj) {
+		this.currentController = currObj;
 	}
 
 	//terminate client

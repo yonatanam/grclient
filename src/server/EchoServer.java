@@ -71,6 +71,7 @@ public class EchoServer extends AbstractServer
 
 	public void handleMessageFromClient (Object msg, ConnectionToClient client)
 	{
+		System.out.println("Send to server was initiated");
 		Envelope ne=(Envelope) msg;
 		try {
 			Statement stmt = conn.createStatement();  

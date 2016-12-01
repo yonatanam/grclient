@@ -48,6 +48,17 @@ The class LoginListener is defined in the controller and implements ActionListen
 This way there is no mess at the GUI class and all the logic is in the controller class.
 =====================================
 
+
+=============================
+Example of login procedure:
+
+Login GUI -> LoginController -> LoginListener button for the "Login button"
+Once the Login button is clicked: Basic validation (Non empty fields) -> Envelope creation (message to server) -> send Envelope to server using sendToServer from AbstractController(which implements ObservableClient [OCSF] method) ->
+Server gets the message and handles it via handleMessageFromClient in EchoServer ->
+Send response to client via sendToClient ->
+Client catches response via handleMessageFromServer
+============================
+
 =============================
 Important notes and shortcuts
 =============================

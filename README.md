@@ -26,10 +26,10 @@ GUI package
 -MainWindowGUI
 
 Models - "Abstract" classes - all inherit from AbstractModel - used for sending objects to and from the server
--AbstractModel - to send Objects to server we need Serializable 
--ClientModel - host and port config
--LoginModel - username and password config
--User - User class
+* AbstractModel - to send Objects to server we need Serializable 
+* ClientModel - host and port config
+* LoginModel - username and password config
+* User - User class
 
 
 =====================================
@@ -56,4 +56,4 @@ Use refactoring instead of renaming : Alt+Shift+R
 
 Use CTRL+SHIFT+P to find matching bracket
 
-use //TODO <text here> to add a flag of tood in eclipse
+Use //TODO <text here> to add a flag of tood in eclipse

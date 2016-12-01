@@ -13,17 +13,17 @@ Client package - All client source code
 -Client : The very first screen (initial config)
 
 Controllers package - All controllers
--AbstractController - will be needed later for server communication
--ClientController - controls the initial config screen
--GoHome - Controls the main window creation
--LoginController - controls the login screen
--MainWindowController - controls the main window
+* AbstractController - will be needed later for server communication
+* ClientController - controls the initial config screen
+* GoHome - Controls the main window creation
+* LoginController - controls the login screen
+* MainWindowController - controls the main window
 
 
 GUI package
--ClientGUI
--LoginGUI
--MainWindowGUI
+* ClientGUI
+* LoginGUI
+* MainWindowGUI
 
 Models - "Abstract" classes - all inherit from AbstractModel - used for sending objects to and from the server
 * AbstractModel - to send Objects to server we need Serializable 

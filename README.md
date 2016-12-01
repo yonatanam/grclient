@@ -48,5 +48,9 @@ The class LoginListener is defined in the controller and implements ActionListen
 This way there is no mess at the GUI class and all the logic is in the controller class.
 =====================================
 
-
-
+=============================
+Important notes and shortcuts
+=============================
+Use refactoring instead of renaming : Alt+Shift+R
+Use CTRL+SHIFT+P to find matching bracket
+use //TODO <text here> to add a flag of tood in eclipse

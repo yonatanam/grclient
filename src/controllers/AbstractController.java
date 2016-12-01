@@ -50,9 +50,10 @@ public abstract class AbstractController
 		 * @param request the request
 		 */
 		
-		/*
+		
 		protected void sendToServer(String request)
 		{
+			System.out.println("SendToServer");
 			try 
 			{
 				 App.client.sendToServer(request);
@@ -63,15 +64,17 @@ public abstract class AbstractController
 				e.printStackTrace();
 			}
 		}
-		*/
+		
 	/**
 	 * Send to server with Object	
 	 * @param request
 	 */
 		
-		/*
+		
 		protected void sendToServer(Object request)
 		{
+			System.out.println("SendToServer");
+
 			try 
 			{
 				
@@ -83,7 +86,7 @@ public abstract class AbstractController
 				e.printStackTrace();
 			}
 		}
-		*/
+		
 		/**
 		 * Method to handle the answer of the db.
 		 * Controller class usually needed to overwrite this method as own reqeusts.

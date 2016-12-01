@@ -53,13 +53,13 @@ public class Client extends ObservableClient
 			((LoginController)currController).handleDBResult(message);
 			break;
 		case "UserOrPassIncorrect":
+			System.out.println("Client bad username/password");
 			((LoginController)currController).handleDBResult(message);
 			break;
 		case "NoSuchUser":
 			JOptionPane.showMessageDialog(null,"No Such User!","Error", JOptionPane.ERROR_MESSAGE);
 			break;
 		}
-		System.out.println("Handle message from server" + message);
 		notify();   
 	}
 

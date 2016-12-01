@@ -42,7 +42,6 @@ public class EchoServer extends AbstractServer
 	private Connection conn;
 	private ServerController controller;
 	public int LoginCounter=0;
-	ResultSet rs;
 	//Class variables *************************************************
 	/**
 	 * The default port to listen on.
@@ -80,16 +79,16 @@ public class EchoServer extends AbstractServer
 				String userName = ne.getParams().get("username");
 				String password = ne.getParams().get("password");
 				System.out.println("Starting login process");
-				ResultSet res = stmt.executeQuery("SELECT count(*) FROM users WHERE username = '"+userName+" AND password = "+password+"';"); //Check If username exists
-				res.next();
-				if (res.getInt(1) == 0) 
+				ResultSet res = stmt.executeQuery("SELECT count(*) FROM users WHERE username = '"+userName+"';"); //Check If username exists
+				int rcount = getRowCount(res);
+				if (rcount == 0) 
 				{ //If not exists  
 					System.out.printf("User %s Tried To Log In\n",res.getString(1));
 					client.sendToClient("NoSuchUser");
 				}
 				else
 				{			  
-					ResultSet result = stmt.executeQuery("SELECT COUNT(*) FROM users WHERE username= '"+((LoginModel)ne.getObject()).getUserName()+"' AND password='"+((LoginModel)ne.getObject()).getPassword()+"';");
+					ResultSet result = stmt.executeQuery("SELECT COUNT(*) FROM users WHERE username= '"+userName+"' AND password='"+password+"';");
 					result.next();
 					if (result.getInt(1) == 0) //If not exists 
 					{   
@@ -122,6 +121,26 @@ public class EchoServer extends AbstractServer
 
 
 	}
+	
+	 private int getRowCount(ResultSet resultSet) 
+	 {
+	        if (resultSet == null) {
+	            return 0;
+	        }
+	        try {
+	            resultSet.last();
+	            return resultSet.getRow();
+	        } catch (SQLException exp) {
+	            exp.printStackTrace();
+	        } finally {
+	            try {
+	                resultSet.beforeFirst();
+	            } catch (SQLException exp) {
+	                exp.printStackTrace();
+	            }
+	        }
+	        return 0;
+	    }
 
 	public Connection getConn() {
 		return conn;

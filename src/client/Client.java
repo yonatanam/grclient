@@ -45,9 +45,8 @@ public class Client extends ObservableClient
 	 */
 	public synchronized void handleMessageFromServer(Object message)  
 	{
-		//Envelope envelope = (Envelope)message;
-		//switch (envelope.getParams().get("msg"))
 		String msg = (String)message;
+		System.out.println("Message is : "+msg);
 		switch (msg)
 		{
 		case "LoginOK":
@@ -56,7 +55,7 @@ public class Client extends ObservableClient
 		case "UserOrPassIncorrect":
 			((LoginController)currController).handleDBResult(message);
 			break;
-		case "NoUser":
+		case "NoSuchUser":
 			JOptionPane.showMessageDialog(null,"No Such User!","Error", JOptionPane.ERROR_MESSAGE);
 			break;
 		}

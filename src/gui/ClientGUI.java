@@ -44,7 +44,7 @@ public class ClientGUI extends JFrame{
 		ButtonCancel.setBounds(194, 79, 89, 23);
 		getContentPane().add(ButtonCancel);
 
-		this.setTitle("Good Reading - Initial Configuration");
+		this.setTitle("Good Reading - Initial Config");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(500, 200, 358, 155);
 		this.setVisible(true);

@@ -72,3 +72,5 @@ Use CTRL+SHIFT+P to find matching bracket
 Use //TODO <text here> to add a flag of tood in eclipse
 
 To make a GUI window open at the center of the screen - use frame.setLocationRelativeTo(null);
+
+Resultset is not Serializable! Therefore if we fetch data from SQL we must first convert it to a Serializable data structure in order to be able to send it over the network

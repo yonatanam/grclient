@@ -67,7 +67,8 @@ Important notes and shortcuts
 =============================
 Use refactoring instead of renaming : Alt+Shift+R
 
-
 Use CTRL+SHIFT+P to find matching bracket
 
 Use //TODO <text here> to add a flag of tood in eclipse
+
+To make a GUI window open at the center of the screen - use frame.setLocationRelativeTo(null);

@@ -3,6 +3,7 @@ package controllers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -41,7 +42,7 @@ public class ReadWorkerController extends AbstractController {
 	class ReadDataFromWorkerListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
-			Map<String,Object> params = new LinkedHashMap<String,Object>();
+			Map<String,Object> params = new HashMap<String,Object>();
 			params.put("msg", "getWorkerData");
 			Envelope envelope = new Envelope(params);
 			App.client.setCurrentController(getReadWorkerController());

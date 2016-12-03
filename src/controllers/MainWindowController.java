@@ -12,6 +12,7 @@ import client.App;
 import models.User;
 import gui.MainWindowGUI;
 import gui.ReadWorkerGUI;
+import gui.WriteWorkerGUI;
 
 
 /**
@@ -62,8 +63,8 @@ public class MainWindowController extends  AbstractController {
 		public void actionPerformed(ActionEvent e) {
 			
 			mwGui.dispose();
-			//ManageGroupsGUI mgg = new ManageGroupsGUI();
-			//ManageGroupsController mgc = new ManageGroupsController(user,lc,mgg);
+			WriteWorkerGUI wwg = new WriteWorkerGUI();
+			WriteWorkerController rwc = new WriteWorkerController(wwg);
 
 		}
 		

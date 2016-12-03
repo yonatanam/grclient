@@ -1,6 +1,7 @@
 package models;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 import models.AbstractModel;
@@ -17,6 +18,7 @@ public class Envelope  extends AbstractModel{
 	public Envelope(Map<String, Object> params){
 		this.params = params;
 	}
+	
 
 	// Getters And Setters
 

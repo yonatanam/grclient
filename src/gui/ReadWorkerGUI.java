@@ -10,13 +10,16 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 public class ReadWorkerGUI {
 
 	private JFrame frame;
 	private JButton btnRead;
 	private JButton btnBack;
-	private JList workerData;
+	private JTable workerData;
 	
 
 
@@ -42,14 +45,13 @@ public class ReadWorkerGUI {
 		btnRead.setBounds(309, 19, 89, 23);
 		frame.getContentPane().add(btnRead);
 		
-		JList data = new JList();
-		data.setBounds(58, 118, 659, 314);
-		
-		frame.getContentPane().add(data);
-		
 		btnBack = new JButton("Back");
 		btnBack.setBounds(28, 499, 89, 23);
 		frame.getContentPane().add(btnBack);
+		
+		workerData = new JTable();
+		workerData.setBounds(39, 116, 707, 359);
+		frame.getContentPane().add(workerData);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
@@ -65,11 +67,11 @@ public class ReadWorkerGUI {
 	
 //Setters and Getters
 	
-	public JList getWorkerData() {
+	public JTable getWorkerData() {
 		return workerData;
 	}
 
-	public void setWorkerData(JList data) {
+	public void setWorkerData(JTable data) {
 		this.workerData = data;
 	}
 }

@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Vector;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -30,12 +31,13 @@ import java.sql.*;
 import javax.imageio.ImageIO;
 import javax.print.DocFlavor.STRING;
 import javax.swing.JOptionPane;
-
+import javax.swing.table.DefaultTableModel;
 
 import client.App;
 import models.LoginModel;
 import models.Envelope;
 import models.User;
+
 /**
  * This class overrides some of the methods in the abstract 
  * superclass in order to give more functionality to the server.
@@ -75,7 +77,7 @@ public class EchoServer extends AbstractServer
 
 	public void handleMessageFromClient (Object msg, ConnectionToClient client)
 	{
-		System.out.println("Send to server was initiated");
+		//System.out.println("Send to server was initiated");
 		Envelope en=(Envelope) msg;
 		String message = (String) en.getParams().get("msg");
 		try 
@@ -85,10 +87,10 @@ public class EchoServer extends AbstractServer
 			{
 				String userName = (String) en.getParams().get("username");
 				String password = (String) en.getParams().get("password");
-				System.out.println("Starting login process");
+				//System.out.println("Starting login process");
 				ResultSet res = stmt.executeQuery("SELECT * FROM users WHERE username = '"+userName+"' LIMIT 1;"); //Check If username exists
 				int rcount = getRowCount(res);
-				System.out.println("rcount is "+rcount);
+				//System.out.println("rcount is "+rcount);
 				if (rcount == 0) 
 				{ //If not exists  
 					System.out.println("User "+userName+" tried to login");
@@ -113,10 +115,29 @@ public class EchoServer extends AbstractServer
 					Map<String,Object> params = new LinkedHashMap<String,Object>();
 					Envelope envelope = new Envelope(params);
 					ResultSet res = stmt.executeQuery("SELECT * from worker");	
-					List<HashMap<String,Object>> res2 = convertResultSetToList(res);
-					params.put("data", res2);
+			        Vector<Object> columnNames = new Vector<Object>();
+			        Vector<Object> data = new Vector<Object>();
+		            ResultSetMetaData md = res.getMetaData();
+		            int columns = md.getColumnCount();
+
+		            //  Get column names
+		            for (int i = 1; i <= columns; i++)
+		                columnNames.addElement( md.getColumnName(i) );
+		            //  Get row data
+
+		            while (res.next())
+		            {
+		                Vector<Object> row = new Vector<Object>(columns);
+		                for (int i = 1; i <= columns; i++)
+		                {
+		                    row.addElement( res.getObject(i) );
+		                }
+		                data.addElement( row );
+		            }
+
+		            params.put("columns", columnNames);
+		            params.put("rows", data);
 					params.put("msg", "WorkerData");
-					//Map<String, Object> test = new HashMap<String,Object>();
 					client.sendToClient(envelope);
 				}
 
@@ -149,22 +170,7 @@ public class EchoServer extends AbstractServer
 
 
 
-	public List<HashMap<String,Object>> convertResultSetToList(ResultSet rs) throws SQLException  //Helper class to convert resultset to List since resultset isnt serializable
-	{
-		ResultSetMetaData md = rs.getMetaData();
-		int columns = md.getColumnCount();
-		List<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
-		while (rs.next())
-		{
-			HashMap<String,Object> row = new HashMap<String, Object>(columns);
-			for(int i=1; i<=columns; ++i) 
-			{
-				row.put(md.getColumnName(i),rs.getObject(i));
-			}
-			list.add(row);
-		}
-		return list;
-	}
+	
 
 
 

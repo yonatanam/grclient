@@ -63,8 +63,6 @@ public class Client extends ObservableClient
 			JOptionPane.showMessageDialog(null,"No Such User!","Error", JOptionPane.ERROR_MESSAGE);
 			break;
 		case "WorkerData":
-			System.out.println("Client got workerdata from server");
-			System.out.println("Current controller is "  + currentController.getClass());
 			((ReadWorkerController)currentController).handleDBResult(message);
 		}
 		notify();   

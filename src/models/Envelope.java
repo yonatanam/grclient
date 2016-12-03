@@ -1,7 +1,6 @@
 package models;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+
 import java.util.Map;
 
 import models.AbstractModel;
@@ -11,32 +10,21 @@ import models.AbstractModel;
  */
 public class Envelope  extends AbstractModel{
 	/**the model that we send to server*/
-	private Object object;
-	
+
 	/** the message that return from server*/
-	private Map<String, String> params; //consider implementing an arraylist for values
+	private Map<String, Object> params; //object can also be arraylist for multiple values per key
 	//string msg should always exist
-	public Envelope(Object object,Map<String, String> params){
-		this.object = object;
+	public Envelope(Map<String, Object> params){
 		this.params = params;
 	}
 
 	// Getters And Setters
 
-	public Map<String, String> getParams() {
+	public Map<String, Object> getParams() {
 		return params;
 	}
 
-	public void setParams(Map<String, String> params) {
+	public void setParams(Map<String, Object> params) {
 		this.params = params;
-	}
-
-	public Object getObject() 
-	{
-		return object;
-	}
-	public void setObject(Object obj1) 
-	{
-		this.object = obj1; 
 	}
 }

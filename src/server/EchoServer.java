@@ -8,7 +8,11 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -72,13 +76,15 @@ public class EchoServer extends AbstractServer
 	public void handleMessageFromClient (Object msg, ConnectionToClient client)
 	{
 		System.out.println("Send to server was initiated");
-		Envelope ne=(Envelope) msg;
-		try {
+		Envelope en=(Envelope) msg;
+		String message = (String) en.getParams().get("msg");
+		try 
+		{
 			Statement stmt = conn.createStatement();  
-			if (ne.getParams().get("msg").equals("LoginOK")) //Login
+			if (message.equals("LoginOK")) //Login
 			{
-				String userName = ne.getParams().get("username");
-				String password = ne.getParams().get("password");
+				String userName = (String) en.getParams().get("username");
+				String password = (String) en.getParams().get("password");
 				System.out.println("Starting login process");
 				ResultSet res = stmt.executeQuery("SELECT * FROM users WHERE username = '"+userName+"' LIMIT 1;"); //Check If username exists
 				int rcount = getRowCount(res);
@@ -100,20 +106,19 @@ public class EchoServer extends AbstractServer
 					}
 				}
 
-			}//end Login		  
-			/**An example for Server communication function
-		  if(ne.getTask().equals("OpenFileInClient")){//Send file to client 
-			  String fname = ((File)ne.getObject()).getFName();
-			  String cl = client.toString();
-			  ArrayList<String> ClientHost = new ArrayList<String>(Arrays.asList(((String) cl).split(" ")));  
-			  System.out.println(ClientHost.get(0));
-			  String ClientToSendoTo=ClientHost.get(0);
-			  String ffname = fname.substring(0, fname.indexOf(" -"));
-			  SendFileToClient.SimpleFileClient.main(ffname,"",ClientToSendoTo);
-
-			  client.sendToClient("OpenFile");  
-		  }
-			 */
+			}//end Login
+			else
+				if ( message.equals("getWorkerData"))
+				{
+					Map<String,Object> params = new LinkedHashMap<String,Object>();
+					Envelope envelope = new Envelope(params);
+					ResultSet res = stmt.executeQuery("SELECT * from worker");	
+					List<HashMap<String,Object>> res2 = convertResultSetToList(res);
+					params.put("data", res2);
+					params.put("msg", "WorkerData");
+					//Map<String, Object> test = new HashMap<String,Object>();
+					client.sendToClient(envelope);
+				}
 
 		} catch (Exception x) {
 			JOptionPane.showMessageDialog(null, "Unable to connect to the database", "Connection error", JOptionPane.ERROR_MESSAGE);
@@ -121,26 +126,47 @@ public class EchoServer extends AbstractServer
 
 
 	}
-	
-	 private int getRowCount(ResultSet resultSet) //helper method to see if a select query has any matching rows
-	 {
-	        if (resultSet == null) {
-	            return 0;
-	        }
-	        try {
-	            resultSet.last();
-	            return resultSet.getRow();
-	        } catch (SQLException exp) {
-	            exp.printStackTrace();
-	        } finally {
-	            try {
-	                resultSet.beforeFirst();
-	            } catch (SQLException exp) {
-	                exp.printStackTrace();
-	            }
-	        }
-	        return 0;
-	    }
+
+	private int getRowCount(ResultSet resultSet) //helper method to see if a select query has any matching rows
+	{
+		if (resultSet == null) {
+			return 0;
+		}
+		try {
+			resultSet.last();
+			return resultSet.getRow();
+		} catch (SQLException exp) {
+			exp.printStackTrace();
+		} finally {
+			try {
+				resultSet.beforeFirst();
+			} catch (SQLException exp) {
+				exp.printStackTrace();
+			}
+		}
+		return 0;
+	}
+
+
+
+	public List<HashMap<String,Object>> convertResultSetToList(ResultSet rs) throws SQLException  //Helper class to convert resultset to List since resultset isnt serializable
+	{
+		ResultSetMetaData md = rs.getMetaData();
+		int columns = md.getColumnCount();
+		List<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
+		while (rs.next())
+		{
+			HashMap<String,Object> row = new HashMap<String, Object>(columns);
+			for(int i=1; i<=columns; ++i) 
+			{
+				row.put(md.getColumnName(i),rs.getObject(i));
+			}
+			list.add(row);
+		}
+		return list;
+	}
+
+
 
 	public Connection getConn() {
 		return conn;

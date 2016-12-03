@@ -20,7 +20,6 @@ import gui.ReadWorkerGUI;
  */
 public class MainWindowController extends  AbstractController {
 	
-	private static User user;
 	private LoginController lc;
 	private MainWindowGUI mwGui;
 	private MainWindowController tempL;
@@ -33,8 +32,6 @@ public class MainWindowController extends  AbstractController {
 	 * @param mwGui
 	 */
 	public MainWindowController(MainWindowGUI mwGui) {
-		this.user = user;
-		this.lc = lc;
 		this.mwGui = mwGui;
 		tempL = this;
 		mwGui.addButtonReadFromWorkerActionListener(new ReadFromWorkerListener());
@@ -49,7 +46,6 @@ public class MainWindowController extends  AbstractController {
 	class ReadFromWorkerListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("READ FROM WORKER DB!!");
 			mwGui.dispose();
 			ReadWorkerGUI rwg = new ReadWorkerGUI();
 			ReadWorkerController rwc = new ReadWorkerController(rwg);

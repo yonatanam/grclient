@@ -53,7 +53,11 @@ public class ReadWorkerController extends AbstractController {
 	class BackFromReadFromWorkerListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e){
-			// get back to main gui	
+			readWorkerGUI.dispose();
+			MainWindowGUI mwg = new MainWindowGUI();
+			MainWindowController mwc = new MainWindowController(mwg);
+
+			
 		}
 	}
 

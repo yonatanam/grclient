@@ -53,7 +53,6 @@ public abstract class AbstractController
 		
 		protected void sendToServer(String request)
 		{
-			System.out.println("SendToServer");
 			try 
 			{
 				 App.client.sendToServer(request);

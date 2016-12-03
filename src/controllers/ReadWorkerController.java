@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import com.mysql.jdbc.ResultSet;
 
@@ -56,9 +58,16 @@ public class ReadWorkerController extends AbstractController {
 
 	public void handleDBResult(Object message)
 	{	
-		System.out.println("Handling DB result in WorkerController");
 		Envelope en = (Envelope)message;
-		readWorkerGUI.getWorkerData().setListData((Object[]) en.getParams().get("data"));
+		
+		System.out.println(en.getParams().get("columns"));
+		System.out.println(en.getParams().get("rows"));
+        Vector<Object> columnNames = (Vector<Object>) en.getParams().get("columns");
+        Vector<Object> data = (Vector<Object>) en.getParams().get("rows");
+        
+		DefaultTableModel model = new DefaultTableModel(data, columnNames);
+		readWorkerGUI.getWorkerData().setModel(model);
+		
 	}
 	
 	public ReadWorkerController getReadWorkerController() {

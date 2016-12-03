@@ -16,9 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class ReadWorkerGUI {
+public class ReadWorkerGUI extends JFrame {
 
-	private JFrame frame;
 	private JButton btnRead;
 	private JButton btnBack;
 	private JTable workerData;
@@ -31,37 +30,37 @@ public class ReadWorkerGUI {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialize the contents of the 
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 800, 600);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		
+		setBounds(100, 100, 800, 600);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(null);
 		
 		JLabel lblReadFromWorker = new JLabel("Read from Worker Database");
 		lblReadFromWorker.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblReadFromWorker.setBounds(39, 11, 271, 30);
-		frame.getContentPane().add(lblReadFromWorker);
+		getContentPane().add(lblReadFromWorker);
 		
 		btnRead = new JButton("Read");
 		btnRead.setBounds(309, 19, 89, 23);
-		frame.getContentPane().add(btnRead);
+		getContentPane().add(btnRead);
 		
 		btnBack = new JButton("Back");
 		btnBack.setBounds(28, 499, 89, 23);
-		frame.getContentPane().add(btnBack);
+		getContentPane().add(btnBack);
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(39, 63, 713, 425);
-		frame.getContentPane().add(scrollPane);
+		getContentPane().add(scrollPane);
 		
 		workerData = new JTable();
 		scrollPane.setViewportView(workerData);
 		workerData.setDefaultEditor(Object.class, null); //prevents from editing the fields but allows row selection
 
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 
 

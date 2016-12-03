@@ -56,21 +56,7 @@ public class MainWindowGUI extends JFrame {
 	private JButton buttonReadFromDB;
 	private JButton buttonWriteToDB;
 	private JPanel panel;
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainWindowGUI frame = new MainWindowGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
+
 	
 	/**
 	 * Create the frame. This is the Home window.

@@ -102,13 +102,14 @@ public class LoginController extends  AbstractController
 			{ 
 				try
 				{		 
-					Map<String, String> params = new LinkedHashMap<String,String>();
+					Map<String, Object> params = new LinkedHashMap<String,Object>();
 					params.put("username",  user);
 					params.put("password", password);
 					params.put("msg",  "LoginOK");
-					Envelope envelope = new Envelope(loginModel,params);
+					Envelope envelope = new Envelope(params);
 					sendToServer(envelope);
-					App.client.setCurrentController(getLoginController());
+					App.client.setCurrentController(getLoginController()); //Set the controller at Client class to LoginController
+					
 				}
 				catch(Exception e)
 				{
@@ -142,6 +143,7 @@ public class LoginController extends  AbstractController
 			loginGUI.dispose();											 //Close login GUI
 			//make a switch here with GUIS depending on user level
 				MainWindowGUI mwg = new MainWindowGUI();
+				MainWindowController mwc = new MainWindowController(mwg);
 		} 
 
 	}

@@ -16,25 +16,10 @@ public class ReadWorkerGUI {
 	private JFrame frame;
 	private JButton btnRead;
 	private JButton btnBack;
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ReadWorkerGUI window = new ReadWorkerGUI();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
+	private JList workerData;
+	
 
-	/**
-	 * Create the application.
-	 */
+
 	public ReadWorkerGUI() {
 		initialize();
 	}
@@ -57,15 +42,18 @@ public class ReadWorkerGUI {
 		btnRead.setBounds(309, 19, 89, 23);
 		frame.getContentPane().add(btnRead);
 		
-		JList list = new JList();
-		list.setBounds(58, 118, 659, 314);
-		frame.getContentPane().add(list);
+		JList data = new JList();
+		data.setBounds(58, 118, 659, 314);
+		
+		frame.getContentPane().add(data);
 		
 		btnBack = new JButton("Back");
 		btnBack.setBounds(28, 499, 89, 23);
 		frame.getContentPane().add(btnBack);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
 	}
-	
+//Action Listeners
 	public void addButtonReadFromWorkerActionListener(ActionListener e)
 	{
 		btnRead.addActionListener(e);
@@ -73,5 +61,15 @@ public class ReadWorkerGUI {
 	public void addButtonBackFromReadFromWorkerActionListener(ActionListener e)
 	{
 		btnBack.addActionListener(e);
+	}
+	
+//Setters and Getters
+	
+	public JList getWorkerData() {
+		return workerData;
+	}
+
+	public void setWorkerData(JList data) {
+		this.workerData = data;
 	}
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -59,14 +60,9 @@ public class ReadWorkerController extends AbstractController {
 	public void handleDBResult(Object message)
 	{	
 		Envelope en = (Envelope)message;
-		
-		System.out.println(en.getParams().get("columns"));
-		System.out.println(en.getParams().get("rows"));
         Vector<Object> columnNames = (Vector<Object>) en.getParams().get("columns");
         Vector<Object> data = (Vector<Object>) en.getParams().get("rows");
-        
-		DefaultTableModel model = new DefaultTableModel(data, columnNames);
-		readWorkerGUI.getWorkerData().setModel(model);
+		readWorkerGUI.populateTable(columnNames, data);
 		
 	}
 	

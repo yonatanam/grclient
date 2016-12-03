@@ -72,7 +72,7 @@ public abstract class AbstractController
 		
 		protected void sendToServer(Object request)
 		{
-			System.out.println("SendToServer");
+			//System.out.println("SendToServer");
 
 			try 
 			{

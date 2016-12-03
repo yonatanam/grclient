@@ -115,31 +115,48 @@ public class EchoServer extends AbstractServer
 					Map<String,Object> params = new LinkedHashMap<String,Object>();
 					Envelope envelope = new Envelope(params);
 					ResultSet res = stmt.executeQuery("SELECT * from worker");	
-			        Vector<Object> columnNames = new Vector<Object>();
-			        Vector<Object> data = new Vector<Object>();
-		            ResultSetMetaData md = res.getMetaData();
-		            int columns = md.getColumnCount();
+					Vector<Object> columnNames = new Vector<Object>();
+					Vector<Object> data = new Vector<Object>();
+					ResultSetMetaData md = res.getMetaData();
+					int columns = md.getColumnCount();
 
-		            //  Get column names
-		            for (int i = 1; i <= columns; i++)
-		                columnNames.addElement( md.getColumnName(i) );
-		            //  Get row data
+					//  Get column names
+					for (int i = 1; i <= columns; i++)
+						columnNames.addElement( md.getColumnName(i) );
+					//  Get row data
 
-		            while (res.next())
-		            {
-		                Vector<Object> row = new Vector<Object>(columns);
-		                for (int i = 1; i <= columns; i++)
-		                {
-		                    row.addElement( res.getObject(i) );
-		                }
-		                data.addElement( row );
-		            }
+					while (res.next())
+					{
+						Vector<Object> row = new Vector<Object>(columns);
+						for (int i = 1; i <= columns; i++)
+						{
+							row.addElement( res.getObject(i) );
+						}
+						data.addElement( row );
+					}
 
-		            params.put("columns", columnNames);
-		            params.put("rows", data);
+					params.put("columns", columnNames);
+					params.put("rows", data);
 					params.put("msg", "WorkerData");
 					client.sendToClient(envelope);
-				}
+				} //End get worker data
+				else
+					if ( message.equals("checkWorkerData"))
+					{
+						String wid = (String) en.getParams().get("wid");
+						String department = (String) en.getParams().get("dep");
+						ResultSet res = stmt.executeQuery("SELECT * from worker WHERE wid='"+wid+"'");
+						int rcount = getRowCount(res);
+						if (rcount == 0) //If such WID doesn't exist
+						{
+							client.sendToClient("NoSuchUser");
+						}
+						else
+						{
+							stmt.executeUpdate("UPDATE worker SET department='"+department+"' WHERE wid='"+wid+"'");
+							client.sendToClient("WorkerUpdatedOK");
+						}
+					} //End update worker data
 
 		} catch (Exception x) {
 			JOptionPane.showMessageDialog(null, "Unable to connect to the database", "Connection error", JOptionPane.ERROR_MESSAGE);
@@ -170,7 +187,7 @@ public class EchoServer extends AbstractServer
 
 
 
-	
+
 
 
 

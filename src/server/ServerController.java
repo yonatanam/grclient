@@ -67,7 +67,7 @@ public class ServerController
 		} catch (SQLException ex) 
 		{/* handle any errors*/
 			//TODO change to log4j
-			System.out.println("SQL Exception: "+ ex.getMessage());
+			System.out.println("SQL ex+ user=: "+username+" password= "+password+ ex.getMessage());
 			return false;
 		}
 	}

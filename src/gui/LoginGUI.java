@@ -185,7 +185,7 @@ public class LoginGUI extends JFrame {
 	public void setWarningMessageVisibleTrue() {
 		labelWarningMessage.setVisible(true);	
 	}
-
+	
 	public void setWarningMessageVisibleTrue(String st) {
 		labelWarningMessage.setText(st);
 		labelWarningMessage.setForeground(Color.RED);

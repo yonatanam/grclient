@@ -102,7 +102,7 @@ public class ReadWorkerGUI extends JFrame {
 		//Background
 		JLabel bg = new JLabel();
 		bg.setBounds(0, 0, 800, 600);
-		Image img1 = new ImageIcon(this.getClass().getResource("/bgWithOutLogo.png")).getImage();
+		Image img1 = new ImageIcon(this.getClass().getResource("/bgWithoutLogo.png")).getImage();
 		bg.setIcon(new ImageIcon(img1));
 		getContentPane().add(bg);
 		//BackGround END

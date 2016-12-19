@@ -142,8 +142,12 @@ public class LoginController extends  AbstractController
 			{
 			loginGUI.dispose();											 //Close login GUI
 			//make a switch here with GUIS depending on user level
+			
+
 				MainWindowGUI mwg = new MainWindowGUI();
 				MainWindowController mwc = new MainWindowController(mwg);
+
+				
 		} 
 
 	}

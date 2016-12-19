@@ -48,6 +48,21 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 import java.awt.event.ActionEvent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import java.awt.Toolkit;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class MainWindowGUI extends JFrame {
 
@@ -178,10 +193,20 @@ public class MainWindowGUI extends JFrame {
 		//Background
 		JLabel bg = new JLabel();
 		bg.setBounds(0, 0, 800, 600);
-		Image img1 = new ImageIcon(this.getClass().getResource("/bgWithOutLogo.png")).getImage();
+		try {
+			
+		
+		Image img1 = new ImageIcon(this.getClass().getResource("/bgWithoutLogo.png")).getImage();
 		bg.setIcon(new ImageIcon(img1));
+		}
+		catch (Exception ex)
+		{
+		System.out.println("FAILED LOGO!"+ex);
+		}
+		
 		contentPane.add(bg);
 		//BackGround END
+		
 		
 		panel = new JPanel();
 		panel.setBounds(111, 463, 671, 253);
@@ -189,6 +214,7 @@ public class MainWindowGUI extends JFrame {
 		panel.setLayout(new BorderLayout(0, 0));
 		setLocationRelativeTo(null);
 		panel.setOpaque(false);
+		
 		setVisible(true);
 		
 	} 

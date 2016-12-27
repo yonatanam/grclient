@@ -85,6 +85,7 @@ public class EchoServer extends AbstractServer
 			Statement stmt = conn.createStatement();  
 			if (message.equals("LoginOK")) //Login
 			{
+
 				String userName = (String) en.getParams().get("username");
 				String password = (String) en.getParams().get("password");
 				//System.out.println("Starting login process");
@@ -106,14 +107,26 @@ public class EchoServer extends AbstractServer
 						res = stmt.executeQuery("SELECT login_attempts FROM users WHERE username='"+userName+"'");
 						if (res.next())
 						{
-						int currentLoginAttempts = res.getInt("login_attempts");
-						
-						stmt.executeUpdate("UPDATE users SET login_attempts="+(currentLoginAttempts+1)+" WHERE username='"+userName+"'");
+							int currentLoginAttempts = res.getInt("login_attempts");
+
+							stmt.executeUpdate("UPDATE users SET login_attempts="+(currentLoginAttempts+1)+" WHERE username='"+userName+"'");
 						}
-						}
+					}
 					else 
-					{ //If  exists					
-						client.sendToClient("LoginOK");
+					{ //If  user exists	
+						Map<String,Object> params = new LinkedHashMap<String,Object>();
+						Envelope envelope = new Envelope(params);
+						/* Get permission level and account status */
+						res = stmt.executeQuery("SELECT permission,status from users WHERE username='"+userName+"'");
+						if (res.next())
+						{
+							String permission = res.getString("permission");
+							String status = res.getString("status");
+							params.put("msg", "LoginOK");
+							params.put("permission", permission);
+							params.put("status",status);
+							client.sendToClient(envelope);
+						}
 					}
 				}
 

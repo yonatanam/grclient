@@ -124,9 +124,14 @@ public class LoginController extends  AbstractController
 
 	public void handleDBResult(Object message)
 	{	
-		String str = message.toString();
-		if(str.equals("UserOrPassIncorrect"))					//if user or password incorrect show warning message 
-		{														//and increase counter by 1
+		Envelope en = (Envelope) message;
+		
+		String str = (String)en.getParams().get("msg");
+		if(str.equals("UserOrPassIncorrect"))			
+		{
+		/*//TODO Change this to server side
+			//if user or password incorrect show warning message 
+															//and increase counter by 1
 			JOptionPane.showMessageDialog(null,"User Or Password Incorrect!\n" + loginCounter + "(out of 3) attempts","Error", JOptionPane.ERROR_MESSAGE);   
 			loginCounter++;
 			if (loginCounter==4)								//if user entered wrong details 3 times
@@ -137,13 +142,14 @@ public class LoginController extends  AbstractController
 				loginCounter=1;							//reset counter	
 			}//if counter			
 		}//if	 
+		*/
+		}
 		else 
 			if (str.equals("LoginOK"))
 			{
 			loginGUI.dispose();											 //Close login GUI
 			//make a switch here with GUIS depending on user level
-			
-
+			System.out.println("User is a "+ en.getParams().get("permission"));
 				MainWindowGUI mwg = new MainWindowGUI();
 				MainWindowController mwc = new MainWindowController(mwg);
 

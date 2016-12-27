@@ -101,7 +101,16 @@ public class EchoServer extends AbstractServer
 					res = stmt.executeQuery("SELECT * FROM users WHERE username='"+userName+"' AND password='"+password+"' LIMIT 1;");
 					rcount = getRowCount(res);
 					if (rcount == 0) 
+					{
 						client.sendToClient("UserOrPassIncorrect");
+						res = stmt.executeQuery("SELECT login_attempts FROM users WHERE username='"+userName+"'");
+						if (res.next())
+						{
+						int currentLoginAttempts = res.getInt("login_attempts");
+						
+						stmt.executeUpdate("UPDATE users SET login_attempts="+(currentLoginAttempts+1)+" WHERE username='"+userName+"'");
+						}
+						}
 					else 
 					{ //If  exists					
 						client.sendToClient("LoginOK");

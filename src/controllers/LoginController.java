@@ -36,6 +36,7 @@ public class LoginController extends  AbstractController
 	private User user;
 	private User U;
 	public int loginCounter=1;
+	public boolean status = true;
 
 
 	public LoginController (LoginGUI lg,LoginModel lm )
@@ -44,7 +45,7 @@ public class LoginController extends  AbstractController
 		loginModel = lm;
 		loginController = this;
 		loginGUI.addLoginActionListener(new LoginListener());
-		//loginG.addbtnForgotYourPasswordActionListener(new forgotPassListener());
+		loginGUI.addbtnForgotYourPasswordActionListener(new ForgotPasswordListener());
 		loginGUI.addCancelActionListener(new CancelListener());
 		//loginG.addbtnChangePasswordActionListener(new changePassListener());
 
@@ -76,6 +77,24 @@ public class LoginController extends  AbstractController
 	}//action
 
 
+	
+	class ForgotPasswordListener implements ActionListener 
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			if(status)
+			{
+				loginGUI.displayEmailField();	//Display Send mail field
+				status = false;
+			}
+			else
+			{
+				loginGUI.disposeEmailField();
+				status = true;
+			}
+		}	
+	}//action
 
 	/*class changePassListener implements ActionListener 
 	{

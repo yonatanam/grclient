@@ -74,8 +74,8 @@ public class MainWindowGUI extends JFrame {
 	private JButton buttonHome;
 	private JButton buttonReadFromDB;
 	private JButton buttonWriteToDB;
-	private JPanel panel;
 	private JTextField nullField;
+	private JButton publishReviewButton;
 
 	
 	/**
@@ -190,12 +190,24 @@ public class MainWindowGUI extends JFrame {
 		contentPane.add(Logo);
 		//LOGO END
 		
+		/* Publish review button*/
+		publishReviewButton = new JButton("Publish Review");
+		publishReviewButton.setVerticalTextPosition(SwingConstants.CENTER);
+		publishReviewButton.setIcon(new ImageIcon(WriteToDB));
+		publishReviewButton.setOpaque(false);
+		publishReviewButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		publishReviewButton.setForeground(Color.WHITE);
+		publishReviewButton.setFont(new Font("Arial", Font.BOLD, 15));
+		publishReviewButton.setContentAreaFilled(false);
+		publishReviewButton.setBorderPainted(false);
+		publishReviewButton.setBounds(207, 380, 194, 110);
+		contentPane.add(publishReviewButton);
+		/* End publish review button */
+		
 		//Background
 		JLabel bg = new JLabel();
 		bg.setBounds(0, 0, 800, 600);
-		try {
-			
-		
+		try {	
 		Image img1 = new ImageIcon(this.getClass().getResource("/bgWithoutLogo.png")).getImage();
 		bg.setIcon(new ImageIcon(img1));
 		}
@@ -203,18 +215,10 @@ public class MainWindowGUI extends JFrame {
 		{
 		System.out.println("FAILED LOGO!"+ex);
 		}
-		
 		contentPane.add(bg);
-		//BackGround END
 		
 		
-		panel = new JPanel();
-		panel.setBounds(111, 463, 671, 253);
-		contentPane.add(panel);
-		panel.setLayout(new BorderLayout(0, 0));
 		setLocationRelativeTo(null);
-		panel.setOpaque(false);
-		
 		setVisible(true);
 		
 	} 
@@ -235,5 +239,9 @@ public class MainWindowGUI extends JFrame {
 	public void addButtonWriteToWorkerActionListener(ActionListener e)
 	{
 		buttonWriteToDB.addActionListener(e);
+	}
+	public void addButtonPublishReviewActionListener(ActionListener e)
+	{
+		publishReviewButton.addActionListener(e);
 	}
 }

@@ -65,6 +65,16 @@ public class Client extends ObservableClient
 			break;
 		case "WorkerUpdatedOK":
 			JOptionPane.showMessageDialog(null,"Worker was updated successfuly!");
+			break;
+		case "GetBooksRead":
+			((PublishReviewController)currentController).handleDBResult(message);
+			break;
+		case "PublishReviewOK":
+			((PublishReviewController)currentController).handleDBResult(message);
+			break;
+		case "PublishReviewNOTOK":
+			((PublishReviewController)currentController).handleDBResult(message);
+			break;
 		}
 		notify();   
 	}

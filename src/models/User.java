@@ -11,17 +11,15 @@ public class User extends AbstractModel {
 	private String password;
 	/**email of user  */
 	private String email ;
-	private String groups;
+	private String permission;
 	
-	public User(String firstName, String lastName, String userName,
-			String password, String email,String groups) {
+	public User(String firstName, String lastName, String userName, String email, String permission) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.userName = userName;
-		this.password = password;
 		this.email = email;
-		this.groups=groups;
+		this.permission = permission;
 	}
 	
 	public String getFirstName() {
@@ -63,14 +61,16 @@ public class User extends AbstractModel {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	public String getGroups() {
-		return groups;
+
+	public String getPermission() {
+		return permission;
 	}
 
-	public void setGroups(String groups) {
-		this.groups = groups;
+	public void setPermission(String permission) {
+		this.permission = permission;
 	}
+	
+
 	
 	
 }

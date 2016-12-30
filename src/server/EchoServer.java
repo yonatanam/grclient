@@ -117,13 +117,17 @@ public class EchoServer extends AbstractServer
 						Map<String,Object> params = new LinkedHashMap<String,Object>();
 						Envelope envelope = new Envelope(params);
 						/* Get permission level and account status */
-						res = stmt.executeQuery("SELECT permission,status from users WHERE username='"+userName+"'");
+						res = stmt.executeQuery("SELECT * from users WHERE username='"+userName+"'");
 						if (res.next())
 						{
 							String permission = res.getString("permission");
 							String status = res.getString("status");
 							params.put("msg", "LoginOK");
 							params.put("permission", permission);
+							params.put("username", res.getString("username"));
+							params.put("email", res.getString("email"));
+							params.put("fname", res.getString("fname"));
+							params.put("lname", res.getString("lname"));
 							params.put("status",status);
 							client.sendToClient(envelope);
 						}
@@ -179,6 +183,65 @@ public class EchoServer extends AbstractServer
 							client.sendToClient("WorkerUpdatedOK");
 						}
 					} //End update worker data
+					else
+						if (message.equals("getBooksRead"))
+						{
+							String username = (String) en.getParams().get("username");
+							ArrayList<String> bookTitles = new ArrayList<String>();
+							ResultSet res = stmt.executeQuery("SELECT B.booktitle FROM books B, book_orders BO, orders O "
+									+ "WHERE B.bookid = BO.bookid AND O.orderid = BO.orderid AND O.username ='"+username+"'");		
+							while (res.next())
+							{
+								String bookTitle = res.getString("booktitle");
+								bookTitles.add(bookTitle);
+							}
+							Map<String,Object> params = new LinkedHashMap<String,Object>();
+							Envelope envelope = new Envelope(params);
+							params.put("msg","GetBooksRead");
+							params.put("booktitles", bookTitles);
+							client.sendToClient(envelope);
+						}
+						else
+							if (message.equals("PublishReview"))
+							{
+
+								String username = (String) en.getParams().get("username");
+								String content = (String) en.getParams().get("content");
+								String keywords = (String) en.getParams().get("keywords");
+								String bookid = null;
+
+								/*Get book id*/
+								ResultSet res = stmt.executeQuery("SELECT bookid from books where booktitle='"+en.getParams().get("booktitle")+"'");	
+								while (res.next())
+								{
+									bookid = res.getString("bookid");
+								}
+								/*End get book id*/
+
+								/*Check if user hasnt submitted a review for this book yet*/
+								res = stmt.executeQuery("SELECT reviewid from reviews where bookid='"+bookid+"' AND username='"+username+"'");	
+								if (getRowCount(res) > 0) //a review by this user for this book already exists
+								{
+									Map<String,Object> params = new LinkedHashMap<String,Object>();
+									Envelope envelope = new Envelope(params);
+									params.put("msg","PublishReviewNOTOK");
+									client.sendToClient(envelope);
+								}
+								/*End duplicate check*/
+								else //all good if got here
+								{
+									java.util.Date dt = new java.util.Date();
+									java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+									String currentTime = sdf.format(dt);
+									String query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+currentTime+"','"+content+"','"
+											+username+"','PENDING','"+keywords+"')";
+									stmt.executeUpdate(query);
+									Map<String,Object> params = new LinkedHashMap<String,Object>();
+									Envelope envelope = new Envelope(params);
+									params.put("msg","PublishReviewOK");
+									client.sendToClient(envelope);
+								}
+							}
 
 		} catch (Exception x) {
 			JOptionPane.showMessageDialog(null, "Unable to connect to the database", "Connection error", JOptionPane.ERROR_MESSAGE);

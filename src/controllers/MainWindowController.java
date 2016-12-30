@@ -11,6 +11,7 @@ import client.App;
 
 import models.User;
 import gui.MainWindowGUI;
+import gui.PublishReviewGUI;
 import gui.ReadWorkerGUI;
 import gui.WriteWorkerGUI;
 
@@ -37,6 +38,7 @@ public class MainWindowController extends  AbstractController {
 		tempL = this;
 		mwGui.addButtonReadFromWorkerActionListener(new ReadFromWorkerListener());
 		mwGui.addButtonWriteToWorkerActionListener(new WriteToWorkerListener());
+		mwGui.addButtonPublishReviewActionListener(new PublishReviewListener());
 	}
 	
 	
@@ -65,6 +67,18 @@ public class MainWindowController extends  AbstractController {
 			mwGui.dispose();
 			WriteWorkerGUI wwg = new WriteWorkerGUI();
 			WriteWorkerController rwc = new WriteWorkerController(wwg);
+
+		}
+		
+	}
+	
+	class PublishReviewListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e) {
+			
+			mwGui.dispose();
+			PublishReviewGUI prg = new PublishReviewGUI();
+			PublishReviewController prc = new PublishReviewController(prg);
 
 		}
 		

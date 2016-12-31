@@ -47,6 +47,9 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
+
+import client.App;
+
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -74,6 +77,7 @@ public class MainWindowGUI extends JFrame {
 	private JButton buttonHome;
 	private JButton buttonReadFromDB;
 	private JButton buttonWriteToDB;
+	private JButton buttonAddBook;
 	private JPanel panel;
 	private JTextField nullField;
 
@@ -182,6 +186,22 @@ public class MainWindowGUI extends JFrame {
 		//HomeButton END
 		
 		
+		//------ button for adding a book (for manager) -------//
+		
+		buttonAddBook = new JButton("Add book");
+		buttonAddBook.setBounds(237, 405, 97, 25);
+		//if(App.client.getCurrentUser())
+		contentPane.add(buttonAddBook);
+		
+		
+		
+		// ----------------- end button ------------------------//
+		
+		
+		
+		
+		
+		
 		//This is the LOGO
 		JLabel Logo = new JLabel();
 		Logo.setBounds(306, 129, 139, 82);
@@ -215,12 +235,19 @@ public class MainWindowGUI extends JFrame {
 		setLocationRelativeTo(null);
 		panel.setOpaque(false);
 		
+
+		
 		setVisible(true);
 		
 	} 
 	
 
 	// Action Listeners
+	
+	public void addButtonAddBookActionListener(ActionListener e)
+	{
+		buttonAddBook.addActionListener(e);
+	}
 	
 	public void addButtonHomeActionListener(ActionListener e)
 	{

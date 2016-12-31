@@ -65,6 +65,13 @@ public class Client extends ObservableClient
 			break;
 		case "WorkerUpdatedOK":
 			JOptionPane.showMessageDialog(null,"Worker was updated successfuly!");
+			break;
+		case "BookIsInTheDB":
+			((BookController)currentController).handleDBResult(message);
+			break;
+		case "BookUpdatedOK":
+			JOptionPane.showMessageDialog(null,"Book was inserted successfuly!");
+			break;
 		}
 		notify();   
 	}

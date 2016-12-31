@@ -58,6 +58,11 @@ public class PublishReviewController extends AbstractController {
 		public void actionPerformed(ActionEvent e){
 			Map<String,Object> params = new HashMap<String,Object>();
 			Envelope en = new Envelope(params);
+			if (publishReviewGUI.getTextArea().getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null,"Review text is empty!","Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			if (publishReviewGUI.getChckbxNewCheckBox().isSelected())
 			{	
 				params.put("msg", "PublishReview");

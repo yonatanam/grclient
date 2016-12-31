@@ -24,7 +24,7 @@ import controllers.*;
 public class Client extends ObservableClient
 {
 
-	private Object currentController;
+	private AbstractController currentController;
 	private User currentUser = null;
 
 
@@ -49,6 +49,8 @@ public class Client extends ObservableClient
 		else
 		msg = (String) ((Envelope)message).getParams().get("msg");
 		
+		currentController.handleDBResult(message);
+		/*
 		switch (msg)
 		{
 		case "LoginOK":
@@ -75,7 +77,7 @@ public class Client extends ObservableClient
 		case "PublishReviewNOTOK":
 			((PublishReviewController)currentController).handleDBResult(message);
 			break;
-		}
+		}*/
 		notify();   
 	}
 
@@ -95,7 +97,7 @@ public class Client extends ObservableClient
 
 
 
-	public Object getCurrentController() {
+	public AbstractController getCurrentController() {
 		return currentController;
 	}
 
@@ -109,7 +111,7 @@ public class Client extends ObservableClient
 	}
 
 
-	public void setCurrentController(Object currObj) {
+	public void setCurrentController(AbstractController currObj) {
 		this.currentController = currObj;
 	}
 

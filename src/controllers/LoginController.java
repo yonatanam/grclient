@@ -168,6 +168,13 @@ public class LoginController extends  AbstractController
 			{
 			loginGUI.dispose();											 //Close login GUI
 			//make a switch here with GUIS depending on user level
+			User user = new User( (String)en.getParams().get("fname"),
+					(String)en.getParams().get("lname"),
+					(String)en.getParams().get("username"),
+					(String)en.getParams().get("email"),
+					(String)en.getParams().get("permission"));
+			App.client.setCurrentUser(user);
+			
 			System.out.println("User is a "+ en.getParams().get("permission"));
 				MainWindowGUI mwg = new MainWindowGUI();
 				MainWindowController mwc = new MainWindowController(mwg);

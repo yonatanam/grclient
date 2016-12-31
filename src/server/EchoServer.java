@@ -77,110 +77,113 @@ public class EchoServer extends AbstractServer
 
 	public void handleMessageFromClient (Object msg, ConnectionToClient client)
 	{
-		//System.out.println("Send to server was initiated");
+		Map<String,Object> params = new LinkedHashMap<String,Object>();
+		Envelope envelope = new Envelope(params);
 		Envelope en=(Envelope) msg;
 		String message = (String) en.getParams().get("msg");
 		try 
 		{
 			Statement stmt = conn.createStatement();  
-			if (message.equals("LoginOK")) //Login
+			switch (message)
 			{
+			case "LoginOK":
 
-				String userName = (String) en.getParams().get("username");
-				String password = (String) en.getParams().get("password");
-				//System.out.println("Starting login process");
-				ResultSet res = stmt.executeQuery("SELECT * FROM users WHERE username = '"+userName+"' LIMIT 1;"); //Check If username exists
+				if (message.equals("LoginOK")) //Login
+				{
+
+					String userName = (String) en.getParams().get("username");
+					String password = (String) en.getParams().get("password");
+					//System.out.println("Starting login process");
+					ResultSet res = stmt.executeQuery("SELECT * FROM users WHERE username = '"+userName+"' LIMIT 1;"); //Check If username exists
+					int rcount = getRowCount(res);
+					//System.out.println("rcount is "+rcount);
+					if (rcount == 0) 
+					{ //If not exists  
+						System.out.println("User "+userName+" tried to login");
+						client.sendToClient("NoSuchUser");
+					}
+					else
+					{			  
+						res = stmt.executeQuery("SELECT * FROM users WHERE username='"+userName+"' AND password='"+password+"' LIMIT 1;");
+						rcount = getRowCount(res);
+						if (rcount == 0) 
+						{
+							client.sendToClient("UserOrPassIncorrect");
+							res = stmt.executeQuery("SELECT login_attempts FROM users WHERE username='"+userName+"'");
+							if (res.next())
+							{
+								int currentLoginAttempts = res.getInt("login_attempts");
+
+								stmt.executeUpdate("UPDATE users SET login_attempts="+(currentLoginAttempts+1)+" WHERE username='"+userName+"'");
+							}
+						}
+						else 
+						{ //If  user exists	
+							/* Get permission level and account status */
+							res = stmt.executeQuery("SELECT * from users WHERE username='"+userName+"'");
+							if (res.next())
+							{
+								String permission = res.getString("permission");
+								String status = res.getString("status");
+								params.put("msg", "LoginOK");
+								params.put("permission", permission);
+								params.put("username", res.getString("username"));
+								params.put("email", res.getString("email"));
+								params.put("fname", res.getString("fname"));
+								params.put("lname", res.getString("lname"));
+								params.put("status",status);
+								client.sendToClient(envelope);
+							}
+						}
+					}
+
+				}//end Login
+				break;
+			case "getWorkerData":
+				ResultSet res = stmt.executeQuery("SELECT * from worker");	
+				Vector<Object> columnNames = new Vector<Object>();
+				Vector<Object> data = new Vector<Object>();
+				ResultSetMetaData md = res.getMetaData();
+				int columns = md.getColumnCount();
+
+				//  Get column names
+				for (int i = 1; i <= columns; i++)
+					columnNames.addElement( md.getColumnName(i) );
+				//  Get row data
+
+				while (res.next())
+				{
+					Vector<Object> row = new Vector<Object>(columns);
+					for (int i = 1; i <= columns; i++)
+					{
+						row.addElement( res.getObject(i) );
+					}
+					data.addElement( row );
+				}
+
+				params.put("columns", columnNames);
+				params.put("rows", data);
+				params.put("msg", "WorkerData");
+				client.sendToClient(envelope);
+		   //End get worker data
+			break;
+			case "checkWorkerData":
+				String wid = (String) en.getParams().get("wid");
+				String department = (String) en.getParams().get("dep");
+				res = stmt.executeQuery("SELECT * from worker WHERE wid='"+wid+"'");
 				int rcount = getRowCount(res);
-				//System.out.println("rcount is "+rcount);
-				if (rcount == 0) 
-				{ //If not exists  
-					System.out.println("User "+userName+" tried to login");
+				if (rcount == 0) //If such WID doesn't exist
+				{
 					client.sendToClient("NoSuchUser");
 				}
 				else
-				{			  
-					res = stmt.executeQuery("SELECT * FROM users WHERE username='"+userName+"' AND password='"+password+"' LIMIT 1;");
-					rcount = getRowCount(res);
-					if (rcount == 0) 
-					{
-						client.sendToClient("UserOrPassIncorrect");
-						res = stmt.executeQuery("SELECT login_attempts FROM users WHERE username='"+userName+"'");
-						if (res.next())
-						{
-							int currentLoginAttempts = res.getInt("login_attempts");
-
-							stmt.executeUpdate("UPDATE users SET login_attempts="+(currentLoginAttempts+1)+" WHERE username='"+userName+"'");
-						}
-					}
-					else 
-					{ //If  user exists	
-						Map<String,Object> params = new LinkedHashMap<String,Object>();
-						Envelope envelope = new Envelope(params);
-						/* Get permission level and account status */
-						res = stmt.executeQuery("SELECT permission,status from users WHERE username='"+userName+"'");
-						if (res.next())
-						{
-							String permission = res.getString("permission");
-							String status = res.getString("status");
-							params.put("msg", "LoginOK");
-							params.put("permission", permission);
-							params.put("status",status);
-							client.sendToClient(envelope);
-						}
-					}
-				}
-
-			}//end Login
-			else
-				if ( message.equals("getWorkerData"))
-				{
-					Map<String,Object> params = new LinkedHashMap<String,Object>();
-					Envelope envelope = new Envelope(params);
-					ResultSet res = stmt.executeQuery("SELECT * from worker");	
-					Vector<Object> columnNames = new Vector<Object>();
-					Vector<Object> data = new Vector<Object>();
-					ResultSetMetaData md = res.getMetaData();
-					int columns = md.getColumnCount();
-
-					//  Get column names
-					for (int i = 1; i <= columns; i++)
-						columnNames.addElement( md.getColumnName(i) );
-					//  Get row data
-
-					while (res.next())
-					{
-						Vector<Object> row = new Vector<Object>(columns);
-						for (int i = 1; i <= columns; i++)
-						{
-							row.addElement( res.getObject(i) );
-						}
-						data.addElement( row );
-					}
-
-					params.put("columns", columnNames);
-					params.put("rows", data);
-					params.put("msg", "WorkerData");
-					client.sendToClient(envelope);
-				} //End get worker data
-				else
-					if ( message.equals("checkWorkerData"))
-					{
-						String wid = (String) en.getParams().get("wid");
-						String department = (String) en.getParams().get("dep");
-						ResultSet res = stmt.executeQuery("SELECT * from worker WHERE wid='"+wid+"'");
-						int rcount = getRowCount(res);
-						if (rcount == 0) //If such WID doesn't exist
-						{
-							client.sendToClient("NoSuchUser");
-						}
-						else
 						{
 							stmt.executeUpdate("UPDATE worker SET department='"+department+"' WHERE wid='"+wid+"'");
 							client.sendToClient("WorkerUpdatedOK");
 						}
 					} //End update worker data
-					else if(message.equals("AddBook"))  // add book to DB handler **NEW HANDLER**
-					{
+          break;
+					case "AddBook":  // add book to DB handler **NEW HANDLER**				
 						String Book_id = (String) en.getParams().get("Book_id");
 						String Book_Name = (String) en.getParams().get("Book_Name");
 						String Book_lang = (String) en.getParams().get("Book_lang");
@@ -196,7 +199,61 @@ public class EchoServer extends AbstractServer
 						}
 						else
 							client.sendToClient("BookIsInTheDB");
-					} // end of add book Handler
+              break;
+					 // end of add book Handler
+           
+			case "getBooksRead":
+			{
+				String username = (String) en.getParams().get("username");
+				ArrayList<String> bookTitles = new ArrayList<String>();
+				res = stmt.executeQuery("SELECT B.booktitle FROM books B, book_orders BO, orders O "
+						+ "WHERE B.bookid = BO.bookid AND O.orderid = BO.orderid AND O.username ='"+username+"'");		
+				while (res.next())
+				{
+					String bookTitle = res.getString("booktitle");
+					bookTitles.add(bookTitle);
+				}
+				params.put("msg","GetBooksRead");
+				params.put("booktitles", bookTitles);
+				client.sendToClient(envelope);
+			}
+			break;
+			case "PublishReview":
+				String username = (String) en.getParams().get("username");
+				String content = (String) en.getParams().get("content");
+				String keywords = (String) en.getParams().get("keywords");
+				String bookid = null;
+
+				/*Get book id*/
+				res = stmt.executeQuery("SELECT bookid from books where booktitle='"+en.getParams().get("booktitle")+"'");	
+				while (res.next())
+				{
+					bookid = res.getString("bookid");
+				}
+				/*End get book id*/
+
+				/*Check if user hasnt submitted a review for this book yet*/
+				res = stmt.executeQuery("SELECT reviewid from reviews where bookid='"+bookid+"' AND username='"+username+"'");	
+				if (getRowCount(res) > 0) //a review by this user for this book already exists
+				{
+					params.put("msg","PublishReviewNOTOK");
+					client.sendToClient(envelope);
+				}
+				/*End duplicate check*/
+				else //all good if got here
+				{
+					java.util.Date dt = new java.util.Date();
+					java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String currentTime = sdf.format(dt);
+					String query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+currentTime+"','"+content+"','"
+							+username+"','PENDING','"+keywords+"')";
+					stmt.executeUpdate(query);
+					params.put("msg","PublishReviewOK");
+					client.sendToClient(envelope);
+				}
+
+				break;
+			}
 
 		} catch (Exception x) {
 			JOptionPane.showMessageDialog(null, "Unable to connect to the database", "Connection error", JOptionPane.ERROR_MESSAGE);

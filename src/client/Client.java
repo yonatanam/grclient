@@ -68,6 +68,7 @@ public class Client extends ObservableClient
 		case "WorkerUpdatedOK":
 			JOptionPane.showMessageDialog(null,"Worker was updated successfuly!");
 			break;
+			*/
 		notify();   
 	}
 

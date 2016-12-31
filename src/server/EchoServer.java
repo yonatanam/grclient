@@ -177,14 +177,32 @@ public class EchoServer extends AbstractServer
 					client.sendToClient("NoSuchUser");
 				}
 				else
-				{
-					stmt.executeUpdate("UPDATE worker SET department='"+department+"' WHERE wid='"+wid+"'");
-					client.sendToClient("WorkerUpdatedOK");
-				}
-				//End update worker data
-				break;
+						{
+							stmt.executeUpdate("UPDATE worker SET department='"+department+"' WHERE wid='"+wid+"'");
+							client.sendToClient("WorkerUpdatedOK");
+						}
+					} //End update worker data
+          break;
+					case "AddBook":  // add book to DB handler **NEW HANDLER**				
+						String Book_id = (String) en.getParams().get("Book_id");
+						String Book_Name = (String) en.getParams().get("Book_Name");
+						String Book_lang = (String) en.getParams().get("Book_lang");
+						String Book_Format = (String) en.getParams().get("Book_Format");
+						String Book_Price = (String) en.getParams().get("Book_Price");
+						
+						ResultSet res = stmt.executeQuery("SELECT * from Books WHERE bookid='"+Book_id+"'");
+						int rcount = getRowCount(res);
+						if (rcount == 0) //If such BID doesn't exist
+						{
+							stmt.executeUpdate("INSERT into books (bookid, booktitle, booklang, format, price) values ('"+ Book_id +"', '"+ Book_Name +"', '"+ Book_lang +"', '"+ Book_Format +"', '"+ Book_Price +"' )");
+							client.sendToClient("BookUpdatedOK");
+						}
+						else
+							client.sendToClient("BookIsInTheDB");
+              break;
+					 // end of add book Handler
+           
 			case "getBooksRead":
-
 			{
 				String username = (String) en.getParams().get("username");
 				ArrayList<String> bookTitles = new ArrayList<String>();

@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import client.App;
 
 import models.User;
+import gui.AddBookGUI;
 import gui.MainWindowGUI;
 import gui.PublishReviewGUI;
 import gui.ReadWorkerGUI;
@@ -38,6 +39,7 @@ public class MainWindowController extends  AbstractController {
 		tempL = this;
 		mwGui.addButtonReadFromWorkerActionListener(new ReadFromWorkerListener());
 		mwGui.addButtonWriteToWorkerActionListener(new WriteToWorkerListener());
+		mwGui.addButtonAddBookActionListener(new AddBookListener());
 		mwGui.addButtonPublishReviewActionListener(new PublishReviewListener());
 	}
 	
@@ -46,6 +48,19 @@ public class MainWindowController extends  AbstractController {
 	 * Inner class where button Manage Files pressed , implements action listener which opens the manage files window.
 	 *
 	 */
+	
+	// Adding new book to system by the manager
+	class AddBookListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e) {
+			//mwGui.dispose();
+			AddBookGUI adg = new AddBookGUI();
+			BookController abk = new BookController(adg);
+			
+		}
+	}
+	
+	
 	class ReadFromWorkerListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {

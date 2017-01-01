@@ -191,7 +191,7 @@ public class EchoServer extends AbstractServer
 				if (rcount == 0) //If such BID doesn't exist
 				{
 					stmt.executeUpdate("INSERT into books (bookid, booktitle, booklang, format, price) values ('"+ Book_id +"', '"+ Book_Name +"', '"+ Book_lang +"', '"+ Book_Format +"', '"+ Book_Price +"' )");
-					client.sendToClient("BookUpdatedOK");
+					client.sendToClient("BookInsertedOK");
 				}
 				else
 					client.sendToClient("BookIsInTheDB");

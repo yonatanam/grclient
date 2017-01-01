@@ -44,6 +44,7 @@ public class AddBookGUI extends JFrame {
 	private JRadioButton rdbtnFb;
 	private JLabel lblPrice;
 	private JTextField Price;
+	private JLabel PriceWarningLabel;
 	
 	
 
@@ -104,12 +105,12 @@ public class AddBookGUI extends JFrame {
 		
 		BidWarningLabel = new JLabel("");
 		BidWarningLabel.setFont(new Font("Arial", Font.BOLD, 15));
-		BidWarningLabel.setBounds(22, 135, 239, 16);
+		BidWarningLabel.setBounds(318, 106, 239, 16);
 		getContentPane().add(BidWarningLabel);
 		
 		BNameWarningLabel = new JLabel("");
 		BNameWarningLabel.setFont(new Font("Arial", Font.BOLD, 15));
-		BNameWarningLabel.setBounds(22, 208, 237, 16);
+		BNameWarningLabel.setBounds(318, 169, 237, 16);
 		getContentPane().add(BNameWarningLabel);
 		
 		JLabel lblLanguage = new JLabel("Language:");
@@ -199,6 +200,11 @@ public class AddBookGUI extends JFrame {
 		Price.setBounds(153, 504, 153, 22);
 		getContentPane().add(Price);
 		
+		PriceWarningLabel = new JLabel("");
+		PriceWarningLabel.setFont(new Font("Arial", Font.BOLD, 15));
+		PriceWarningLabel.setBounds(318, 507, 239, 16);
+		getContentPane().add(PriceWarningLabel);
+		
 		BackGround = new JLabel("");
 		BackGround.setIcon(new ImageIcon(imgbg));
 		BackGround.setBounds(0, 0, 851, 762);
@@ -212,6 +218,11 @@ public class AddBookGUI extends JFrame {
 	}
 	
 	
+	public JLabel getPriceWarningLabel() {
+		return PriceWarningLabel;
+	}
+
+
 	public JTextField getPrice() {
 		return Price;
 	}

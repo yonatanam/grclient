@@ -190,7 +190,16 @@ public class MainWindowGUI extends JFrame {
 		//------ button for adding a book (for manager) -------//
 		
 		buttonAddBook = new JButton("Add book");
-		buttonAddBook.setBounds(237, 405, 97, 25);
+		buttonAddBook.setFont(new Font("Arial", Font.BOLD, 14));
+		Image addbook = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
+		buttonAddBook.setIcon(new ImageIcon(addbook));
+		buttonAddBook.setBounds(92, 287, 113, 25);
+		buttonAddBook.setOpaque(false);
+		buttonAddBook.setContentAreaFilled(false);
+		buttonAddBook.setBorderPainted(false);
+		buttonAddBook.setHorizontalTextPosition(JButton.CENTER);
+		buttonAddBook.setVerticalTextPosition(JButton.CENTER);
+		buttonAddBook.setForeground(Color.WHITE);
 		//if(App.client.getCurrentUser())
 		contentPane.add(buttonAddBook);
 		

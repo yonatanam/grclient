@@ -30,6 +30,7 @@ public class BookController extends AbstractController{
 	private AddBookGUI addBookGUI;
 	private int flag_id = 0;
 	private int flag_name = 0;
+	private int flag_price = 0;
 	
 	public BookController(AddBookGUI abg){  // add your GUI functionality here ('AddBook' is one of them)
 		addBookGUI = abg;
@@ -146,14 +147,22 @@ public class BookController extends AbstractController{
 			}
 			else
 				flag_name = 1;
+			if(addBookGUI.getPrice().getText().matches("[a-zA-Z]+"))
+			{
+				(addBookGUI.getPriceWarningLabel()).setForeground(Color.red);
+				(addBookGUI.getPriceWarningLabel()).setText("Wrong input! only numbers");
+				flag_price = 0;
+			}
+			else
+				flag_price = 1;
 			
-			if(flag_name == 1 && flag_id == 1)
+			if(flag_name == 1 && flag_id == 1 && flag_price == 1)
 			{
 				String Book_id = (addBookGUI.getBookIdText()).getText();
 				String Book_Name = (addBookGUI.getBookNameText()).getText();
 				String Book_lang = (addBookGUI.getComboBox().getSelectedItem()).toString();
 				String Book_Format = null;
-				float Book_Price = Float.valueOf(addBookGUI.getPrice().getText());
+				String Book_Price = addBookGUI.getPrice().getText();
 				
 				if(addBookGUI.getRdbtnDoc().isSelected())
 					Book_Format = "DOC";
@@ -209,6 +218,9 @@ public class BookController extends AbstractController{
 		
 		switch (msg)
 		{
+		case "BookInsertedOK":
+			JOptionPane.showMessageDialog(null,"Book was inserted successfuly!");
+			break;
 		case "BookIsInTheDB":
 			JOptionPane.showMessageDialog(null,"This book is already in the DataBase!","Error", JOptionPane.ERROR_MESSAGE);
 			break;

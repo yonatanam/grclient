@@ -78,7 +78,6 @@ public class MainWindowGUI extends JFrame {
 	private JButton buttonReadFromDB;
 	private JButton buttonWriteToDB;
 	private JButton buttonAddBook;
-	private JPanel panel;
 
 	private JTextField nullField;
 	private JButton publishReviewButton;
@@ -241,7 +240,7 @@ public class MainWindowGUI extends JFrame {
 		
 		
 		setLocationRelativeTo(null);
-		panel.setOpaque(false);
+		//panel.setOpaque(false);
 		setVisible(true);
 		
 	} 

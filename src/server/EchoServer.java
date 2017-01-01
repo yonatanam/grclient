@@ -87,10 +87,6 @@ public class EchoServer extends AbstractServer
 			switch (message)
 			{
 			case "LoginOK":
-
-				if (message.equals("LoginOK")) //Login
-				{
-
 					String userName = (String) en.getParams().get("username");
 					String password = (String) en.getParams().get("password");
 					//System.out.println("Starting login process");
@@ -137,10 +133,10 @@ public class EchoServer extends AbstractServer
 						}
 					}
 
-				}//end Login
+				//end Login
 				break;
 			case "getWorkerData":
-				ResultSet res = stmt.executeQuery("SELECT * from worker");	
+				res = stmt.executeQuery("SELECT * from worker");	
 				Vector<Object> columnNames = new Vector<Object>();
 				Vector<Object> data = new Vector<Object>();
 				ResultSetMetaData md = res.getMetaData();
@@ -171,7 +167,7 @@ public class EchoServer extends AbstractServer
 				String wid = (String) en.getParams().get("wid");
 				String department = (String) en.getParams().get("dep");
 				res = stmt.executeQuery("SELECT * from worker WHERE wid='"+wid+"'");
-				int rcount = getRowCount(res);
+				rcount = getRowCount(res);
 				if (rcount == 0) //If such WID doesn't exist
 				{
 					client.sendToClient("NoSuchUser");
@@ -181,105 +177,105 @@ public class EchoServer extends AbstractServer
 					stmt.executeUpdate("UPDATE worker SET department='"+department+"' WHERE wid='"+wid+"'");
 					client.sendToClient("WorkerUpdatedOK");
 				}
-			 //End update worker data
-			break;
-		case "AddBook":  // add book to DB handler **NEW HANDLER**				
-			String Book_id = (String) en.getParams().get("Book_id");
-			String Book_Name = (String) en.getParams().get("Book_Name");
-			String Book_lang = (String) en.getParams().get("Book_lang");
-			String Book_Format = (String) en.getParams().get("Book_Format");
-			String Book_Price = (String) en.getParams().get("Book_Price");
+				//End update worker data
+				break;
+			case "AddBook":  // add book to DB handler **NEW HANDLER**				
+				String Book_id = (String) en.getParams().get("Book_id");
+				String Book_Name = (String) en.getParams().get("Book_Name");
+				String Book_lang = (String) en.getParams().get("Book_lang");
+				String Book_Format = (String) en.getParams().get("Book_Format");
+				String Book_Price = (String) en.getParams().get("Book_Price");
 
-			res = stmt.executeQuery("SELECT * from Books WHERE bookid='"+Book_id+"'");
-			rcount = getRowCount(res);
-			if (rcount == 0) //If such BID doesn't exist
-			{
-				stmt.executeUpdate("INSERT into books (bookid, booktitle, booklang, format, price) values ('"+ Book_id +"', '"+ Book_Name +"', '"+ Book_lang +"', '"+ Book_Format +"', '"+ Book_Price +"' )");
-				client.sendToClient("BookUpdatedOK");
-			}
-			else
-				client.sendToClient("BookIsInTheDB");
-			break;
-			// end of add book Handler
+				res = stmt.executeQuery("SELECT * from Books WHERE bookid='"+Book_id+"'");
+				rcount = getRowCount(res);
+				if (rcount == 0) //If such BID doesn't exist
+				{
+					stmt.executeUpdate("INSERT into books (bookid, booktitle, booklang, format, price) values ('"+ Book_id +"', '"+ Book_Name +"', '"+ Book_lang +"', '"+ Book_Format +"', '"+ Book_Price +"' )");
+					client.sendToClient("BookUpdatedOK");
+				}
+				else
+					client.sendToClient("BookIsInTheDB");
+				break;
+				// end of add book Handler
 
-		case "getBooksRead":	
-			String username = (String) en.getParams().get("username");
-			ArrayList<String> bookTitles = new ArrayList<String>();
-			res = stmt.executeQuery("SELECT B.booktitle FROM books B, book_orders BO, orders O "
-					+ "WHERE B.bookid = BO.bookid AND O.orderid = BO.orderid AND O.username ='"+username+"'");		
-			while (res.next())
-			{
-				String bookTitle = res.getString("booktitle");
-				bookTitles.add(bookTitle);
-			}
-			params.put("msg","GetBooksRead");
-			params.put("booktitles", bookTitles);
-			client.sendToClient(envelope);
-		
-		break;
-		case "PublishReview":
-			username = (String) en.getParams().get("username");
-			String content = (String) en.getParams().get("content");
-			String keywords = (String) en.getParams().get("keywords");
-			String bookid = null;
-
-			/*Get book id*/
-			res = stmt.executeQuery("SELECT bookid from books where booktitle='"+en.getParams().get("booktitle")+"'");	
-			while (res.next())
-			{
-				bookid = res.getString("bookid");
-			}
-			/*End get book id*/
-
-			/*Check if user hasnt submitted a review for this book yet*/
-			res = stmt.executeQuery("SELECT reviewid from reviews where bookid='"+bookid+"' AND username='"+username+"'");	
-			if (getRowCount(res) > 0) //a review by this user for this book already exists
-			{
-				params.put("msg","PublishReviewNOTOK");
+			case "getBooksRead":	
+				String username = (String) en.getParams().get("username");
+				ArrayList<String> bookTitles = new ArrayList<String>();
+				res = stmt.executeQuery("SELECT B.booktitle FROM books B, book_orders BO, orders O "
+						+ "WHERE B.bookid = BO.bookid AND O.orderid = BO.orderid AND O.username ='"+username+"'");		
+				while (res.next())
+				{
+					String bookTitle = res.getString("booktitle");
+					bookTitles.add(bookTitle);
+				}
+				params.put("msg","GetBooksRead");
+				params.put("booktitles", bookTitles);
 				client.sendToClient(envelope);
+
+				break;
+			case "PublishReview":
+				username = (String) en.getParams().get("username");
+				String content = (String) en.getParams().get("content");
+				String keywords = (String) en.getParams().get("keywords");
+				String bookid = null;
+
+				/*Get book id*/
+				res = stmt.executeQuery("SELECT bookid from books where booktitle='"+en.getParams().get("booktitle")+"'");	
+				while (res.next())
+				{
+					bookid = res.getString("bookid");
+				}
+				/*End get book id*/
+
+				/*Check if user hasnt submitted a review for this book yet*/
+				res = stmt.executeQuery("SELECT reviewid from reviews where bookid='"+bookid+"' AND username='"+username+"'");	
+				if (getRowCount(res) > 0) //a review by this user for this book already exists
+				{
+					params.put("msg","PublishReviewNOTOK");
+					client.sendToClient(envelope);
+				}
+				/*End duplicate check*/
+				else //all good if got here
+				{
+					java.util.Date dt = new java.util.Date();
+					java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String currentTime = sdf.format(dt);
+					String query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+currentTime+"','"+content+"','"
+							+username+"','PENDING','"+keywords+"')";
+					stmt.executeUpdate(query);
+					params.put("msg","PublishReviewOK");
+					client.sendToClient(envelope);
+				}
+
+				break;
 			}
-			/*End duplicate check*/
-			else //all good if got here
-			{
-				java.util.Date dt = new java.util.Date();
-				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String currentTime = sdf.format(dt);
-				String query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+currentTime+"','"+content+"','"
-						+username+"','PENDING','"+keywords+"')";
-				stmt.executeUpdate(query);
-				params.put("msg","PublishReviewOK");
-				client.sendToClient(envelope);
-			}
 
-			break;
-		}
-
-	} catch (Exception x) {
-		JOptionPane.showMessageDialog(null, "Unable to connect to the database", "Connection error", JOptionPane.ERROR_MESSAGE);
-	}//outer try catch closed
+		} catch (Exception x) {
+			JOptionPane.showMessageDialog(null, "Unable to connect to the database", "Connection error", JOptionPane.ERROR_MESSAGE);
+		}//outer try catch closed
 
 
-}
-
-private int getRowCount(ResultSet resultSet) //helper method to see if a select query has any matching rows
-{
-	if (resultSet == null) {
-		return 0;
 	}
-	try {
-		resultSet.last();
-		return resultSet.getRow();
-	} catch (SQLException exp) {
-		exp.printStackTrace();
-	} finally {
+
+	private int getRowCount(ResultSet resultSet) //helper method to see if a select query has any matching rows
+	{
+		if (resultSet == null) {
+			return 0;
+		}
 		try {
-			resultSet.beforeFirst();
+			resultSet.last();
+			return resultSet.getRow();
 		} catch (SQLException exp) {
 			exp.printStackTrace();
+		} finally {
+			try {
+				resultSet.beforeFirst();
+			} catch (SQLException exp) {
+				exp.printStackTrace();
+			}
 		}
+		return 0;
 	}
-	return 0;
-}
 
 
 
@@ -287,36 +283,36 @@ private int getRowCount(ResultSet resultSet) //helper method to see if a select 
 
 
 
-public Connection getConn() {
-	return conn;
-}
+	public Connection getConn() {
+		return conn;
+	}
 
 
-public void setConn(Connection conn) {
-	this.conn = conn;
-}
-public void setController(ServerController controller) {
-	this.controller = controller;
-}
+	public void setConn(Connection conn) {
+		this.conn = conn;
+	}
+	public void setController(ServerController controller) {
+		this.controller = controller;
+	}
 
-/**
- * This method overrides the one in the superclass.  Called
- * when the server starts listening for connections.
- */
-protected void serverStarted()
-{
-	System.out.println("Server listening for connections on port " + DEFAULT_PORT);
-}
+	/**
+	 * This method overrides the one in the superclass.  Called
+	 * when the server starts listening for connections.
+	 */
+	protected void serverStarted()
+	{
+		System.out.println("Server listening for connections on port " + DEFAULT_PORT);
+	}
 
-/**
- * This method overrides the one in the superclass.  Called
- * when the server stops listening for connections.
- */
-protected void serverStopped()
-{
-	System.out.println
-	("Server has stopped listening for connections.");
-}
+	/**
+	 * This method overrides the one in the superclass.  Called
+	 * when the server stops listening for connections.
+	 */
+	protected void serverStopped()
+	{
+		System.out.println
+		("Server has stopped listening for connections.");
+	}
 
 
 }

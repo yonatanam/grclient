@@ -81,6 +81,7 @@ public class MainWindowGUI extends JFrame {
 
 	private JTextField nullField;
 	private JButton publishReviewButton;
+	private JButton btnSettlepayment;
 
 	
 	/**
@@ -230,13 +231,19 @@ public class MainWindowGUI extends JFrame {
 		publishReviewButton.setFont(new Font("Arial", Font.BOLD, 15));
 		publishReviewButton.setContentAreaFilled(false);
 		publishReviewButton.setBorderPainted(false);
-		publishReviewButton.setBounds(207, 380, 194, 110);
+		publishReviewButton.setBounds(241, 381, 130, 110);
 		contentPane.add(publishReviewButton);
 		/* End publish review button */
 		
+		/* Settle Payment Button*/
+		btnSettlepayment = new JButton("SettlePayment");
+		btnSettlepayment.setBounds(85, 367, 120, 23);
+		contentPane.add(btnSettlepayment);
+		/* End Of Settle Payment Button*/
+		
 		//Background
 		JLabel bg = new JLabel();
-		bg.setBounds(0, 0, 800, 600);
+		bg.setBounds(10, 0, 800, 600);
 		try {	
 		Image img1 = new ImageIcon(this.getClass().getResource("/bgWithoutLogo.png")).getImage();
 		bg.setIcon(new ImageIcon(img1));
@@ -280,4 +287,9 @@ public class MainWindowGUI extends JFrame {
 	{
 		publishReviewButton.addActionListener(e);
 	}
+	public void addBtnSettlepaymentActionListener(ActionListener e)
+	{
+		btnSettlepayment.addActionListener(e);
+	}	
+	
 }

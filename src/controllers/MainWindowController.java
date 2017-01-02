@@ -41,6 +41,7 @@ public class MainWindowController extends  AbstractController {
 		mwGui.addButtonWriteToWorkerActionListener(new WriteToWorkerListener());
 		mwGui.addButtonAddBookActionListener(new AddBookListener());
 		mwGui.addButtonPublishReviewActionListener(new PublishReviewListener());
+		mwGui.addBtnSettlepaymentActionListener(new SettlePaymentListener());
 	}
 	
 	
@@ -98,6 +99,23 @@ public class MainWindowController extends  AbstractController {
 		}
 		
 	}
+	class SettlePaymentListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e) 
+		{
+			/*
+			//SettlePaymentGUI spGUI = new SettlePaymentGUI();
+			SettlePaymentController spController = new SettlePaymentController(new SettlePaymentGUI());
+			
+			
+			
+			
+			
+			
+			*/
+		}
+		
+	}	
 	
 
 	

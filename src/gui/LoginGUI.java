@@ -25,7 +25,7 @@ public class LoginGUI extends JFrame {
 	private JTextField userField;
 	private JTextField nullField;
 	private JTextField passwordField;
-	private JTextField emailField;
+	private JTextField ForgotPasswordUserField;
 	private JButton buttonCancel;
 	private JButton buttonLogin;
 	private JButton btnForgotPassword;
@@ -83,29 +83,29 @@ public class LoginGUI extends JFrame {
 		
 		
 		//Email Field 
-		emailField = new JTextField()
+		ForgotPasswordUserField = new JTextField()
 		{
 		    @Override public void setBorder(Border border) {   //Disable field's border
 		        // No!
 		    }
 		};
 		
-		emailField.setForeground(Color.WHITE);
-		emailField.setFont(new Font("Arial", Font.PLAIN, 13));
-		emailField.setOpaque(false);       //Make Field transparent 
-		emailField.setText("Enter your email");
-		emailField.addFocusListener(new FocusAdapter() {
+		ForgotPasswordUserField.setForeground(Color.WHITE);
+		ForgotPasswordUserField.setFont(new Font("Arial", Font.PLAIN, 13));
+		ForgotPasswordUserField.setOpaque(false);       //Make Field transparent 
+		ForgotPasswordUserField.setText("Enter your username");
+		ForgotPasswordUserField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				emailField.setText("");                //Clear "Email String" on focus
+				ForgotPasswordUserField.setText("");                //Clear "Email String" on focus
 			}
 		});
 		
-		emailField.setToolTipText("");
-		emailField.setColumns(10);
-		emailField.setBounds(295, 429, 224, 39);
-		contentPane.add(emailField);
-		emailField.setVisible(false);
+		ForgotPasswordUserField.setToolTipText("");
+		ForgotPasswordUserField.setColumns(10);
+		ForgotPasswordUserField.setBounds(295, 429, 224, 39);
+		contentPane.add(ForgotPasswordUserField);
+		ForgotPasswordUserField.setVisible(false);
 		//Email field JText END
 		
 		
@@ -262,7 +262,7 @@ public class LoginGUI extends JFrame {
 	{
 		
 		FieldEmail.setVisible(true);
-		emailField.setVisible(true);
+		ForgotPasswordUserField.setVisible(true);
 		buttonSend.setVisible(true);
 	}
 	
@@ -271,10 +271,18 @@ public class LoginGUI extends JFrame {
 	{
 		
 		FieldEmail.setVisible(false);
-		emailField.setVisible(false);
+		ForgotPasswordUserField.setVisible(false);
 		buttonSend.setVisible(false);
 	}
-
+	
+	public String ForgotPasswordUserField() {
+		return ForgotPasswordUserField.getText();
+	}
+	
+	public void addRecoverMyPasswordActionListener(ActionListener e)
+	{
+		buttonSend.addActionListener(e);
+	}
 	public void addLoginActionListener(ActionListener e)
 	{
 		buttonLogin.addActionListener(e);

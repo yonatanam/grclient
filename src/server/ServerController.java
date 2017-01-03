@@ -70,6 +70,7 @@ public class ServerController
 		try 
 		{
 			conn = DriverManager.getConnection(database,username,password);
+			server.GoogleMail.getDBConnection(conn);
 			System.out.println("SQL connection succeed");
 			return true;
 		} catch (SQLException ex) 

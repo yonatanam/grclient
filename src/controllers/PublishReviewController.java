@@ -82,21 +82,24 @@ public class PublishReviewController extends AbstractController {
 	public void handleDBResult(Object message)
 	{	
 		Envelope en = (Envelope)message;
-		if (en.getParams().get("msg").equals("GetBooksRead"))
-		{
-			ArrayList<String> bookTitles = (ArrayList<String>)en.getParams().get("booktitles");
-			for (String bookTitle : bookTitles)
-				publishReviewGUI.getChooseBookComboBox().addItem(bookTitle);
-		}
-		else
-			if (en.getParams().get("msg").equals("PublishReviewOK"))
-			{
-				JOptionPane.showMessageDialog(null,"Review was published successfuly!");
+		switch ((String)en.getParams().get("msg"))
+				{
+				case "GetBooksRead":
 
-			}
-			else
-				JOptionPane.showMessageDialog(null,"Review already exists!","Error", JOptionPane.ERROR_MESSAGE);
-
+					ArrayList<String> bookTitles = (ArrayList<String>)en.getParams().get("booktitles");
+					for (String bookTitle : bookTitles)
+						publishReviewGUI.getChooseBookComboBox().addItem(bookTitle);
+					break;
+				case "PublishReviewOK":
+					JOptionPane.showMessageDialog(null,"Review was published successfuly!");
+					break;
+				case "PublishReviewNotOK":
+					JOptionPane.showMessageDialog(null,"Review already exists!","Error", JOptionPane.ERROR_MESSAGE);
+					break;
+				case "ReviewPopUp":
+					JOptionPane.showMessageDialog(null,"New review was added!");
+					break;
+				}
 	}
 
 	public void populateBooksRead()

@@ -3,12 +3,17 @@ package controllers;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 
 import client.App;
-
+import models.Envelope;
 import models.User;
 import gui.AddBookGUI;
 import gui.MainWindowGUI;
@@ -26,6 +31,7 @@ public class MainWindowController extends  AbstractController {
 	private LoginController lc;
 	private MainWindowGUI mwGui;
 	private MainWindowController tempL;
+	public static final long DEFAULT_THREAD = 0;
 
 	
 	/**
@@ -42,7 +48,9 @@ public class MainWindowController extends  AbstractController {
 		mwGui.addButtonAddBookActionListener(new AddBookListener());
 		mwGui.addButtonPublishReviewActionListener(new PublishReviewListener());
 		mwGui.addBtnSettlepaymentActionListener(new SettlePaymentListener());
+		mwGui.addWindowListenerFromController(new CustomWindowListener());
 	}
+	
 	
 	
 	/**
@@ -106,16 +114,48 @@ public class MainWindowController extends  AbstractController {
 			/*
 			//SettlePaymentGUI spGUI = new SettlePaymentGUI();
 			SettlePaymentController spController = new SettlePaymentController(new SettlePaymentGUI());
-			
-			
-			
-			
-			
-			
 			*/
 		}
 		
 	}	
+	
+	class CustomWindowListener implements WindowListener {
+	      
+
+	      public void windowClosing(WindowEvent e) {    
+				Map<String, Object> params = new LinkedHashMap<String,Object>();
+				Envelope envelope = new Envelope(params);
+				
+				params.put("username",  App.client.getCurrentUser().getUserName());
+				params.put("status", "ACTIVE");
+				params.put("threadnum", DEFAULT_THREAD);
+				params.put("msg",  "UpdateUserLoginStatus");
+				sendToServer(envelope);					
+	    	  System.out.println("CLOSING");
+	      }
+	      
+	      public void windowClosed(WindowEvent e) {
+	    	 
+	    	  
+	      }
+	      public void windowOpened(WindowEvent e) {
+	    	  System.out.println("Window opened");
+
+	    	  
+	      }
+
+	      public void windowIconified(WindowEvent e) {
+	      }
+
+	      public void windowDeiconified(WindowEvent e) {
+	      }
+
+	      public void windowActivated(WindowEvent e) {
+	      }
+
+	      public void windowDeactivated(WindowEvent e) {
+	      }
+	   }   
 	
 
 	

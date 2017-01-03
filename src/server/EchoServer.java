@@ -77,7 +77,7 @@ public class EchoServer extends AbstractServer
 
 	public void handleMessageFromClient (Object msg, ConnectionToClient client)
 	{
-		Map<String,Object> params = new LinkedHashMap<String,Object>();
+		Map<String,Object> params = new LinkedHashMap<String,Object>();	
 		Envelope envelope = new Envelope(params);
 		Envelope en=(Envelope) msg;
 		String message = (String) en.getParams().get("msg");
@@ -217,6 +217,7 @@ public class EchoServer extends AbstractServer
 
 				break;
 			case "PublishReview":
+
 				username = (String) en.getParams().get("username");
 				String content = (String) en.getParams().get("content");
 				String keywords = (String) en.getParams().get("keywords");
@@ -246,10 +247,47 @@ public class EchoServer extends AbstractServer
 					String query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+currentTime+"','"+content+"','"
 							+username+"','PENDING','"+keywords+"')";
 					stmt.executeUpdate(query);
+					
+					/*Send notification regarding new review*/
+					Thread[] clientThreadList = getClientConnections();
+					Map<String,Object> params2 = new LinkedHashMap<String,Object>();	
+					Envelope envelope2 = new Envelope(params2);
+					params2.put("msg", "ReviewPopUp");
+					query = "SELECT threadnum from users WHERE status='LOGGED_IN' AND threadnum <> 0 AND (permission='LIBRARIAN' OR "
+							+ "permission='LIBRARY_MANAGER')";
+					res = stmt.executeQuery(query);
+					
+					
+					while (res.next())
+					{
+						long threadnum = res.getLong("threadnum");
+						for (Thread x : clientThreadList)
+						{
+							System.out.println("Thread id: "+ x.getId());
+							if (x.getId() == threadnum)
+							((ConnectionToClient)x).sendToClient(envelope2);
+						}
+					}
+					/*Thread[] clientThreadList = getClientConnections();
+					for (Thread x : clientThreadList)
+					((ConnectionToClient)x).sendToClient(envelope2);*/
+					
+					//((ConnectionToClient)clientThreadList[0]).sendToClient("ReviewPopUp");
+					/*End notification*/
 					params.put("msg","PublishReviewOK");
 					client.sendToClient(envelope);
 				}
 
+				break;
+			case "UpdateUserLoginStatus":
+				userName = (String)en.getParams().get("username");
+				
+				long threadnum = getThreadNum();
+				String status = (String)en.getParams().get("status");
+				if (status.equals("ACTIVE"))
+					threadnum=0;
+				String query = "UPDATE users SET STATUS='"+status+"' , threadnum="+threadnum+" WHERE username='"+userName+"'";
+				stmt.executeUpdate(query);
 				break;
 			}
 
@@ -283,7 +321,7 @@ public class EchoServer extends AbstractServer
 
 
 
-
+	
 
 
 	public Connection getConn() {
@@ -318,5 +356,6 @@ public class EchoServer extends AbstractServer
 	}
 
 
+	  
 }
 //End of EchoServer class   

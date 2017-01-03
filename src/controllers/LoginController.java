@@ -144,7 +144,8 @@ public class LoginController extends  AbstractController
 	public void handleDBResult(Object message)
 	{	
 		Envelope en = (Envelope) message;
-		
+		if (((String)en.getParams().get("msg")).equals("ReviewPopUp"))
+			JOptionPane.showMessageDialog(null,"New review was added!");
 		String str = (String)en.getParams().get("msg");
 		if(str.equals("UserOrPassIncorrect"))			
 		{
@@ -175,10 +176,20 @@ public class LoginController extends  AbstractController
 					(String)en.getParams().get("permission"));
 			App.client.setCurrentUser(user);
 			
+			/*Change status of user in db*/
+			Map<String, Object> params = new LinkedHashMap<String,Object>();
+			Envelope envelope = new Envelope(params);
+			params.put("username",  user.getUserName());
+			params.put("status", "LOGGED_IN");
+			params.put("threadnum", App.client.getClientThreadID());
+			params.put("msg",  "UpdateUserLoginStatus");
+			sendToServer(envelope);
+			/*End change status*/
+			System.out.println("Client thread id :"+App.client.getClientThreadID());
 			System.out.println("User is a "+ en.getParams().get("permission"));
 				MainWindowGUI mwg = new MainWindowGUI();
 				MainWindowController mwc = new MainWindowController(mwg);
-
+				
 				
 		} 
 

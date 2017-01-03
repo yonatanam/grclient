@@ -26,12 +26,15 @@ public class Client extends ObservableClient
 
 	private AbstractController currentController;
 	private User currentUser = null;
+	private long clientThreadID;
+
+
 
 
 	public Client(String host, int port)  throws IOException 
 	{
 		super(host, port); //Call the superclass constructor
-		openConnection();
+		clientThreadID = openConnection();
 	}
 	private LoginGUI loginG;
 	//Instance methods ************************************************
@@ -106,6 +109,14 @@ public class Client extends ObservableClient
 		this.currentController = currObj;
 	}
 
+	public long getClientThreadID() {
+		return clientThreadID;
+	}
+
+
+	public void setClientThreadID(long clientThreadID) {
+		this.clientThreadID = clientThreadID;
+	}
 	//terminate client
 	public void quit()
 	{

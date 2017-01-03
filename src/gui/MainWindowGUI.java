@@ -66,6 +66,9 @@ import javax.swing.JButton;
 import java.awt.Toolkit;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 public class MainWindowGUI extends JFrame {
 
@@ -93,6 +96,7 @@ public class MainWindowGUI extends JFrame {
 		setResizable(false);
 		setTitle("Good Reading");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -258,6 +262,7 @@ public class MainWindowGUI extends JFrame {
 		setLocationRelativeTo(null);
 		//panel.setOpaque(false);
 		setVisible(true);
+	
 		
 	} 
 	
@@ -291,5 +296,10 @@ public class MainWindowGUI extends JFrame {
 	{
 		btnSettlepayment.addActionListener(e);
 	}	
+	
+	public void addWindowListenerFromController(WindowListener e)
+	{
+		addWindowListener(e);
+	}
 	
 }

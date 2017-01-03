@@ -185,12 +185,15 @@ public class EchoServer extends AbstractServer
 				String Book_lang = (String) en.getParams().get("Book_lang");
 				String Book_Format = (String) en.getParams().get("Book_Format");
 				String Book_Price = (String) en.getParams().get("Book_Price");
-
+				String Book_inCatalog = (String) en.getParams().get("Book_inCatalog");
+				String Book_Synopsis = (String) en.getParams().get("Book_Synopsis");
+				
+				
 				res = stmt.executeQuery("SELECT * from Books WHERE bookid='"+Book_id+"'");
 				rcount = getRowCount(res);
 				if (rcount == 0) //If such BID doesn't exist
 				{
-					stmt.executeUpdate("INSERT into books (bookid, booktitle, booklang, format, price) values ('"+ Book_id +"', '"+ Book_Name +"', '"+ Book_lang +"', '"+ Book_Format +"', '"+ Book_Price +"' )");
+					stmt.executeUpdate("INSERT into books (bookid, booktitle, booklang, synopsis, format, incatalog, price) values ('"+ Book_id +"', '"+ Book_Name +"', '"+ Book_lang +"', '"+ Book_Synopsis +"', '"+ Book_Format +"', '"+ Book_inCatalog +"', '"+ Book_Price +"' )");
 					client.sendToClient("BookInsertedOK");
 				}
 				else

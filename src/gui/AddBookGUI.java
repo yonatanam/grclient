@@ -37,6 +37,7 @@ public class AddBookGUI extends JFrame {
 	private JLabel BackGround;
 	private String[] langs = {"Hebrew", "English", "Arabic", "Albanian", "Franch", "Pakistanian"};
 	private ButtonGroup formats;
+	private ButtonGroup yesno;
 	private JButton btnCancel;
 	private JComboBox comboBox;
 	private JRadioButton rdbtnPdf;
@@ -45,9 +46,11 @@ public class AddBookGUI extends JFrame {
 	private JLabel lblPrice;
 	private JTextField Price;
 	private JLabel PriceWarningLabel;
-	
-	
-
+	private JLabel lblWillItBe;
+	private JRadioButton rdbtnYes;
+	private JRadioButton rdbtnNo;
+	private JLabel lblSynopsis;
+	private JTextArea textArea;
 
 	public AddBookGUI() {
 		getContentPane().setLayout(null);
@@ -95,7 +98,7 @@ public class AddBookGUI extends JFrame {
 		ApplyButton.setForeground(Color.WHITE);
 		Image buttonapp = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
 		ApplyButton.setIcon(new ImageIcon(buttonapp));
-		ApplyButton.setBounds(174, 597, 116, 37);
+		ApplyButton.setBounds(175, 665, 116, 37);
 		ApplyButton.setHorizontalTextPosition(JButton.CENTER);
 		ApplyButton.setVerticalTextPosition(JButton.CENTER);
 		ApplyButton.setOpaque(false);
@@ -126,7 +129,7 @@ public class AddBookGUI extends JFrame {
 		comboBox.setBounds(153, 238, 116, 22);
 		getContentPane().add(comboBox);
 		
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
 		JScrollPane sc = new JScrollPane(textArea);
@@ -134,11 +137,11 @@ public class AddBookGUI extends JFrame {
 		sc.setBounds(153, 300, 239, 64);
 		getContentPane().add(sc);
 		
-		JLabel lblSummary = new JLabel("Summary:");
-		lblSummary.setForeground(Color.LIGHT_GRAY);
-		lblSummary.setFont(new Font("Arial", Font.BOLD, 18));
-		lblSummary.setBounds(12, 303, 102, 22);
-		getContentPane().add(lblSummary);
+		lblSynopsis = new JLabel("Synopsis:");
+		lblSynopsis.setForeground(Color.LIGHT_GRAY);
+		lblSynopsis.setFont(new Font("Arial", Font.BOLD, 18));
+		lblSynopsis.setBounds(12, 303, 102, 22);
+		getContentPane().add(lblSynopsis);
 		
 		JLabel lblFormat = new JLabel("Format:");
 		lblFormat.setForeground(Color.LIGHT_GRAY);
@@ -147,6 +150,7 @@ public class AddBookGUI extends JFrame {
 		getContentPane().add(lblFormat);
 		
 		formats = new ButtonGroup();
+		yesno = new ButtonGroup();
 		
 		rdbtnPdf = new JRadioButton("PDF");
 		rdbtnPdf.setFont(new Font("Arial", Font.BOLD, 15));
@@ -185,7 +189,7 @@ public class AddBookGUI extends JFrame {
 		btnCancel.setFont(new Font("Arial", Font.BOLD, 16));
 		btnCancel.setContentAreaFilled(false);
 		btnCancel.setBorderPainted(false);
-		btnCancel.setBounds(12, 597, 116, 37);
+		btnCancel.setBounds(12, 665, 116, 37);
 		getContentPane().add(btnCancel);
 		
 		lblPrice = new JLabel("Price:");
@@ -205,6 +209,30 @@ public class AddBookGUI extends JFrame {
 		PriceWarningLabel.setBounds(318, 507, 239, 16);
 		getContentPane().add(PriceWarningLabel);
 		
+		lblWillItBe = new JLabel("Will the book be in the catalog?");
+		lblWillItBe.setForeground(Color.LIGHT_GRAY);
+		lblWillItBe.setFont(new Font("Arial", Font.BOLD, 18));
+		lblWillItBe.setBounds(12, 561, 294, 22);
+		getContentPane().add(lblWillItBe);
+		
+		rdbtnNo = new JRadioButton("NO");
+		rdbtnNo.setForeground(Color.LIGHT_GRAY);
+		rdbtnNo.setFont(new Font("Arial", Font.BOLD, 15));
+		rdbtnNo.setBackground(Color.BLACK);
+		rdbtnNo.setBounds(12, 604, 61, 25);
+		getContentPane().add(rdbtnNo);
+		
+		rdbtnYes = new JRadioButton("YES");
+		rdbtnYes.setSelected(true);
+		rdbtnYes.setForeground(Color.LIGHT_GRAY);
+		rdbtnYes.setFont(new Font("Arial", Font.BOLD, 15));
+		rdbtnYes.setBackground(Color.BLACK);
+		rdbtnYes.setBounds(138, 604, 61, 25);
+		getContentPane().add(rdbtnYes);
+		
+		yesno.add(rdbtnNo);
+		yesno.add(rdbtnYes);
+		
 		BackGround = new JLabel("");
 		BackGround.setIcon(new ImageIcon(imgbg));
 		BackGround.setBounds(0, 0, 851, 762);
@@ -218,6 +246,18 @@ public class AddBookGUI extends JFrame {
 	}
 	
 	
+	// ------------------ Getters and Setters for all components ---------------------------------//
+	
+	public JRadioButton getRdbtnYes() {
+		return rdbtnYes;
+	}
+
+
+	public JRadioButton getRdbtnNo() {
+		return rdbtnNo;
+	}
+
+
 	public JLabel getPriceWarningLabel() {
 		return PriceWarningLabel;
 	}
@@ -277,9 +317,19 @@ public class AddBookGUI extends JFrame {
 		return rdbtnFb;
 	}
 
+	public JTextArea getTextArea() {
+		return textArea;
+	}
+	
+	// ----------------------------------- end of getters and setters -------------------------------------------//
+	
 	
 	//listeners for AddBookGUI
 	
+
+
+
+
 
 
 

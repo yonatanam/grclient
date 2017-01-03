@@ -28,8 +28,6 @@ public class Client extends ObservableClient
 	private User currentUser = null;
 
 
-
-
 	public Client(String host, int port)  throws IOException 
 	{
 		super(host, port); //Call the superclass constructor

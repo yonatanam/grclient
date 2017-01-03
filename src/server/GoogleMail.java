@@ -38,7 +38,7 @@ public class GoogleMail {
         String ToSend;
         String Email="";
         String Pass="";
-        if(MessageType==1){Email="ishi141991@gmail.com";}
+        if(MessageType==1){Email="ishi14199121@gmail.com";}
         if(MessageType==2){
         	Email=GetUserMail(user);
         if(Email=="NO"){return 0;}

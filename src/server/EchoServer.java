@@ -257,7 +257,7 @@ public class EchoServer extends AbstractServer
 							+ "permission='LIBRARY_MANAGER')";
 					res = stmt.executeQuery(query);
 					
-					
+					//
 					while (res.next())
 					{
 						long threadnum = res.getLong("threadnum");

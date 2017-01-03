@@ -77,7 +77,7 @@ public class LoginController extends  AbstractController
 	}//action
 
 
-	
+
 	class ForgotPasswordListener implements ActionListener 
 	{
 		@Override
@@ -128,11 +128,11 @@ public class LoginController extends  AbstractController
 					Envelope envelope = new Envelope(params);
 					sendToServer(envelope);
 					App.client.setCurrentController(getLoginController()); //Set the controller at Client class to LoginController
-					
+
 				}
 				catch(Exception e)
 				{
-				System.out.println("Exception at sending login user info to server "+ e );
+					System.out.println("Exception at sending login user info to server "+ e );
 				}
 			}//else
 		}
@@ -149,7 +149,7 @@ public class LoginController extends  AbstractController
 		String str = (String)en.getParams().get("msg");
 		if(str.equals("UserOrPassIncorrect"))			
 		{
-		/*//TODO Change this to server side
+			/*//TODO Change this to server side
 			//if user or password incorrect show warning message 
 															//and increase counter by 1
 			JOptionPane.showMessageDialog(null,"User Or Password Incorrect!\n" + loginCounter + "(out of 3) attempts","Error", JOptionPane.ERROR_MESSAGE);   
@@ -162,36 +162,34 @@ public class LoginController extends  AbstractController
 				loginCounter=1;							//reset counter	
 			}//if counter			
 		}//if	 
-		*/
+			 */
 		}
 		else 
 			if (str.equals("LoginOK"))
 			{
-			loginGUI.dispose();											 //Close login GUI
-			//make a switch here with GUIS depending on user level
-			User user = new User( (String)en.getParams().get("fname"),
-					(String)en.getParams().get("lname"),
-					(String)en.getParams().get("username"),
-					(String)en.getParams().get("email"),
-					(String)en.getParams().get("permission"));
-			App.client.setCurrentUser(user);
-			
-			/*Change status of user in db*/
-			Map<String, Object> params = new LinkedHashMap<String,Object>();
-			Envelope envelope = new Envelope(params);
-			params.put("username",  user.getUserName());
-			params.put("status", "LOGGED_IN");
-			params.put("threadnum", App.client.getClientThreadID());
-			params.put("msg",  "UpdateUserLoginStatus");
-			sendToServer(envelope);
-			/*End change status*/
-			System.out.println("Client thread id :"+App.client.getClientThreadID());
-			System.out.println("User is a "+ en.getParams().get("permission"));
+				loginGUI.dispose();											 //Close login GUI
+				//make a switch here with GUIS depending on user level
+				User user = new User( (String)en.getParams().get("fname"),
+						(String)en.getParams().get("lname"),
+						(String)en.getParams().get("username"),
+						(String)en.getParams().get("email"),
+						(String)en.getParams().get("permission"));
+				App.client.setCurrentUser(user);
+
+				/*Change status of user in db*/
+				Map<String, Object> params = new LinkedHashMap<String,Object>();
+				Envelope envelope = new Envelope(params);
+				params.put("username",  user.getUserName());
+				params.put("status", "LOGGED_IN");
+				params.put("msg",  "UpdateUserLoginStatus");
+				sendToServer(envelope);
+				/*End change status*/
+				System.out.println("User is a "+ en.getParams().get("permission"));
 				MainWindowGUI mwg = new MainWindowGUI();
 				MainWindowController mwc = new MainWindowController(mwg);
-				
-				
-		} 
+
+
+			} 
 
 	}
 

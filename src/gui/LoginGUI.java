@@ -68,6 +68,7 @@ public class LoginGUI extends JFrame {
 		passwordField.setFont(new Font("Arial", Font.PLAIN, 13));
 		passwordField.setOpaque(false);       //Make Field transparent 
 		passwordField.setText("Password");
+		passwordField.setText("1234");//////////////////////////////////////////////////////////
 		passwordField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -122,6 +123,7 @@ public class LoginGUI extends JFrame {
 		userField.setFont(new Font("Arial", Font.PLAIN, 13));
 		userField.setOpaque(false);       //Make Field transparent 
 		userField.setText("Username");
+		userField.setText("adi");/////////////////////////////////////////////////////////////////////////
 		userField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {

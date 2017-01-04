@@ -198,13 +198,14 @@ public class EchoServer extends AbstractServer
 				String Book_Price = (String) en.getParams().get("Book_Price");
 				String Book_inCatalog = (String) en.getParams().get("Book_inCatalog");
 				String Book_Synopsis = (String) en.getParams().get("Book_Synopsis");
-				
+				String Book_Keywords = (String) en.getParams().get("Book_Keywords");
+				String Book_TOC = (String) en.getParams().get("Book_TOC");
 				
 				res = stmt.executeQuery("SELECT * from Books WHERE bookid='"+Book_id+"'");
 				rcount = getRowCount(res);
 				if (rcount == 0) //If such BID doesn't exist
 				{
-					stmt.executeUpdate("INSERT into books (bookid, booktitle, booklang, synopsis, format, incatalog, price) values ('"+ Book_id +"', '"+ Book_Name +"', '"+ Book_lang +"', '"+ Book_Synopsis +"', '"+ Book_Format +"', '"+ Book_inCatalog +"', '"+ Book_Price +"' )");
+					stmt.executeUpdate("INSERT into books (bookid, booktitle, booklang, synopsis, toc, keywords, format, incatalog, price) values ('"+ Book_id +"', '"+ Book_Name +"', '"+ Book_lang +"', '"+ Book_Synopsis +"', '"+ Book_TOC +"', '"+ Book_Keywords +"', '"+ Book_Format +"', '"+ Book_inCatalog +"', '"+ Book_Price +"' )");
 					client.sendToClient("BookInsertedOK");
 				}
 				else
@@ -300,7 +301,52 @@ public class EchoServer extends AbstractServer
 				String query = "UPDATE users SET STATUS='"+status+"' , threadnum="+threadnum+" WHERE username='"+userName+"'";
 				stmt.executeUpdate(query);
 				break;
+			case "CreateNewCategory":      // insert new category for the library
+				System.out.println("in here!!!");
+				String CatId = (String) en.getParams().get("CatId");
+				String CatName = (String) en.getParams().get("CatName");
+				
+				res = stmt.executeQuery("SELECT categoryid from categories where categoryid = '"+ CatId +"'");
+				
+				
+				if(getRowCount(res) == 0) // checking if there are any categories with the same name or id
+				{
+					res = stmt.executeQuery("SELECT category_name from categories where category_name = '"+ CatName +"'");
+					if(getRowCount(res) == 0)
+					{
+						stmt.executeUpdate("INSERT into categories (categoryid, category_name) values ('"+ CatId +"', '"+ CatName +"')");
+						params.put("msg", "CreateNewCategoryOK");
+						client.sendToClient(envelope);
+					}
+				}
+				else if(getRowCount(res) > 0)
+				{
+					params.put("msg", "CategoryidExist");
+					client.sendToClient(envelope);
+				}
+				else
+				{
+					res = stmt.executeQuery("SELECT category_name from categories where category_name = '"+ CatName +"'");
+					if(getRowCount(res) > 0)
+					{
+						params.put("msg", "Category_nameExist");
+						client.sendToClient(envelope);
+					}
+				}
+				break;
+			case "GetCategories":
+				ArrayList<String> categories = new ArrayList<String>();
+				
+				ResultSet res4 = stmt.executeQuery("SELECT category_name from categories");
+				while(res4.next())
+					categories.add(res4.getString("category_name"));
+				
+				params.put("msg", "AllCategoriesInDB");
+				params.put("categories", categories);
+				client.sendToClient(envelope);
+				break;
 			}
+			
 
 		} catch (Exception x) {
 			JOptionPane.showMessageDialog(null, "Unable to connect to the database", "Connection error", JOptionPane.ERROR_MESSAGE);

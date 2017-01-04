@@ -18,12 +18,13 @@ public class SettlePaymentController extends  AbstractController
 	{
 		spGUI = sp;
 		//spGUI.addCbSubscriptionTypeActionListener(new handler());
-		spGUI.addSubmitActionListener(new handler());
+		getSubscriptionNames();
+		spGUI.addSubmitActionListener(new submitHandler());
 		//spGUI.addTextFiledListener(new HandleJtextField(2));
 		
 	}
 	
-	class handler implements ActionListener 
+	class submitHandler implements ActionListener 
 	{
 		private boolean valid;
 		@Override
@@ -93,6 +94,4 @@ public class SettlePaymentController extends  AbstractController
 		sendToServer(envelope);
 		*/
 	}
-	
-
 }

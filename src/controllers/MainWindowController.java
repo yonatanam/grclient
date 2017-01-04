@@ -19,6 +19,7 @@ import gui.AddBookGUI;
 import gui.MainWindowGUI;
 import gui.PublishReviewGUI;
 import gui.ReadWorkerGUI;
+import gui.SearchReviewGUI;
 import gui.WriteWorkerGUI;
 
 
@@ -47,7 +48,8 @@ public class MainWindowController extends  AbstractController {
 		mwGui.addButtonWriteToWorkerActionListener(new WriteToWorkerListener());
 		mwGui.addButtonAddBookActionListener(new AddBookListener());
 		mwGui.addButtonPublishReviewActionListener(new PublishReviewListener());
-		mwGui.addBtnSettlepaymentActionListener(new SettlePaymentListener());
+		mwGui.addBtnSettlePaymentActionListener(new SettlePaymentListener());
+		mwGui.addBtnSearchReviewActionListener(new SearchReviewListener());
 		mwGui.addWindowListenerFromController(new CustomWindowListener());
 	}
 	
@@ -118,6 +120,15 @@ public class MainWindowController extends  AbstractController {
 		}
 		
 	}	
+
+	class SearchReviewListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e) 
+		{
+			mwGui.dispose();
+			new SearchReviewController(new SearchReviewGUI());			
+		}		
+	}		
 	
 	class CustomWindowListener implements WindowListener {
 	      

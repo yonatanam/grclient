@@ -199,7 +199,8 @@ public class SettlePaymentGUI extends  JPanel
 	
 	public String getSubscriptioType()
 	{
-		return String.valueOf(cbSubscriptionName.getSelectedIndex());
+		return"aaa";
+		//return String.valueOf(cbSubscriptionName.getSelectedIndex());
 	}			
 	
 	public void AddItemToCbSubscriptionName(String item)

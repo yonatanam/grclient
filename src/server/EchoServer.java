@@ -136,6 +136,17 @@ public class EchoServer extends AbstractServer
 
 				//end Login
 				break;
+			
+			case "ForgotPassword":
+				
+					String user = (String) en.getParams().get("username");
+					if(server.GoogleMail.main(2,user,conn)==1)
+						//client.sendToClient("ForgotPassword");
+						System.out.println("Mail was sent!");
+					else
+						client.sendToClient("ForgotPasswordFalse");	
+					break;
+				
 			case "getWorkerData":
 				res = stmt.executeQuery("SELECT * from worker");	
 				Vector<Object> columnNames = new Vector<Object>();

@@ -93,6 +93,8 @@ public class LoginController extends  AbstractController
 				loginGUI.disposeEmailField();
 				status = true;
 			}
+				
+			ForgotPasswordController fpc = new ForgotPasswordController(loginGUI);
 		}	
 	}//action
 

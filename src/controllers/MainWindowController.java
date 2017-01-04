@@ -16,6 +16,7 @@ import client.App;
 import models.Envelope;
 import models.User;
 import gui.AddBookGUI;
+import gui.AddCategoryGUI;
 import gui.MainWindowGUI;
 import gui.PublishReviewGUI;
 import gui.ReadWorkerGUI;
@@ -44,6 +45,7 @@ public class MainWindowController extends  AbstractController {
 	public MainWindowController(MainWindowGUI mwGui) {
 		this.mwGui = mwGui;
 		tempL = this;
+		mwGui.addButtonCreateNewCategoryActionListener(new CreateNewCategoryActionListener());
 		mwGui.addButtonReadFromWorkerActionListener(new ReadFromWorkerListener());
 		mwGui.addButtonWriteToWorkerActionListener(new WriteToWorkerListener());
 		mwGui.addButtonAddBookActionListener(new AddBookListener());
@@ -59,6 +61,19 @@ public class MainWindowController extends  AbstractController {
 	 * Inner class where button Manage Files pressed , implements action listener which opens the manage files window.
 	 *
 	 */
+	class CreateNewCategoryActionListener implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			AddCategoryGUI acg = new AddCategoryGUI();
+			CategoryController cc = new CategoryController(acg);
+		}
+		
+	}
+	
+	
+	
 	
 	// Adding new book to system by the manager
 	class AddBookListener implements ActionListener

@@ -81,6 +81,7 @@ public class EchoServer extends AbstractServer
 		Envelope envelope = new Envelope(params);
 		Envelope en=(Envelope) msg;
 		String message = (String) en.getParams().get("msg");
+		String query = null;
 		try 
 		{
 			Statement stmt = conn.createStatement();  
@@ -255,7 +256,7 @@ public class EchoServer extends AbstractServer
 					java.util.Date dt = new java.util.Date();
 					java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					String currentTime = sdf.format(dt);
-					String query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+currentTime+"','"+content+"','"
+					query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+currentTime+"','"+content+"','"
 							+username+"','PENDING','"+keywords+"')";
 					stmt.executeUpdate(query);
 					
@@ -297,10 +298,59 @@ public class EchoServer extends AbstractServer
 				String status = (String)en.getParams().get("status");
 				if (status.equals("ACTIVE"))
 					threadnum=0;
-				String query = "UPDATE users SET STATUS='"+status+"' , threadnum="+threadnum+" WHERE username='"+userName+"'";
+				query = "UPDATE users SET STATUS='"+status+"' , threadnum="+threadnum+" WHERE username='"+userName+"'";
 				stmt.executeUpdate(query);
 				break;
+				
+			case "SearchReview":	
+				System.out.println("SearchReview");
+				String searchType = (String)en.getParams().get("searchType");
+				String searchText = (String)en.getParams().get("searchText");
+				switch(searchType)
+				{
+					case "Book's name":
+						//query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.booktitle = '" + searchText + "'"; 
+						query = "SELECT R.username, R.date, R.content FROM reviews AS R WHERE R.status = 'APPROVED' AND R.username = '" + searchText + "'";
+						break;
+					case "Book's writer":
+						//query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.bookid = B.bookid AND B.booktitle = '" + searchText + "'";
+						break;
+					case "Key words":
+						query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.keywords = '" + searchText + "'";
+						break;
+				}
+				 
+				res = stmt.executeQuery(query);
+				if(getRowCount(res) == 0)
+					params.put("msg","SearchReviewResultsEmpty");
+				else
+				{
+					md = res.getMetaData();
+					columns = md.getColumnCount();
+					data = new Vector<Object>();
+					columnNames = new Vector<Object>();
+					
+					//Get columns names
+					for (int i = 1; i <= columns; i++)
+						columnNames.addElement(md.getColumnName(i));
+					//Get rows
+					while (res.next())
+					{
+						Vector<Object> row = new Vector<Object>(columns);
+						for (int i = 1; i <= columns; i++)
+							row.addElement(res.getObject(i));
+						data.addElement(row);
+					}
+					
+					params.put("msg","SearchReviewResults");
+					params.put("columnNames",columnNames);
+					params.put("data",data);
+				}
+				client.sendToClient(envelope);
+				break;			
 			}
+			
+			
 
 		} catch (Exception x) {
 			JOptionPane.showMessageDialog(null, "Unable to connect to the database", "Connection error", JOptionPane.ERROR_MESSAGE);

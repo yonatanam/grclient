@@ -85,6 +85,7 @@ public class MainWindowGUI extends JFrame {
 	private JTextField nullField;
 	private JButton publishReviewButton;
 	private JButton btnSettlepayment;
+	private JButton btnSearchReview;
 
 	
 	/**
@@ -245,6 +246,21 @@ public class MainWindowGUI extends JFrame {
 		contentPane.add(btnSettlepayment);
 		/* End Of Settle Payment Button*/
 		
+		/* Search Review Button*/
+		btnSearchReview = new JButton("Search review");
+		btnSearchReview.setFont(new Font("Arial", Font.BOLD, 14));
+		Image imgBtnSearchReview = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
+		btnSearchReview.setIcon(new ImageIcon(imgBtnSearchReview));
+		btnSearchReview.setBounds(79, 425, 139, 25);
+		btnSearchReview.setOpaque(false);
+		btnSearchReview.setContentAreaFilled(false);
+		btnSearchReview.setBorderPainted(false);
+		btnSearchReview.setHorizontalTextPosition(JButton.CENTER);
+		btnSearchReview.setVerticalTextPosition(JButton.CENTER);
+		btnSearchReview.setForeground(Color.WHITE);
+		contentPane.add(btnSearchReview);
+		/* End Of Search Review Button*/
+		
 		//Background
 		JLabel bg = new JLabel();
 		bg.setBounds(10, 0, 800, 600);
@@ -292,14 +308,18 @@ public class MainWindowGUI extends JFrame {
 	{
 		publishReviewButton.addActionListener(e);
 	}
-	public void addBtnSettlepaymentActionListener(ActionListener e)
+	public void addBtnSettlePaymentActionListener(ActionListener e)
 	{
 		btnSettlepayment.addActionListener(e);
+	}	
+
+	public void addBtnSearchReviewActionListener(ActionListener e)
+	{
+		btnSearchReview.addActionListener(e);
 	}	
 	
 	public void addWindowListenerFromController(WindowListener e)
 	{
 		addWindowListener(e);
 	}
-	
 }

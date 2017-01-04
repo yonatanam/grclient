@@ -37,6 +37,7 @@ public class BookController extends AbstractController{
 		bookController = this;
 		abg.AddTextBookIdMouseListener(new TextBookIdMouseListener());
 		abg.AddTextBookNameMouseListener(new TextBookNameMouseListener());
+		abg.AddTextPriceMouseListener(new TextPriceMouseListener());
 		abg.AddbuttonApplyactionListener(new buttonApplyActionListener());
 		abg.addButtonCancelFromAddBookActionListener(new CancelFromReadFromWorkerListener());
 	}
@@ -82,6 +83,41 @@ public class BookController extends AbstractController{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			addBookGUI.SetBookNameText("");
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}	
+		
+	}
+	
+	public class TextPriceMouseListener implements MouseListener
+	{
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			addBookGUI.getPrice().setText("");
 			
 		}
 
@@ -164,7 +200,9 @@ public class BookController extends AbstractController{
 				String Book_Format = null;
 				String Book_Price = addBookGUI.getPrice().getText();
 				String Book_inCatalog = null;
-				String Book_Synopsis = addBookGUI.getTextArea().getText();
+				String Book_Synopsis = addBookGUI.getSynopsisArea().getText();
+				String Book_TOC = addBookGUI.getTOC_area().getText();
+				String Book_Keywords = addBookGUI.getKeywords_area().getText();
 				
 				if(addBookGUI.getRdbtnDoc().isSelected())
 					Book_Format = "DOC";
@@ -188,7 +226,8 @@ public class BookController extends AbstractController{
 				params.put("Book_Price", Book_Price);
 				params.put("Book_inCatalog", Book_inCatalog);
 				params.put("Book_Synopsis", Book_Synopsis);
-				
+				params.put("Book_Keywords", Book_Keywords);
+				params.put("Book_TOC", Book_TOC);
 				
 				Envelope envelope = new Envelope(params);
 				App.client.setCurrentController(bookController);

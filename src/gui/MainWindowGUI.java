@@ -81,7 +81,7 @@ public class MainWindowGUI extends JFrame {
 	private JButton buttonReadFromDB;
 	private JButton buttonWriteToDB;
 	private JButton buttonAddBook;
-
+	private JButton buttonCreateCategory;
 	private JTextField nullField;
 	private JButton publishReviewButton;
 	private JButton btnSettlepayment;
@@ -212,10 +212,22 @@ public class MainWindowGUI extends JFrame {
 		
 		// ----------------- end button ------------------------//
 		
+		// --------------- Creating new category --------------------//
 		
+		buttonCreateCategory = new JButton("Create new category");
+		Image createnewcat = new ImageIcon(this.getClass().getResource("/Button.png")).getImage();
+		buttonCreateCategory.setIcon(new ImageIcon(createnewcat));
+		buttonCreateCategory.setVerticalTextPosition(SwingConstants.CENTER);
+		buttonCreateCategory.setOpaque(false);
+		buttonCreateCategory.setHorizontalTextPosition(SwingConstants.CENTER);
+		buttonCreateCategory.setForeground(Color.WHITE);
+		buttonCreateCategory.setFont(new Font("Arial", Font.BOLD, 14));
+		buttonCreateCategory.setContentAreaFilled(false);
+		buttonCreateCategory.setBorderPainted(false);
+		buttonCreateCategory.setBounds(0, 338, 228, 41);
+		contentPane.add(buttonCreateCategory);
 		
-		
-		
+		// --------------------- end button --------------------------------//
 		
 		//This is the LOGO
 		JLabel Logo = new JLabel();
@@ -272,6 +284,11 @@ public class MainWindowGUI extends JFrame {
 	public void addButtonAddBookActionListener(ActionListener e)
 	{
 		buttonAddBook.addActionListener(e);
+	}
+	
+	public void addButtonCreateNewCategoryActionListener(ActionListener e)
+	{
+		buttonCreateCategory.addActionListener(e);
 	}
 	
 	public void addButtonHomeActionListener(ActionListener e)

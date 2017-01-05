@@ -66,6 +66,7 @@ public class MainWindowController extends  AbstractController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			mwGui.dispose();
 			AddCategoryGUI acg = new AddCategoryGUI();
 			CategoryController cc = new CategoryController(acg);
 		}
@@ -79,7 +80,7 @@ public class MainWindowController extends  AbstractController {
 	class AddBookListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
-			//mwGui.dispose();
+			mwGui.dispose();
 			AddBookGUI adg = new AddBookGUI();
 			BookController abk = new BookController(adg);
 			

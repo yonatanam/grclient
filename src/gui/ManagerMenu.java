@@ -34,3 +34,4 @@ public class ManagerMenu extends LibrarianMenu{
 
 	/** End getters and setters*/
 }
+//

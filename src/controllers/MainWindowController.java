@@ -118,7 +118,7 @@ public class MainWindowController extends  AbstractController {
 	class PublishReviewListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
-			
+			System.out.println("Publish review clicked!");
 			mwGui.dispose();
 			PublishReviewGUI prg = new PublishReviewGUI();
 			PublishReviewController prc = new PublishReviewController(prg);

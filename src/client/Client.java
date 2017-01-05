@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.awt.Window;
 import java.io.*;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import controllers.*;
 
@@ -115,5 +116,19 @@ public class Client extends ObservableClient
 		}
 		catch(IOException e) {}
 		System.exit(0);
+	}
+	
+	public UserMenu menuSwitcher()
+	{
+		switch (App.client.currentUser.getPermission())
+		{
+		case "USER":
+			return new UserMenu();
+		case "LIBRARIAN":
+			return new LibrarianMenu();
+		case "LIBRARY_MANAGER":
+			return new ManagerMenu();
+		}
+		return null;
 	}
 }

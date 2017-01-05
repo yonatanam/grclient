@@ -86,7 +86,7 @@ public class MainWindowGUI extends JFrame {
 	private JButton publishReviewButton;
 	private JButton btnSettlepayment;
 	private JButton btnSearchReview;
-
+	private UserMenu userMenu;
 	
 	/**
 	 * Create the frame. This is the Home window.
@@ -199,7 +199,7 @@ public class MainWindowGUI extends JFrame {
 		buttonAddBook.setFont(new Font("Arial", Font.BOLD, 14));
 		Image addbook = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
 		buttonAddBook.setIcon(new ImageIcon(addbook));
-		buttonAddBook.setBounds(92, 287, 113, 25);
+		buttonAddBook.setBounds(244, 207, 113, 25);
 		buttonAddBook.setOpaque(false);
 		buttonAddBook.setContentAreaFilled(false);
 		buttonAddBook.setBorderPainted(false);
@@ -254,7 +254,7 @@ public class MainWindowGUI extends JFrame {
 		
 		/**----------------------------Settle Payment Button----------------------------*/
 		btnSettlepayment = new JButton("SettlePayment");
-		btnSettlepayment.setBounds(85, 367, 120, 23);
+		btnSettlepayment.setBounds(244, 158, 120, 23);
 		contentPane.add(btnSettlepayment);
 		/**----------------------------End Settle Payment Button----------------------------*/
 
@@ -263,7 +263,7 @@ public class MainWindowGUI extends JFrame {
 		btnSearchReview.setFont(new Font("Arial", Font.BOLD, 14));
 		Image imgBtnSearchReview = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
 		btnSearchReview.setIcon(new ImageIcon(imgBtnSearchReview));
-		btnSearchReview.setBounds(79, 425, 139, 25);
+		btnSearchReview.setBounds(376, 212, 139, 25);
 		btnSearchReview.setOpaque(false);
 		btnSearchReview.setContentAreaFilled(false);
 		btnSearchReview.setBorderPainted(false);
@@ -273,6 +273,12 @@ public class MainWindowGUI extends JFrame {
 		contentPane.add(btnSearchReview);
 		/**----------------------------End Search Review Button----------------------------*/
 		
+		/** Menu */
+		userMenu = App.client.menuSwitcher(); //Gets the specific menu per user permission
+		Menu menu = new Menu(userMenu);
+		menu.setBounds(10,11,165,550);
+		contentPane.add(menu);	
+		/** End menu */
 		//Background
 		JLabel bg = new JLabel();
 		bg.setBounds(10, 0, 800, 600);
@@ -324,6 +330,8 @@ public class MainWindowGUI extends JFrame {
 	public void addButtonPublishReviewActionListener(ActionListener e)
 	{
 		publishReviewButton.addActionListener(e);
+		System.out.println("im here!");
+		userMenu.getBtnAddReview().addActionListener(e);
 	}
 	public void addBtnSettlePaymentActionListener(ActionListener e)
 	{

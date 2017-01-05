@@ -18,6 +18,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import client.App;
+
 import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
@@ -38,7 +41,7 @@ public class PublishReviewGUI extends JFrame {
 	private JCheckBox chckbxNewCheckBox;
 	private JButton btnSubmit;
 	private JTextArea textArea;
-
+	private UserMenu userMenu;
 	
 	public PublishReviewGUI() {
 		initialize();
@@ -121,6 +124,13 @@ public class PublishReviewGUI extends JFrame {
 		btnSubmit.setBounds(322, 482, 89, 23);
 		getContentPane().add(btnSubmit);
 		/*End submit button*/
+		
+		/** Menu */
+		userMenu = App.client.menuSwitcher(); //Gets the specific menu per user permission
+		Menu menu = new Menu(userMenu);
+		menu.setBounds(10,11,165,550);
+		add(menu);	
+		/** End menu */
 		
 		//Background
 		JLabel bg = new JLabel();

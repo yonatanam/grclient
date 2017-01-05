@@ -35,6 +35,7 @@ public class PublishReviewController extends AbstractController {
 		this.publishReviewGUI =prg;
 		publishReviewController = this;  //IMPORTANT
 		populateBooksRead();
+		System.out.println("publishreviewcontroller");
 		prg.addButtonBackFromReadFromWorkerActionListener(new BackFromPublishReviewListener());
 		prg.addButtonSubmitPublishReviewActionListener(new SubmitPublishReviewListener());
 

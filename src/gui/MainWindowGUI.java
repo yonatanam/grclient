@@ -225,7 +225,7 @@ public class MainWindowGUI extends JFrame {
 		buttonCreateCategory.setFont(new Font("Arial", Font.BOLD, 14));
 		buttonCreateCategory.setContentAreaFilled(false);
 		buttonCreateCategory.setBorderPainted(false);
-		buttonCreateCategory.setBounds(0, 338, 228, 41);
+		buttonCreateCategory.setBounds(540, 259, 228, 41);
 		contentPane.add(buttonCreateCategory);
 		
 		// --------------------- end button --------------------------------//

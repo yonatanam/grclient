@@ -348,9 +348,8 @@ public class EchoServer extends AbstractServer
 				}
 				client.sendToClient(envelope);
 				break;	
-        
         case "CreateNewCategory":      // insert new category for the library
-				System.out.println("in here!!!");
+				//System.out.println("in here!!!");
 				String CatId = (String) en.getParams().get("CatId");
 				String CatName = (String) en.getParams().get("CatName");
 				

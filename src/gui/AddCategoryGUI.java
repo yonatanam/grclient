@@ -125,13 +125,15 @@ public class AddCategoryGUI extends JFrame {
 		TextCatName.setColumns(10);
 		
 		Id_Warning = new JLabel("");
+		Id_Warning.setFont(new Font("Arial", Font.BOLD, 15));
 		Id_Warning.setForeground(Color.RED);
-		Id_Warning.setBounds(529, 302, 213, 22);
+		Id_Warning.setBounds(573, 266, 213, 22);
 		getContentPane().add(Id_Warning);
 		
 		Name_Warning = new JLabel("");
+		Name_Warning.setFont(new Font("Arial", Font.BOLD, 15));
 		Name_Warning.setForeground(Color.RED);
-		Name_Warning.setBounds(529, 383, 213, 22);
+		Name_Warning.setBounds(574, 309, 213, 22);
 		getContentPane().add(Name_Warning);
 		
 		lblCreateNewCategories = new JLabel("Create new categories for your library ");

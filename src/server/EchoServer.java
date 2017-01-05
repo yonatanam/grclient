@@ -301,7 +301,9 @@ public class EchoServer extends AbstractServer
 					threadnum=0;
 				query = "UPDATE users SET STATUS='"+status+"' , threadnum="+threadnum+" WHERE username='"+userName+"'";
 				stmt.executeUpdate(query);
-				break;	
+				break;
+		
+			/**----------------------------Search Review----------------------------*/ 
 			case "SearchReview":	
 				System.out.println("SearchReview");
 				String searchType = (String)en.getParams().get("searchType");
@@ -348,7 +350,29 @@ public class EchoServer extends AbstractServer
 				}
 				client.sendToClient(envelope);
 				break;	
-        
+			/**----------------------------Search Review----------------------------*/ 
+				
+			/**----------------------------Get Subscriptions Names----------------------------*/ 	
+			case "getSubscriptionsNames":
+				query = "SELECT name, description FROM subscriptions";
+				res = stmt.executeQuery(query);
+				md = res.getMetaData();
+				columns = md.getColumnCount();
+				data = new Vector<Object>();
+				//Get rows
+				while (res.next())
+				{
+					Vector<Object> row = new Vector<Object>(columns);
+					for (int i = 1; i <= columns; i++)
+						row.addElement(res.getObject(i));
+					data.addElement(row);
+				}
+				params.put("msg","getSubscriptionsNames");
+				params.put("data",data);
+				client.sendToClient(envelope);
+				break;
+			/**----------------------------End of Get Subscriptions Names----------------------------*/ 
+				
         case "CreateNewCategory":      // insert new category for the library
 				System.out.println("in here!!!");
 				String CatId = (String) en.getParams().get("CatId");

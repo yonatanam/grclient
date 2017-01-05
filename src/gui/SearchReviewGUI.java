@@ -96,7 +96,6 @@ public class SearchReviewGUI extends JFrame
 		setTitle("Search Review");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(800,600);
-		//setSize(700,390);
 		setResizable(false);
 		setLocationRelativeTo(null);		
 		getContentPane().setLayout(null);			
@@ -134,19 +133,19 @@ public class SearchReviewGUI extends JFrame
 		return SearchFiled.getText();
 	}
 
-	public void addBtnBackActionListener(ActionListener e)
+	public void addBtnBackActionListener(ActionListener listener)
 	{
-		btnBack.addActionListener(e);
+		btnBack.addActionListener(listener);
 	}
 	
-	public void addBtnSearchActionListener(ActionListener e)
+	public void addBtnSearchActionListener(ActionListener listener)
 	{
-		btnSearch.addActionListener(e);
+		btnSearch.addActionListener(listener);
 	}
 	
-	public void addJtResultsTableListSelectionListener(ListSelectionListener e)
+	public void addJtResultsTableListSelectionListener(ListSelectionListener listener)
 	{
-		jtResultsTable.getSelectionModel().addListSelectionListener(e);
+		jtResultsTable.getSelectionModel().addListSelectionListener(listener);
 	}	
 	
 	public void generateResultsTable(Vector<Object> columnNames, Vector<Object> data)
@@ -220,10 +219,10 @@ public class SearchReviewGUI extends JFrame
                 BorderFactory.createCompoundBorder(
                     BorderFactory.createCompoundBorder(
                                     BorderFactory.createTitledBorder("Review's content"),
-                                    BorderFactory.createEmptyBorder(5,5,5,5)), null));
-	    panelResultsFound.add(jspReviewContent);
+                                    BorderFactory.createEmptyBorder(5,5,5,5)), null));	    
 	    jspReviewContent.setBounds(20, 271, 462, 140);
 	    jspReviewContent.setVisible(false);	    
+	    panelResultsFound.add(jspReviewContent);
 	    
 	    /** End of properties of jspReviewContent*/
 	    

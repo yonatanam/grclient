@@ -252,13 +252,13 @@ public class MainWindowGUI extends JFrame {
 		contentPane.add(publishReviewButton);
 		/* End publish review button */
 		
-		/* Settle Payment Button*/
+		/**----------------------------Settle Payment Button----------------------------*/
 		btnSettlepayment = new JButton("SettlePayment");
 		btnSettlepayment.setBounds(85, 367, 120, 23);
 		contentPane.add(btnSettlepayment);
-		/* End Of Settle Payment Button*/
-		
-		/* Search Review Button*/
+		/**----------------------------End Settle Payment Button----------------------------*/
+
+		/**----------------------------Search Review Button----------------------------*/
 		btnSearchReview = new JButton("Search review");
 		btnSearchReview.setFont(new Font("Arial", Font.BOLD, 14));
 		Image imgBtnSearchReview = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
@@ -271,7 +271,7 @@ public class MainWindowGUI extends JFrame {
 		btnSearchReview.setVerticalTextPosition(JButton.CENTER);
 		btnSearchReview.setForeground(Color.WHITE);
 		contentPane.add(btnSearchReview);
-		/* End Of Search Review Button*/
+		/**----------------------------End Search Review Button----------------------------*/
 		
 		//Background
 		JLabel bg = new JLabel();

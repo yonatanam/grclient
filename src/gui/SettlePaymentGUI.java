@@ -2,29 +2,22 @@ package gui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Vector;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.text.DefaultFormatter;
-import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.plaf.ComboBoxUI;
 import javax.swing.text.MaskFormatter;
-
 import models.AdvancedDocument;
-
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
-public class SettlePaymentGUI extends  JPanel
+public class SettlePaymentGUI extends JFrame
 {
 	private JLabel lblSettlePayment;
 	private JLabel lblCardNumber;
@@ -37,23 +30,24 @@ public class SettlePaymentGUI extends  JPanel
 	private JLabel lblErrorExpiration;
 		
 	private JTextField tfCardNumber;
-	//private JFormattedTextField tfCardNumber;
 	private JTextField tfSecurityCode;
-	//private JTextField tfExpirationDate;
 	
+	private String[] subscriptioDes;
 	
 	private JComboBox<String> cbMonth;
 	private JComboBox<String> cbYear;
 	private JComboBox<String> cbSubscriptionName;
 	
 	private JButton btnSubmit;
+	private JButton btnBack;
 	
-	JFormattedTextField zipField;
+	private JTextArea jtaSubscriptionDes;
+	
+	private JScrollPane jspSubscriptionDes;
 	
 	private final int MAX_LEN_CARD_NUMBER = 6; 
 	private final int MAX_LEN_SECURITY_NUMBER = 3; 
-	
-	
+		
 	public SettlePaymentGUI()
 	{		
 		
@@ -62,52 +56,31 @@ public class SettlePaymentGUI extends  JPanel
 		lblSettlePayment = new JLabel("Settle payment");
 		lblSettlePayment.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblSettlePayment.setBounds(148, 22, 127, 28);
-		add(lblSettlePayment);
+		getContentPane().add(lblSettlePayment);
 				
 		lblCardNumber = new JLabel("Card number:");
 		lblCardNumber.setBounds(31, 86, 80, 14);
-		add(lblCardNumber);
+		getContentPane().add(lblCardNumber);
 		
-		
-		
-		//tfCardNumber = new JFormattedTextField(new MyMaskFormat("##-##-##").getMaskForamt());
 		tfCardNumber = new JTextField();
 		tfCardNumber.setBounds(148, 83, 99, 20);
-		add(tfCardNumber);
+		getContentPane().add(tfCardNumber);
 		tfCardNumber.setColumns(10);
 		tfCardNumber.setDocument(new AdvancedDocument(MAX_LEN_CARD_NUMBER,AdvancedDocument.ONLY_NUMBERS));
 			
-		
-		//SimpleDateFormat format = new SimpleDateFormat("MM-YY");
-		//MaskFormatter m = new MaskFormatter("##-##");
-		//zipField = new JFormattedTextField(format);
-		//zipField.setFormatterFactory(new DefaultFormatterFactory(m));
-		
-		
-	
-		
-		//zipField.setText("12-12");
-		
-		//zipField.setBounds(148, 83, 86, 20);
-		//add(zipField);
-		
-	
-		//zipField.setColumns(10);
-
-		
 		lblErrorCardNum = new JLabel();
 		lblErrorCardNum.setFont(errorFont);
 		lblErrorCardNum.setForeground(Color.red);	
 		lblErrorCardNum.setBounds(257, 86, 153, 14);
-		add(lblErrorCardNum);	
+		getContentPane().add(lblErrorCardNum);	
 		
 		lblSecurityCode = new JLabel("Security code:");
 		lblSecurityCode.setBounds(31, 131, 92, 14);
-		add(lblSecurityCode);
+		getContentPane().add(lblSecurityCode);
 		
 		tfSecurityCode = new JTextField();
 		tfSecurityCode.setBounds(148, 128, 99, 20);
-		add(tfSecurityCode);
+		getContentPane().add(tfSecurityCode);
 		tfSecurityCode.setColumns(10);
 		tfSecurityCode.setDocument(new AdvancedDocument(MAX_LEN_SECURITY_NUMBER,AdvancedDocument.ONLY_NUMBERS));
 			
@@ -115,28 +88,22 @@ public class SettlePaymentGUI extends  JPanel
 		lblErrorSecurity.setFont(errorFont);
 		lblErrorSecurity.setForeground(Color.red);		
 		lblErrorSecurity.setBounds(257, 131, 153, 14);
-		add(lblErrorSecurity);	
+		getContentPane().add(lblErrorSecurity);	
 		
 		lblExpirationDate = new JLabel("Expiration date:");
 		lblExpirationDate.setBounds(32, 176, 91, 14);
-		add(lblExpirationDate);
-		/*
-		
-		tfExpirationDate = new JTextField();
-		tfExpirationDate.setBounds(148, 173, 86, 20);
-		add(tfExpirationDate);
-		tfExpirationDate.setColumns(10);
-		*/
+		getContentPane().add(lblExpirationDate);
+
 		cbMonth = new JComboBox<String>();
 		cbMonth.setBounds(148, 173, 39, 20);
-		add(cbMonth);
+		getContentPane().add(cbMonth);
 		for(int i = 1; i <= 12; i++)
 			cbMonth.addItem(String.valueOf(i));
 		cbMonth.setSelectedIndex(0);
 		
 		cbYear = new JComboBox<String>();
 		cbYear.setBounds(197, 173, 50, 20);
-		add(cbYear);		
+		getContentPane().add(cbYear);		
 		LocalDateTime now = LocalDateTime.now();
 		int year = now.getYear();
 		for(int i = year; i <= year + 4; i++) //five years ahead
@@ -147,25 +114,71 @@ public class SettlePaymentGUI extends  JPanel
 		lblErrorExpiration.setFont(errorFont);
 		lblErrorExpiration.setForeground(Color.red);			
 		lblErrorExpiration.setBounds(257, 176, 153, 14);
-		add(lblErrorExpiration);			
+		getContentPane().add(lblErrorExpiration);			
 		
 		lblSubscriptionType = new JLabel("Subscription type:");
 		lblSubscriptionType.setBounds(31, 226, 107, 14);
-		add(lblSubscriptionType);
+		getContentPane().add(lblSubscriptionType);
 		
 		cbSubscriptionName = new JComboBox<String>(); //????????? sql to get types
 		cbSubscriptionName.setBounds(148, 223, 99, 20);
-		add(cbSubscriptionName);
+		getContentPane().add(cbSubscriptionName);
+		
+	    jtaSubscriptionDes = new JTextArea();
+	    jtaSubscriptionDes.setBounds(24, 285, 300, 126);
+	    jtaSubscriptionDes.setLineWrap(true);
+	    jtaSubscriptionDes.setWrapStyleWord(true);
+	    jtaSubscriptionDes.setOpaque(false);
+	    jtaSubscriptionDes.setEditable(false);
+	    jtaSubscriptionDes.setBorder(null);
+	    
+	    /** Properties of jspReviewContent **/
+	    jspSubscriptionDes = new JScrollPane (jtaSubscriptionDes);
+	    jspSubscriptionDes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	    jspSubscriptionDes.setBorder(
+                BorderFactory.createCompoundBorder(
+                    BorderFactory.createCompoundBorder(
+                                    BorderFactory.createTitledBorder("Subscription description"),
+                                    BorderFactory.createEmptyBorder(5,5,5,5)), null));
+	    getContentPane().add(jspSubscriptionDes);
+	    jspSubscriptionDes.setBounds(20, 271, 462, 140);
+	    //jspSubscriptionDes.setVisible(false);	    
+	    
+	    /** End of properties of jspReviewContent*/		
 		
 		btnSubmit = new JButton("Submit");
-		btnSubmit.setBounds(351, 256, 89, 23);
-		add(btnSubmit);
-				
-		// JPanel properties
-		//setSize(400,438);	
-		setLayout(null);			
-		setVisible(true);
+		btnSubmit.setBounds(570, 538, 89, 23);
+		getContentPane().add(btnSubmit);
+		
+		btnBack = new JButton("Back");
+		btnBack.setBounds(694, 538, 89, 23);
+		getContentPane().add(btnBack);		
+		
+		/**----------------------------Properties of JFrame----------------------------*/ 
+		setTitle("Settle Payment");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setSize(800,600);
+		setResizable(false);
+		setLocationRelativeTo(null);		
+		getContentPane().setLayout(null);			
+		//setVisible(true); should be after loading of subscription types!!!!
+		/**----------------------------End of Properties of JFrame----------------------------*/ 
 	}
+
+	public void viewSubscriptionDes()
+	{
+		jtaSubscriptionDes.setText(subscriptioDes[cbSubscriptionName.getSelectedIndex()]);
+	}
+	
+	public void addItemToCbSubscriptionName(String item)
+	{
+		cbSubscriptionName.addItem(item);
+	}
+	
+	public void setSubscriptionDesc(String[] desc)
+	{
+		subscriptioDes = desc;
+	}	
 	
 	public void setLblErrorCardNum(String msg)
 	{
@@ -191,42 +204,7 @@ public class SettlePaymentGUI extends  JPanel
 	{
 		return tfSecurityCode.getText();
 	}
-	/*
-	public String getExpirationDate()
-	{
-		return "asdasd";//tfExpirationDate.getText();
-	}*/
-	
-	public String getSubscriptioType()
-	{
-		return"aaa";
-		//return String.valueOf(cbSubscriptionName.getSelectedIndex());
-	}			
-	
-	public void AddItemToCbSubscriptionName(String item)
-	{
-		cbSubscriptionName.addItem(item);
-	}
-	
-	public void addCbSubscriptionTypeActionListener(ActionListener listener){
-		//btnSubmit.addActionListener(listener);
-	}	
-		
-	public void addSubmitActionListener(ActionListener listener){
-		btnSubmit.addActionListener(listener);
-	}	
-	
-	protected MaskFormatter createFormatter(String s) {
-	    MaskFormatter formatter = null;
-	    try {
-	        formatter = new MaskFormatter(s);
-	    } catch (java.text.ParseException exc) {
-	        System.err.println("formatter is bad: " + exc.getMessage());
-	        System.exit(-1);
-	    }
-	    return formatter;
-	}
-	
+
 	public int getMaxlenCardNumber()
 	{
 		return MAX_LEN_CARD_NUMBER;
@@ -245,5 +223,26 @@ public class SettlePaymentGUI extends  JPanel
 	public int getYear()
 	{
 		return Integer.valueOf((String)cbYear.getSelectedItem());
+	}
+	
+	public String getSubscriptioType()
+	{
+		return"aaa";
+		//return String.valueOf(cbSubscriptionName.getSelectedIndex());
+	}	
+		
+	public void addCbSubscriptionTypeActionListener(ActionListener listener)
+	{
+		cbSubscriptionName.addActionListener(listener);
+	}	
+		
+	public void addSubmitActionListener(ActionListener listener)
+	{
+		btnSubmit.addActionListener(listener);
+	}	
+		
+	public void addBtnBackActionListener(ActionListener e)
+	{
+		btnBack.addActionListener(e);
 	}	
 }

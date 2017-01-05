@@ -167,6 +167,7 @@ public class SettlePaymentGUI extends JFrame
 
 	public void viewSubscriptionDes()
 	{
+		System.out.println(cbSubscriptionName.getSelectedIndex());
 		jtaSubscriptionDes.setText(subscriptioDes[cbSubscriptionName.getSelectedIndex()]);
 	}
 	
@@ -241,8 +242,8 @@ public class SettlePaymentGUI extends JFrame
 		btnSubmit.addActionListener(listener);
 	}	
 		
-	public void addBtnBackActionListener(ActionListener e)
+	public void addBtnBackActionListener(ActionListener listener)
 	{
-		btnBack.addActionListener(e);
+		btnBack.addActionListener(listener);
 	}	
 }

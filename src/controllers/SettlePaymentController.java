@@ -122,14 +122,18 @@ public class SettlePaymentController extends AbstractController
 		if(msg.equals("getSubscriptionsNames"))
 		{
 			Vector<Object> data = (Vector<Object>) en.getParams().get("data");
+			String[] subscriptionsNames = new String[data.size()];
 			String[] descriptions = new String[data.size()];
 			for(int  i = 0; i < data.size(); i++)
 			{
-				spGUI.addItemToCbSubscriptionName((String)((Vector<Object>) data.get(i)).get(0));
+				subscriptionsNames[i] = ((String)((Vector<Object>) data.get(i)).get(0));
 				descriptions[i] = (String)((Vector<Object>) data.get(i)).get(1);
 			}
 			
 			spGUI.setSubscriptionDesc(descriptions);
+			for(int  i = 0; i < data.size(); i++)
+				spGUI.addItemToCbSubscriptionName((String)((Vector<Object>) data.get(i)).get(0));
+						
 			spGUI.viewSubscriptionDes();
 		}
 		else

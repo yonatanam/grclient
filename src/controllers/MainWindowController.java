@@ -21,6 +21,7 @@ import gui.MainWindowGUI;
 import gui.PublishReviewGUI;
 import gui.ReadWorkerGUI;
 import gui.SearchReviewGUI;
+import gui.SettlePaymentGUI;
 import gui.WriteWorkerGUI;
 
 
@@ -125,16 +126,14 @@ public class MainWindowController extends  AbstractController {
 		}
 		
 	}
-	class SettlePaymentListener implements ActionListener
+	
+	private class SettlePaymentListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) 
 		{
-			/*
-			//SettlePaymentGUI spGUI = new SettlePaymentGUI();
-			SettlePaymentController spController = new SettlePaymentController(new SettlePaymentGUI());
-			*/
-		}
-		
+			mwGui.dispose();
+			new SettlePaymentController(new SettlePaymentGUI());
+		}		
 	}	
 
 	class SearchReviewListener implements ActionListener

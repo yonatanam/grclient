@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.awt.Window;
 import java.io.*;
+
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -118,17 +120,21 @@ public class Client extends ObservableClient
 		System.exit(0);
 	}
 	
-	public UserMenu menuSwitcher()
+	public UserMenu menuSwitcher(JFrame gui)
 	{
 		switch (App.client.currentUser.getPermission())
 		{
 		case "USER":
-			return new UserMenu();
+			return new UserMenu(gui);
 		case "LIBRARIAN":
-			return new LibrarianMenu();
+			return new LibrarianMenu(gui);
 		case "LIBRARY_MANAGER":
-			return new ManagerMenu();
+			return new ManagerMenu(gui);
 		}
 		return null;
 	}
+	
+
+	
+	
 }

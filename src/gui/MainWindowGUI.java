@@ -78,56 +78,32 @@ public class MainWindowGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JButton buttonHome;
-	private JTextField nullField;
 	private UserMenu userMenu;
-	
+
 	/**
 	 * Create the frame. This is the Home window.
 	 */
 	public MainWindowGUI() {
-		
-
 		setResizable(false);
 		setTitle("Good Reading");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		setBounds(100, 100, 800, 600);
-		
-		
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		
+
 		/** Menu */
-		userMenu = App.client.menuSwitcher(); //Gets the specific menu per user permission
+		userMenu = App.client.menuSwitcher(this); //Gets the specific menu per user permission
 		Menu menu = new Menu(userMenu);
 		menu.setBounds(10,11,165,550);
 		contentPane.add(menu);	
 		/** End menu */
-		
-		nullField = new JTextField();
-		nullField.setOpaque(false);     
-		contentPane.add(nullField);
-		
-		JLabel label = new JLabel("New label");
-		label.setBounds(0, 0, 0, 0);
-		contentPane.add(label);
-		
 
-		Image WriteToDB = new ImageIcon(this.getClass().getResource("/WriteToDB.png")).getImage();
-		Image ReadFromDB = new ImageIcon(this.getClass().getResource("/RetInfo.png")).getImage();
-		Image UpdateInfo = new ImageIcon(this.getClass().getResource("/UpdateInfo.png")).getImage();
-		
-		//ButtonRead From Database END
-		
+
 		//HomeButton
 		buttonHome = new JButton("");
-		buttonHome.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		buttonHome.setFont(new Font("Arial", Font.BOLD, 15));
 		Image Home = new ImageIcon(this.getClass().getResource("/HomeButton.png")).getImage();
 		buttonHome.setIcon(new ImageIcon(Home));
@@ -140,69 +116,26 @@ public class MainWindowGUI extends JFrame {
 		buttonHome.setForeground(Color.WHITE);
 		contentPane.add(buttonHome);
 		Image addbook = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
-		Image createnewcat = new ImageIcon(this.getClass().getResource("/Button.png")).getImage();
-		
-		// --------------------- end button --------------------------------//
-		
+		Image createnewcat = new ImageIcon(this.getClass().getResource("/Button.png")).getImage();	
+		// --------------------- end home button --------------------------------//
+
 		//This is the LOGO
 		JLabel Logo = new JLabel();
 		Logo.setBounds(306, 129, 139, 82);
 		Image logo = new ImageIcon(this.getClass().getResource("/logo.png")).getImage();
 		Logo.setIcon(new ImageIcon(logo));
 		contentPane.add(Logo);
-		Image imgBtnSearchReview = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
-		/**----------------------------End Search Review Button----------------------------*/
-		
-
 		//Background
 		JLabel bg = new JLabel();
 		bg.setBounds(10, 0, 800, 600);
-		try {	
 		Image img1 = new ImageIcon(this.getClass().getResource("/bgWithoutLogo.png")).getImage();
 		bg.setIcon(new ImageIcon(img1));
-		}
-		catch (Exception ex)
-		{
-		System.out.println("FAILED LOGO!"+ex);
-		}
 		contentPane.add(bg);
-		
-		
 		setLocationRelativeTo(null);
 		//panel.setOpaque(false);
 		setVisible(true);
-	
-		
 	} 
-	
 
-	// Action Listeners
-	
-	public void btnManageBooksActionListener(ActionListener e)
-	{
-		((LibrarianMenu) userMenu).getBtnManageBooks().addActionListener(e);
-	}
-	
-	public void addButtonCreateNewCategoryActionListener(ActionListener e)
-	{
-		((LibrarianMenu) userMenu).getBtnManageBooks().addActionListener(e);
-	}
-	
-
-	public void addButtonPublishReviewActionListener(ActionListener e)
-	{
-		userMenu.getBtnAddReview().addActionListener(e);
-	}
-	public void addBtnSettlePaymentActionListener(ActionListener e)
-	{
-		userMenu.getBtnSettlePayment().addActionListener(e);
-	}	
-
-	public void addBtnSearchReviewActionListener(ActionListener e)
-	{
-		userMenu.getBtnSearchReview().addActionListener(e);
-	}	
-	
 	public void addWindowListenerFromController(WindowListener e)
 	{
 		addWindowListener(e);

@@ -10,8 +10,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+
+import client.App;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
 import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -48,9 +52,16 @@ public class SearchReviewGUI extends JFrame
 	
 	private String[] searchTypeData = {"Book's name","Book's writer", "Key words"};
 	private String WriterName;
-	
+	private UserMenu userMenu;
 	public SearchReviewGUI()
 	{		
+		/** Menu */
+		userMenu = App.client.menuSwitcher(this); //Gets the specific menu per user permission
+		Menu menu = new Menu(userMenu);
+		menu.setBounds(10,11,165,550);
+		add(menu);	
+		/** End menu */
+		
 		lblSearchreviews = new JLabel("Search Reviews");
 		lblSearchreviews.setFont(new Font("Tahoma", Font.PLAIN, 18));		
 		lblSearchreviews.setBounds(95, 44, 174, 14);
@@ -228,4 +239,9 @@ public class SearchReviewGUI extends JFrame
 	    
 	    /**----------------------------End of Initialize output for search found----------------------------*/
 	}
+	
+	
+	
+	
+	
 }

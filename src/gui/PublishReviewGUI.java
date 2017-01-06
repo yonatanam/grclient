@@ -57,7 +57,7 @@ public class PublishReviewGUI extends JFrame {
 		getContentPane().setLayout(null);
 		
 		/** Menu */
-		userMenu = App.client.menuSwitcher(); //Gets the specific menu per user permission
+		userMenu = App.client.menuSwitcher(this); //Gets the specific menu per user permission
 		Menu menu = new Menu(userMenu);
 		menu.setBounds(10,11,165,550);
 		add(menu);	

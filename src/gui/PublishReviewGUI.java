@@ -55,6 +55,15 @@ public class PublishReviewGUI extends JFrame {
 		setBounds(100, 100, 800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
+		
+		/** Menu */
+		userMenu = App.client.menuSwitcher(); //Gets the specific menu per user permission
+		Menu menu = new Menu(userMenu);
+		menu.setBounds(10,11,165,550);
+		add(menu);	
+		/** End menu */
+		
+		
 		//Back button
 		BackButton = new JButton("Back");
 		BackButton.setFont(new Font("Arial", Font.BOLD, 15));
@@ -125,12 +134,7 @@ public class PublishReviewGUI extends JFrame {
 		getContentPane().add(btnSubmit);
 		/*End submit button*/
 		
-		/** Menu */
-		userMenu = App.client.menuSwitcher(); //Gets the specific menu per user permission
-		Menu menu = new Menu(userMenu);
-		menu.setBounds(10,11,165,550);
-		add(menu);	
-		/** End menu */
+
 		
 		//Background
 		JLabel bg = new JLabel();

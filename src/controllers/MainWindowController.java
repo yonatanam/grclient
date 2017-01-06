@@ -46,10 +46,7 @@ public class MainWindowController extends  AbstractController {
 	public MainWindowController(MainWindowGUI mwGui) {
 		this.mwGui = mwGui;
 		tempL = this;
-		mwGui.addButtonCreateNewCategoryActionListener(new CreateNewCategoryActionListener());
-		mwGui.addButtonReadFromWorkerActionListener(new ReadFromWorkerListener());
-		mwGui.addButtonWriteToWorkerActionListener(new WriteToWorkerListener());
-		mwGui.addButtonAddBookActionListener(new AddBookListener());
+		mwGui.btnManageBooksActionListener(new ManageBooksListener());
 		mwGui.addButtonPublishReviewActionListener(new PublishReviewListener());
 		mwGui.addBtnSettlePaymentActionListener(new SettlePaymentListener());
 		mwGui.addBtnSearchReviewActionListener(new SearchReviewListener());
@@ -62,6 +59,7 @@ public class MainWindowController extends  AbstractController {
 	 * Inner class where button Manage Files pressed , implements action listener which opens the manage files window.
 	 *
 	 */
+	/*//TODO shouldnt be here
 	class CreateNewCategoryActionListener implements ActionListener
 	{
 
@@ -72,12 +70,21 @@ public class MainWindowController extends  AbstractController {
 			CategoryController cc = new CategoryController(acg);
 		}
 		
+	}*/
+	
+	
+	class ManageBooksListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e) {
+			//mwGui.dispose();
+			//TODO ManageBooksGUI mbg = new ManageBooksGUI();
+			//BookController abk = new BookController(mbg);
+			
+		}
 	}
 	
-	
-	
-	
 	// Adding new book to system by the manager
+	/*//TODO this should be in ManageBooksCont
 	class AddBookListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
@@ -86,34 +93,9 @@ public class MainWindowController extends  AbstractController {
 			BookController abk = new BookController(adg);
 			
 		}
-	}
+	}*/
 	
 	
-	class ReadFromWorkerListener implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e) {
-			mwGui.dispose();
-			ReadWorkerGUI rwg = new ReadWorkerGUI();
-			ReadWorkerController rwc = new ReadWorkerController(rwg);
-		}
-	}
-	
-	
-	/**
-	 * Inner class where button Manage Groups pressed , implements action listener which opens the manage groups window.
-	 *
-	 */
-	class WriteToWorkerListener implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e) {
-			
-			mwGui.dispose();
-			WriteWorkerGUI wwg = new WriteWorkerGUI();
-			WriteWorkerController rwc = new WriteWorkerController(wwg);
-
-		}
-		
-	}
 	
 	class PublishReviewListener implements ActionListener
 	{
@@ -165,7 +147,6 @@ public class MainWindowController extends  AbstractController {
 	    	  
 	      }
 	      public void windowOpened(WindowEvent e) {
-	    	  System.out.println("Window opened");
 
 	    	  
 	      }

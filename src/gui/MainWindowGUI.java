@@ -78,14 +78,7 @@ public class MainWindowGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JButton buttonHome;
-	private JButton buttonReadFromDB;
-	private JButton buttonWriteToDB;
-	private JButton buttonAddBook;
-	private JButton buttonCreateCategory;
 	private JTextField nullField;
-	private JButton publishReviewButton;
-	private JButton btnSettlepayment;
-	private JButton btnSearchReview;
 	private UserMenu userMenu;
 	
 	/**
@@ -99,12 +92,20 @@ public class MainWindowGUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setBounds(100, 100, 800, 600);
+		
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		
+		/** Menu */
+		userMenu = App.client.menuSwitcher(); //Gets the specific menu per user permission
+		Menu menu = new Menu(userMenu);
+		menu.setBounds(10,11,165,550);
+		contentPane.add(menu);	
+		/** End menu */
 		
 		nullField = new JTextField();
 		nullField.setOpaque(false);     
@@ -114,62 +115,10 @@ public class MainWindowGUI extends JFrame {
 		label.setBounds(0, 0, 0, 0);
 		contentPane.add(label);
 		
-		/*buttonHome = new JButton("Home");
-		buttonHome.setForeground(SystemColor.control);
-		buttonHome.setBackground(SystemColor.activeCaptionBorder);
-		buttonHome.setFont(new Font("Tahoma", Font.BOLD, 15));
-		buttonHome.setBounds(10, 81, 252, 79);
-		contentPane.add(buttonHome);*/
-		
-		/*buttonReadFromDB = new JButton("Read from Worker Table");
-		buttonReadFromDB.setFont(new Font("Tahoma", Font.BOLD, 15));
-		buttonReadFromDB.setBounds(268, 81, 252, 79);
-		contentPane.add(buttonReadFromDB);
-		
-		buttonWriteToDB = new JButton("Write to Worker Table");
-		buttonWriteToDB.setFont(new Font("Tahoma", Font.BOLD, 15));
-		buttonWriteToDB.setBounds(528, 81, 252, 79);
-		contentPane.add(buttonWriteToDB);*/
+
 		Image WriteToDB = new ImageIcon(this.getClass().getResource("/WriteToDB.png")).getImage();
-		//buttonWrite To Database END
-		
-		
-		//ButtonRead From Database
-		buttonReadFromDB = new JButton("");
-		buttonReadFromDB.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		buttonReadFromDB.setFont(new Font("Arial", Font.BOLD, 15));
 		Image ReadFromDB = new ImageIcon(this.getClass().getResource("/RetInfo.png")).getImage();
-		buttonReadFromDB.setIcon(new ImageIcon(ReadFromDB));
-		buttonReadFromDB.setBounds(363, 358, 194, 151);
-		buttonReadFromDB.setOpaque(false);
-		buttonReadFromDB.setContentAreaFilled(false);
-		buttonReadFromDB.setBorderPainted(false);
-		buttonReadFromDB.setHorizontalTextPosition(JButton.CENTER);
-		buttonReadFromDB.setVerticalTextPosition(JButton.CENTER);
-		buttonReadFromDB.setForeground(Color.WHITE);
-		contentPane.add(buttonReadFromDB);
-		
-		//buttonWrite To Database
-		buttonWriteToDB = new JButton("");
-		buttonWriteToDB.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		buttonWriteToDB.setFont(new Font("Arial", Font.BOLD, 15));
-		buttonWriteToDB.setIcon(new ImageIcon(WriteToDB));
-		buttonWriteToDB.setBounds(207, 248, 194, 110);
-		buttonWriteToDB.setOpaque(false);
-		buttonWriteToDB.setContentAreaFilled(false);
-		buttonWriteToDB.setBorderPainted(false);
-		buttonWriteToDB.setHorizontalTextPosition(SwingConstants.CENTER);
-		buttonWriteToDB.setVerticalTextPosition(SwingConstants.CENTER);
-		buttonWriteToDB.setForeground(Color.WHITE);
 		Image UpdateInfo = new ImageIcon(this.getClass().getResource("/UpdateInfo.png")).getImage();
-		buttonWriteToDB.setIcon(new ImageIcon(UpdateInfo));
-		contentPane.add(buttonWriteToDB);
 		
 		//ButtonRead From Database END
 		
@@ -190,43 +139,8 @@ public class MainWindowGUI extends JFrame {
 		buttonHome.setVerticalTextPosition(JButton.CENTER);
 		buttonHome.setForeground(Color.WHITE);
 		contentPane.add(buttonHome);
-		//HomeButton END
-		
-		
-		//------ button for adding a book (for manager) -------//
-		
-		buttonAddBook = new JButton("Add book");
-		buttonAddBook.setFont(new Font("Arial", Font.BOLD, 14));
 		Image addbook = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
-		buttonAddBook.setIcon(new ImageIcon(addbook));
-		buttonAddBook.setBounds(244, 207, 113, 25);
-		buttonAddBook.setOpaque(false);
-		buttonAddBook.setContentAreaFilled(false);
-		buttonAddBook.setBorderPainted(false);
-		buttonAddBook.setHorizontalTextPosition(JButton.CENTER);
-		buttonAddBook.setVerticalTextPosition(JButton.CENTER);
-		buttonAddBook.setForeground(Color.WHITE);
-		//if(App.client.getCurrentUser())
-		contentPane.add(buttonAddBook);
-		
-		
-		
-		// ----------------- end button ------------------------//
-		
-		// --------------- Creating new category --------------------//
-		
-		buttonCreateCategory = new JButton("Create new category");
 		Image createnewcat = new ImageIcon(this.getClass().getResource("/Button.png")).getImage();
-		buttonCreateCategory.setIcon(new ImageIcon(createnewcat));
-		buttonCreateCategory.setVerticalTextPosition(SwingConstants.CENTER);
-		buttonCreateCategory.setOpaque(false);
-		buttonCreateCategory.setHorizontalTextPosition(SwingConstants.CENTER);
-		buttonCreateCategory.setForeground(Color.WHITE);
-		buttonCreateCategory.setFont(new Font("Arial", Font.BOLD, 14));
-		buttonCreateCategory.setContentAreaFilled(false);
-		buttonCreateCategory.setBorderPainted(false);
-		buttonCreateCategory.setBounds(540, 259, 228, 41);
-		contentPane.add(buttonCreateCategory);
 		
 		// --------------------- end button --------------------------------//
 		
@@ -236,49 +150,10 @@ public class MainWindowGUI extends JFrame {
 		Image logo = new ImageIcon(this.getClass().getResource("/logo.png")).getImage();
 		Logo.setIcon(new ImageIcon(logo));
 		contentPane.add(Logo);
-		//LOGO END
-		
-		/* Publish review button*/
-		publishReviewButton = new JButton("Publish Review");
-		publishReviewButton.setVerticalTextPosition(SwingConstants.CENTER);
-		publishReviewButton.setIcon(new ImageIcon(WriteToDB));
-		publishReviewButton.setOpaque(false);
-		publishReviewButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		publishReviewButton.setForeground(Color.WHITE);
-		publishReviewButton.setFont(new Font("Arial", Font.BOLD, 15));
-		publishReviewButton.setContentAreaFilled(false);
-		publishReviewButton.setBorderPainted(false);
-		publishReviewButton.setBounds(241, 381, 130, 110);
-		contentPane.add(publishReviewButton);
-		/* End publish review button */
-		
-		/**----------------------------Settle Payment Button----------------------------*/
-		btnSettlepayment = new JButton("SettlePayment");
-		btnSettlepayment.setBounds(244, 158, 120, 23);
-		contentPane.add(btnSettlepayment);
-		/**----------------------------End Settle Payment Button----------------------------*/
-
-		/**----------------------------Search Review Button----------------------------*/
-		btnSearchReview = new JButton("Search review");
-		btnSearchReview.setFont(new Font("Arial", Font.BOLD, 14));
 		Image imgBtnSearchReview = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
-		btnSearchReview.setIcon(new ImageIcon(imgBtnSearchReview));
-		btnSearchReview.setBounds(376, 212, 139, 25);
-		btnSearchReview.setOpaque(false);
-		btnSearchReview.setContentAreaFilled(false);
-		btnSearchReview.setBorderPainted(false);
-		btnSearchReview.setHorizontalTextPosition(JButton.CENTER);
-		btnSearchReview.setVerticalTextPosition(JButton.CENTER);
-		btnSearchReview.setForeground(Color.WHITE);
-		contentPane.add(btnSearchReview);
 		/**----------------------------End Search Review Button----------------------------*/
 		
-		/** Menu */
-		userMenu = App.client.menuSwitcher(); //Gets the specific menu per user permission
-		Menu menu = new Menu(userMenu);
-		menu.setBounds(10,11,165,550);
-		contentPane.add(menu);	
-		/** End menu */
+
 		//Background
 		JLabel bg = new JLabel();
 		bg.setBounds(10, 0, 800, 600);
@@ -303,44 +178,29 @@ public class MainWindowGUI extends JFrame {
 
 	// Action Listeners
 	
-	public void addButtonAddBookActionListener(ActionListener e)
+	public void btnManageBooksActionListener(ActionListener e)
 	{
-		buttonAddBook.addActionListener(e);
+		((LibrarianMenu) userMenu).getBtnManageBooks().addActionListener(e);
 	}
 	
 	public void addButtonCreateNewCategoryActionListener(ActionListener e)
 	{
-		buttonCreateCategory.addActionListener(e);
+		((LibrarianMenu) userMenu).getBtnManageBooks().addActionListener(e);
 	}
 	
-	public void addButtonHomeActionListener(ActionListener e)
-	{
-		buttonHome.addActionListener(e);
-	}
-	
-	public void addButtonReadFromWorkerActionListener(ActionListener e)
-	{
-		buttonReadFromDB.addActionListener(e);
-	}
-	
-	public void addButtonWriteToWorkerActionListener(ActionListener e)
-	{
-		buttonWriteToDB.addActionListener(e);
-	}
+
 	public void addButtonPublishReviewActionListener(ActionListener e)
 	{
-		publishReviewButton.addActionListener(e);
-		System.out.println("im here!");
 		userMenu.getBtnAddReview().addActionListener(e);
 	}
 	public void addBtnSettlePaymentActionListener(ActionListener e)
 	{
-		btnSettlepayment.addActionListener(e);
+		userMenu.getBtnSettlePayment().addActionListener(e);
 	}	
 
 	public void addBtnSearchReviewActionListener(ActionListener e)
 	{
-		btnSearchReview.addActionListener(e);
+		userMenu.getBtnSearchReview().addActionListener(e);
 	}	
 	
 	public void addWindowListenerFromController(WindowListener e)

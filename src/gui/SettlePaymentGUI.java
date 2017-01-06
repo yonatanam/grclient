@@ -11,6 +11,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.plaf.ComboBoxUI;
 import javax.swing.text.MaskFormatter;
+
+import client.App;
 import models.AdvancedDocument;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -47,10 +49,15 @@ public class SettlePaymentGUI extends JFrame
 	
 	private final int MAX_LEN_CARD_NUMBER = 6; 
 	private final int MAX_LEN_SECURITY_NUMBER = 3; 
-		
+	private UserMenu userMenu;
 	public SettlePaymentGUI()
 	{		
-		
+		/** Menu */
+		userMenu = App.client.menuSwitcher(this); //Gets the specific menu per user permission
+		Menu menu = new Menu(userMenu);
+		menu.setBounds(10,11,165,550);
+		add(menu);	
+		/** End menu */
 		Font errorFont = new Font("Tahoma", Font.PLAIN, 12);
 		
 		lblSettlePayment = new JLabel("Settle payment");

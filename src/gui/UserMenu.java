@@ -14,7 +14,11 @@ import javax.swing.JButton;
 
 public class UserMenu extends JPanel{
 	private JButton btnAddReview;
-	
+	private JButton btnSettlePayment;
+	private JButton btnSearchReview;
+	private JButton btnCancelSubscription;
+
+
 	public UserMenu() {
 		setLayout(null);
 		setOpaque(false);
@@ -26,15 +30,15 @@ public class UserMenu extends JPanel{
 		btnAddReview.setBounds(10, 66, 140, 23);
 		add(btnAddReview);
 		
-		JButton btnSettlePayment = new JButton("Settle Payment");
+		btnSettlePayment = new JButton("Settle Payment");
 		btnSettlePayment.setBounds(10, 132, 140, 23);
 		add(btnSettlePayment);
 		
-		JButton btnSearchReview = new JButton("Search Review");
+		btnSearchReview = new JButton("Search Review");
 		btnSearchReview.setBounds(10, 100, 140, 23);
 		add(btnSearchReview);
 		
-		JButton btnCancelSubscription = new JButton("Cancel Subscription");
+		btnCancelSubscription = new JButton("Cancel Subscription");
 		btnCancelSubscription.setBounds(10, 166, 140, 23);
 		add(btnCancelSubscription);
 	}
@@ -45,6 +49,29 @@ public class UserMenu extends JPanel{
 	}
 	public void setBtnAddReview(JButton btnAddReview) {
 		this.btnAddReview = btnAddReview;
+	}
+	public JButton getBtnSettlePayment() {
+		return btnSettlePayment;
+	}
+
+	public void setBtnSettlePayment(JButton btnSettlePayment) {
+		this.btnSettlePayment = btnSettlePayment;
+	}
+
+	public JButton getBtnSearchReview() {
+		return btnSearchReview;
+	}
+
+	public void setBtnSearchReview(JButton btnSearchReview) {
+		this.btnSearchReview = btnSearchReview;
+	}
+
+	public JButton getBtnCancelSubscription() {
+		return btnCancelSubscription;
+	}
+
+	public void setBtnCancelSubscription(JButton btnCancelSubscription) {
+		this.btnCancelSubscription = btnCancelSubscription;
 	}
 	/** End getters and setters*/
 }

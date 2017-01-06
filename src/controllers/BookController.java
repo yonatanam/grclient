@@ -40,6 +40,7 @@ public class BookController extends AbstractController{
 		abg.AddTextPriceMouseListener(new TextPriceMouseListener());
 		abg.AddbuttonApplyactionListener(new buttonApplyActionListener());
 		abg.addButtonCancelFromAddBookActionListener(new CancelFromReadFromWorkerListener());
+		abg.addWindowListener(new CustomWindowListener());
 	}
 	
 	public class TextBookIdMouseListener implements MouseListener

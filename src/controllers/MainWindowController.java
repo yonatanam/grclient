@@ -36,33 +36,8 @@ public class MainWindowController extends  AbstractController {
 	public MainWindowController(MainWindowGUI mwGui) {
 		this.mwGui = mwGui;
 		tempL = this;		
+		mwGui.addWindowListener(new CustomWindowListener());
 	}
 	
-				
-	
-	class CustomWindowListener implements WindowListener {	      
-	      public void windowClosing(WindowEvent e) {    
-				Map<String, Object> params = new LinkedHashMap<String,Object>();
-				Envelope envelope = new Envelope(params);			
-				params.put("username",  App.client.getCurrentUser().getUserName());
-				params.put("status", "ACTIVE");
-				params.put("threadnum", DEFAULT_THREAD);
-				params.put("msg",  "UpdateUserLoginStatus");
-				sendToServer(envelope);					
-	    	  System.out.println("CLOSING");
-	      }	      
-	      public void windowClosed(WindowEvent e) {   	  
-	      }
-	      public void windowOpened(WindowEvent e) {	    	  
-	      }
-	      public void windowIconified(WindowEvent e) {
-	      }
-	      public void windowDeiconified(WindowEvent e) {
-	      }
-	      public void windowActivated(WindowEvent e) {
-	      }
-	      public void windowDeactivated(WindowEvent e) {
-	      }
-	   }   	
 	
 }

@@ -1,6 +1,8 @@
 package controllers;
 
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 
 import java.io.FileInputStream;
@@ -9,6 +11,8 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -16,6 +20,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import client.Client;
+import models.Envelope;
 //import client.CliMessage;
 //import client.IObserve;
 import client.App;
@@ -27,7 +32,7 @@ import client.App;
  */
 public abstract class AbstractController 
 {
-
+		public static final float DEFAULT_THREAD =0;
 		/** The model. */
 		protected Object theModel;
 
@@ -100,7 +105,30 @@ public abstract class AbstractController
 			 //
 		 }
 		
-		
+			class CustomWindowListener implements WindowListener {	      
+			      public void windowClosing(WindowEvent e) {    
+						Map<String, Object> params = new LinkedHashMap<String,Object>();
+						Envelope envelope = new Envelope(params);			
+						params.put("username",  App.client.getCurrentUser().getUserName());
+						params.put("status", "ACTIVE");
+						params.put("threadnum", DEFAULT_THREAD);
+						params.put("msg",  "UpdateUserLoginStatus");
+						sendToServer(envelope);					
+			    	  System.out.println("CLOSING");
+			      }	      
+			      public void windowClosed(WindowEvent e) {   	  
+			      }
+			      public void windowOpened(WindowEvent e) {	    	  
+			      }
+			      public void windowIconified(WindowEvent e) {
+			      }
+			      public void windowDeiconified(WindowEvent e) {
+			      }
+			      public void windowActivated(WindowEvent e) {
+			      }
+			      public void windowDeactivated(WindowEvent e) {
+			      }
+			   }  
 			
 		
 	}

@@ -39,6 +39,7 @@ public class CategoryController extends AbstractController{
 		addcat.addButtonCancelFromCreateNewCategActionListener(new ButtonCancelActionListener());
 		addcat.AddTextCategIdMouseListener(new TextCategIdMouseListener());
 		addcat.AddTextCategNameMouseListener(new TextCategNameMouseListener());
+		addcat.addWindowListener(new CustomWindowListener());
 	}
 	
 	

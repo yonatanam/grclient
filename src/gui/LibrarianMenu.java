@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import controllers.CategoryController;
+import controllers.PendingReviewsController;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -80,6 +81,7 @@ public class LibrarianMenu extends UserMenu{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			currentGUI.dispose();
+			PendingReviewsController prc = new PendingReviewsController(new PendingReviewsGUI());
 			//TODO
 		}
 		

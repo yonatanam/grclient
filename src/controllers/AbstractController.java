@@ -114,7 +114,6 @@ public abstract class AbstractController
 						params.put("threadnum", DEFAULT_THREAD);
 						params.put("msg",  "UpdateUserLoginStatus");
 						sendToServer(envelope);					
-			    	  System.out.println("CLOSING");
 			      }	      
 			      public void windowClosed(WindowEvent e) {   	  
 			      }

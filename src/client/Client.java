@@ -51,7 +51,6 @@ public class Client extends ObservableClient
 			msg = ((String)message);
 		else
 		msg = (String) ((Envelope)message).getParams().get("msg");
-		
 		currentController.handleDBResult(message);
 		/*
 		switch (msg)

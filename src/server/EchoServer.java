@@ -97,7 +97,8 @@ public class EchoServer extends AbstractServer
 				if (rcount == 0) 
 				{ //If not exists  
 					System.out.println("User "+userName+" tried to login");
-					client.sendToClient("NoSuchUser");
+					params.put("msg", "NoSuchUser");
+					client.sendToClient(envelope);
 				}
 				else
 				{			  
@@ -105,7 +106,8 @@ public class EchoServer extends AbstractServer
 					rcount = getRowCount(res);
 					if (rcount == 0) 
 					{
-						client.sendToClient("UserOrPassIncorrect");
+						params.put("msg", "UserOrPassIncorrect");
+						client.sendToClient(envelope);
 						res = stmt.executeQuery("SELECT login_attempts FROM users WHERE username='"+userName+"'");
 						if (res.next())
 						{

@@ -12,7 +12,7 @@ import javax.swing.JLayeredPane;
 class SlideContainer extends JLayeredPane {
    private static  int PREF_W ;
    private static  int PREF_H ;
-   private static final int SLIDE_DELAY = 20;
+   private static final int SLIDE_DELAY = 1;
    protected static final int DELTA_X = 2;
    private Component menu;
    private int direction=1;

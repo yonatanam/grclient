@@ -33,7 +33,7 @@ public class Menu  extends JPanel {
 		});
 		//menuIcon.setBounds(130, 235, 142, 23);
 		
-		Image menu1 = new ImageIcon(this.getClass().getResource("/menu_icon.png")).getImage();
+		Image menu1 = new ImageIcon(this.getClass().getResource("/menuIcon.png")).getImage();
 		menuIcon.setIcon(new ImageIcon(menu1));
 		menuIcon.setOpaque(false);
 		menuIcon.setContentAreaFilled(false);
@@ -44,12 +44,12 @@ public class Menu  extends JPanel {
 				slideContainer.Switch();				
 			}
 		});
-		menuIcon.setBounds(0, 0, 32, 32);
+		menuIcon.setBounds(5, 0, 32, 32);
 		add(menuIcon);
 		
 		JPanel menupanel = new JPanel();
 		menupanel.setOpaque(false);
-		menupanel.setBounds(0, 32, 175, 556);
+		menupanel.setBounds(0, 1, 175, 556);
 		menupanel.setLayout(new BorderLayout(0, 0));
 		slideContainer=new SlideContainer(menu,menupanel.getBounds());
 		menupanel.add(slideContainer, BorderLayout.NORTH);

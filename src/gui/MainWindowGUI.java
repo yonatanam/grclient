@@ -136,8 +136,5 @@ public class MainWindowGUI extends JFrame {
 		setVisible(true);
 	} 
 
-	public void addWindowListenerFromController(WindowListener e)
-	{
-		addWindowListener(e);
-	}
+
 }

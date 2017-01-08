@@ -88,65 +88,67 @@ public class EchoServer extends AbstractServer
 			switch (message)
 			{
 			case "LoginOK":
-					String userName = (String) en.getParams().get("username");
-					String password = (String) en.getParams().get("password");
-					//System.out.println("Starting login process");
-					ResultSet res = stmt.executeQuery("SELECT * FROM users WHERE username = '"+userName+"' LIMIT 1;"); //Check If username exists
-					int rcount = getRowCount(res);
-					//System.out.println("rcount is "+rcount);
+				String userName = (String) en.getParams().get("username");
+				String password = (String) en.getParams().get("password");
+				//System.out.println("Starting login process");
+				ResultSet res = stmt.executeQuery("SELECT * FROM users WHERE username = '"+userName+"' LIMIT 1;"); //Check If username exists
+				int rcount = getRowCount(res);
+				//System.out.println("rcount is "+rcount);
+				if (rcount == 0) 
+				{ //If not exists  
+					System.out.println("User "+userName+" tried to login");
+					params.put("msg", "NoSuchUser");
+					client.sendToClient(envelope);
+				}
+				else
+				{			  
+					res = stmt.executeQuery("SELECT * FROM users WHERE username='"+userName+"' AND password='"+password+"' LIMIT 1;");
+					rcount = getRowCount(res);
 					if (rcount == 0) 
-					{ //If not exists  
-						System.out.println("User "+userName+" tried to login");
-						client.sendToClient("NoSuchUser");
-					}
-					else
-					{			  
-						res = stmt.executeQuery("SELECT * FROM users WHERE username='"+userName+"' AND password='"+password+"' LIMIT 1;");
-						rcount = getRowCount(res);
-						if (rcount == 0) 
+					{
+						params.put("msg", "UserOrPassIncorrect");
+						client.sendToClient(envelope);
+						res = stmt.executeQuery("SELECT login_attempts FROM users WHERE username='"+userName+"'");
+						if (res.next())
 						{
-							client.sendToClient("UserOrPassIncorrect");
-							res = stmt.executeQuery("SELECT login_attempts FROM users WHERE username='"+userName+"'");
-							if (res.next())
-							{
-								int currentLoginAttempts = res.getInt("login_attempts");
+							int currentLoginAttempts = res.getInt("login_attempts");
 
-								stmt.executeUpdate("UPDATE users SET login_attempts="+(currentLoginAttempts+1)+" WHERE username='"+userName+"'");
-							}
-						}
-						else 
-						{ //If  user exists	
-							/* Get permission level and account status */
-							res = stmt.executeQuery("SELECT * from users WHERE username='"+userName+"'");
-							if (res.next())
-							{
-								String permission = res.getString("permission");
-								String status = res.getString("status");
-								params.put("msg", "LoginOK");
-								params.put("permission", permission);
-								params.put("username", res.getString("username"));
-								params.put("email", res.getString("email"));
-								params.put("fname", res.getString("fname"));
-								params.put("lname", res.getString("lname"));
-								params.put("status",status);
-								client.sendToClient(envelope);
-							}
+							stmt.executeUpdate("UPDATE users SET login_attempts="+(currentLoginAttempts+1)+" WHERE username='"+userName+"'");
 						}
 					}
+					else 
+					{ //If  user exists	
+						/* Get permission level and account status */
+						res = stmt.executeQuery("SELECT * from users WHERE username='"+userName+"'");
+						if (res.next())
+						{
+							String permission = res.getString("permission");
+							String status = res.getString("status");
+							params.put("msg", "LoginOK");
+							params.put("permission", permission);
+							params.put("username", res.getString("username"));
+							params.put("email", res.getString("email"));
+							params.put("fname", res.getString("fname"));
+							params.put("lname", res.getString("lname"));
+							params.put("status",status);
+							client.sendToClient(envelope);
+						}
+					}
+				}
 
 				//end Login
 				break;
-			
+
 			case "ForgotPassword":
-				
-					String user = (String) en.getParams().get("username");
-					if(server.GoogleMail.main(2,user,conn)==1)
-						//client.sendToClient("ForgotPassword");
-						System.out.println("Mail was sent!");
-					else
-						client.sendToClient("ForgotPasswordFalse");	
-					break;
-				
+
+				String user = (String) en.getParams().get("username");
+				if(server.GoogleMail.main(2,user,conn)==1)
+					//client.sendToClient("ForgotPassword");
+					System.out.println("Mail was sent!");
+				else
+					client.sendToClient("ForgotPasswordFalse");	
+				break;
+
 			case "getWorkerData":
 				res = stmt.executeQuery("SELECT * from worker");	
 				Vector<Object> columnNames = new Vector<Object>();
@@ -201,7 +203,7 @@ public class EchoServer extends AbstractServer
 				String Book_Synopsis = (String) en.getParams().get("Book_Synopsis");
 				String Book_Keywords = (String) en.getParams().get("Book_Keywords");
 				String Book_TOC = (String) en.getParams().get("Book_TOC");
-				
+
 				res = stmt.executeQuery("SELECT * from Books WHERE bookid='"+Book_id+"'");
 				rcount = getRowCount(res);
 				if (rcount == 0) //If such BID doesn't exist
@@ -260,7 +262,7 @@ public class EchoServer extends AbstractServer
 					query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+currentTime+"','"+content+"','"
 							+username+"','PENDING','"+keywords+"')";
 					stmt.executeUpdate(query);
-					
+
 					/*Send notification regarding new review*/
 					Thread[] clientThreadList = getClientConnections();
 					Map<String,Object> params2 = new LinkedHashMap<String,Object>();	
@@ -269,7 +271,7 @@ public class EchoServer extends AbstractServer
 					query = "SELECT threadnum from users WHERE status='LOGGED_IN' AND threadnum <> 0 AND (permission='LIBRARIAN' OR "
 							+ "permission='LIBRARY_MANAGER')";
 					res = stmt.executeQuery(query);
-					
+
 					//
 					while (res.next())
 					{
@@ -278,13 +280,13 @@ public class EchoServer extends AbstractServer
 						{
 							System.out.println("Thread id: "+ x.getId());
 							if (x.getId() == threadnum)
-							((ConnectionToClient)x).sendToClient(envelope2);
+								((ConnectionToClient)x).sendToClient(envelope2);
 						}
 					}
 					/*Thread[] clientThreadList = getClientConnections();
 					for (Thread x : clientThreadList)
 					((ConnectionToClient)x).sendToClient(envelope2);*/
-					
+
 					//((ConnectionToClient)clientThreadList[0]).sendToClient("ReviewPopUp");
 					/*End notification*/
 					params.put("msg","PublishReviewOK");
@@ -294,7 +296,7 @@ public class EchoServer extends AbstractServer
 				break;
 			case "UpdateUserLoginStatus":
 				userName = (String)en.getParams().get("username");
-				
+
 				long threadnum = getThreadNum();
 				String status = (String)en.getParams().get("status");
 				if (status.equals("ACTIVE"))
@@ -302,26 +304,26 @@ public class EchoServer extends AbstractServer
 				query = "UPDATE users SET STATUS='"+status+"' , threadnum="+threadnum+" WHERE username='"+userName+"'";
 				stmt.executeUpdate(query);
 				break;
-		
-			/**----------------------------Search Review----------------------------*/ 
+
+				/**----------------------------Search Review----------------------------*/ 
 			case "SearchReview":	
 				System.out.println("SearchReview");
 				String searchType = (String)en.getParams().get("searchType");
 				String searchText = (String)en.getParams().get("searchText");
 				switch(searchType)
 				{
-					case "Book's name":
-						//query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.booktitle = '" + searchText + "'"; 
-						query = "SELECT R.username, R.date, R.content FROM reviews AS R WHERE R.status = 'APPROVED' AND R.username = '" + searchText + "'";
-						break;
-					case "Book's writer":
-						//query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.bookid = B.bookid AND B.booktitle = '" + searchText + "'";
-						break;
-					case "Key words":
-						query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.keywords = '" + searchText + "'";
-						break;
+				case "Book's name":
+					//query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.booktitle = '" + searchText + "'"; 
+					query = "SELECT R.username, R.date, R.content FROM reviews AS R WHERE R.status = 'APPROVED' AND R.username = '" + searchText + "'";
+					break;
+				case "Book's writer":
+					//query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.bookid = B.bookid AND B.booktitle = '" + searchText + "'";
+					break;
+				case "Key words":
+					query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.keywords = '" + searchText + "'";
+					break;
 				}
-				 
+
 				res = stmt.executeQuery(query);
 				if(getRowCount(res) == 0)
 					params.put("msg","SearchReviewResultsEmpty");
@@ -331,7 +333,7 @@ public class EchoServer extends AbstractServer
 					columns = md.getColumnCount();
 					data = new Vector<Object>();
 					columnNames = new Vector<Object>();
-					
+
 					//Get columns names
 					for (int i = 1; i <= columns; i++)
 						columnNames.addElement(md.getColumnName(i));
@@ -343,16 +345,16 @@ public class EchoServer extends AbstractServer
 							row.addElement(res.getObject(i));
 						data.addElement(row);
 					}
-					
+
 					params.put("msg","SearchReviewResults");
 					params.put("columnNames",columnNames);
 					params.put("data",data);
 				}
 				client.sendToClient(envelope);
 				break;	
-			/**----------------------------Search Review----------------------------*/ 
-				
-			/**----------------------------Get Subscriptions Names----------------------------*/ 	
+				/**----------------------------Search Review----------------------------*/ 
+
+				/**----------------------------Get Subscriptions Names----------------------------*/ 	
 			case "getSubscriptionsNames":
 				query = "SELECT name, description FROM subscriptions";
 				res = stmt.executeQuery(query);
@@ -371,16 +373,16 @@ public class EchoServer extends AbstractServer
 				params.put("data",data);
 				client.sendToClient(envelope);
 				break;
-			/**----------------------------End of Get Subscriptions Names----------------------------*/ 
-      
-        case "CreateNewCategory":      // insert new category for the library
+				/**----------------------------End of Get Subscriptions Names----------------------------*/ 
+
+			case "CreateNewCategory":      // insert new category for the library
 				//System.out.println("in here!!!");
 				String CatId = (String) en.getParams().get("CatId");
 				String CatName = (String) en.getParams().get("CatName");
-				
+
 				res = stmt.executeQuery("SELECT categoryid from categories where categoryid = '"+ CatId +"'");
-				
-				
+
+
 				if(getRowCount(res) == 0) // checking if there are any categories with the same name or id
 				{
 					res = stmt.executeQuery("SELECT category_name from categories where category_name = '"+ CatName +"'");
@@ -408,17 +410,67 @@ public class EchoServer extends AbstractServer
 				break;
 			case "GetCategories":
 				ArrayList<String> categories = new ArrayList<String>();
-				
+
 				ResultSet res4 = stmt.executeQuery("SELECT category_name from categories");
 				while(res4.next())
 					categories.add(res4.getString("category_name"));
-				
+
 				params.put("msg", "AllCategoriesInDB");
 				params.put("categories", categories);
 				client.sendToClient(envelope);
 				break;
+			case "getPendingReviews":
+				res = stmt.executeQuery("SELECT * from reviews WHERE status='PENDING'");	
+				Vector<Object> reviewsColumnNames = new Vector<Object>();
+				Vector<Object> reviewsData = new Vector<Object>();
+				ResultSetMetaData rmd = res.getMetaData();
+				int reviewColumnCount = rmd.getColumnCount();
+
+				//  Get column names
+				for (int i = 1; i <= reviewColumnCount; i++)
+					reviewsColumnNames.addElement( rmd.getColumnName(i) );
+				//  Get row data
+
+				while (res.next())
+				{
+					Vector<Object> row = new Vector<Object>(reviewColumnCount);
+					for (int i = 1; i <= reviewColumnCount; i++)
+					{
+						row.addElement( res.getObject(i) );
+					}
+					reviewsData.addElement( row );
+				}
+
+				params.put("reviewsColumnNames", reviewsColumnNames);
+				params.put("reviewsData", reviewsData);
+				params.put("msg", "ReviewData");
+				client.sendToClient(envelope);
+				//End get worker data
+				break;
+			case "approveReview":
+				int reviewID = (Integer)en.getParams().get("reviewid");
+				stmt.executeUpdate("UPDATE reviews SET status='APPROVED' WHERE reviewid="+reviewID);
+				break;
+			case "denyReview":
+				reviewID = (Integer)en.getParams().get("reviewid");
+				stmt.executeUpdate("UPDATE reviews SET status='REJECTED' WHERE reviewid="+reviewID);
+				break;
+			case "editReview":
+				try
+				{
+					String newReviewText = (String) en.getParams().get("reviewcontent");
+					reviewID = (Integer)en.getParams().get("reviewid");
+					stmt.executeUpdate("UPDATE reviews SET content='"+newReviewText+"' WHERE reviewid="+reviewID);
+					params.put("msg", "editReviewOK");
+					client.sendToClient(envelope);
+				}
+				catch (Exception ex)
+				{
+					params.put("msg", "editReviewNOTOK");
+					client.sendToClient(envelope);	
+				}
 			}
-      
+
 		} catch (Exception x) {
 			JOptionPane.showMessageDialog(null, "Unable to connect to the database", "Connection error", JOptionPane.ERROR_MESSAGE);
 		}//outer try catch closed
@@ -449,7 +501,7 @@ public class EchoServer extends AbstractServer
 
 
 
-	
+
 
 
 	public Connection getConn() {
@@ -484,6 +536,6 @@ public class EchoServer extends AbstractServer
 	}
 
 
-	  
+
 }
 //End of EchoServer class   

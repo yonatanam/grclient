@@ -23,6 +23,7 @@ public class SettlePaymentController extends AbstractController
 		spGUI.addBtnBackActionListener(new BackHandler());
 		spGUI.addCbSubscriptionTypeActionListener(new ComboboxSubscriptionHandler());
 		spGUI.setVisible(true);
+		spGUI.addWindowListener(new CustomWindowListener());
 		
 	}
 	

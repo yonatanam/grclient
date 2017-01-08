@@ -22,6 +22,7 @@ public class SearchReviewController extends AbstractController
 		srGUI.addBtnSearchActionListener(new SearchReviewHandler());
 		srGUI.addJtResultsTableListSelectionListener(new RowListener());
 		srGUI.addBtnBackActionListener(new BackHandler());
+		srGUI.addWindowListener(new CustomWindowListener());
 		
 	}
 

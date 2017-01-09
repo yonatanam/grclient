@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.regex.Pattern;
+
 import client.App;
 import gui.MainWindowGUI;
 import gui.SettlePaymentGUI;
@@ -128,8 +130,8 @@ public class SettlePaymentController extends AbstractController
 			{
 				subscriptionsNames[i] = ((String)((Vector<Object>) data.get(i)).get(0));
 				descriptions[i] = (String)((Vector<Object>) data.get(i)).get(1);
+				descriptions[i] = descriptions[i].replaceAll(Pattern.quote("\\n"), "\n");
 			}
-			
 			spGUI.setSubscriptionDesc(descriptions);
 			for(int  i = 0; i < data.size(); i++)
 				spGUI.addItemToCbSubscriptionName((String)((Vector<Object>) data.get(i)).get(0));

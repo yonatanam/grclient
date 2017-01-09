@@ -40,6 +40,7 @@ public class BookController extends AbstractController{
 		abg.AddTextPriceMouseListener(new TextPriceMouseListener());
 		abg.AddbuttonApplyactionListener(new buttonApplyActionListener());
 		abg.addButtonCancelFromAddBookActionListener(new CancelFromReadFromWorkerListener());
+		abg.addWindowListener(new CustomWindowListener());
 	}
 	
 	public class TextBookIdMouseListener implements MouseListener
@@ -185,8 +186,8 @@ public class BookController extends AbstractController{
 				flag_name = 1;
 			if(addBookGUI.getPrice().getText().matches("[a-zA-Z]+"))
 			{
-				(addBookGUI.getPriceWarningLabel()).setForeground(Color.red);
-				(addBookGUI.getPriceWarningLabel()).setText("Wrong input! only numbers");
+				(addBookGUI.getBpriceWarningLabel()).setForeground(Color.red);
+				(addBookGUI.getBpriceWarningLabel()).setText("Wrong input! only numbers");
 				flag_price = 0;
 			}
 			else

@@ -53,20 +53,6 @@ public class LoginController extends  AbstractController
 
 
 
-
-
-	/*class forgotPassListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			ForgotPasswordGUI fpg = new ForgotPasswordGUI(); //Open the forgot password window
-			ForgotPasswordController fpc = new ForgotPasswordController(fpg);	
-		}
-	}*/
-
-
-
 	class CancelListener implements ActionListener 
 	{
 		@Override
@@ -93,20 +79,11 @@ public class LoginController extends  AbstractController
 				loginGUI.disposeEmailField();
 				status = true;
 			}
-				
+
 			ForgotPasswordController fpc = new ForgotPasswordController(loginGUI);
 		}	
 	}//action
 
-	/*class changePassListener implements ActionListener 
-	{
-        public void actionPerformed(ActionEvent ev)
-        {
-        	loginG.dispose(); 								 //Closes the login window
-        	ChangePasswordGUI cpg = new ChangePasswordGUI(); //Opens the Change password window
-        	ChangePasswordController cpc = new ChangePasswordController(cpg);
-        }
-	}*/
 
 	class LoginListener implements ActionListener
 	{
@@ -149,49 +126,39 @@ public class LoginController extends  AbstractController
 		if (((String)en.getParams().get("msg")).equals("ReviewPopUp"))
 			JOptionPane.showMessageDialog(null,"New review was added!");
 		String str = (String)en.getParams().get("msg");
-		if(str.equals("UserOrPassIncorrect"))			
+
+		switch (str)
 		{
-			/*//TODO Change this to server side
-			//if user or password incorrect show warning message 
-															//and increase counter by 1
-			JOptionPane.showMessageDialog(null,"User Or Password Incorrect!\n" + loginCounter + "(out of 3) attempts","Error", JOptionPane.ERROR_MESSAGE);   
-			loginCounter++;
-			if (loginCounter==4)								//if user entered wrong details 3 times
-			{													//Show warning message, close program and send notification to the administrator
-				JOptionPane.showMessageDialog(null,"3rd Login Try\nTerminating!","Error", JOptionPane.ERROR_MESSAGE); 
-				loginGUI.dispose();
-				//Block user here
-				loginCounter=1;							//reset counter	
-			}//if counter			
-		}//if	 
-			 */
+		case "NoSuchUser":
+			JOptionPane.showMessageDialog(null,"No such user!","Error", JOptionPane.INFORMATION_MESSAGE);    
+			break;
+		case "UserOrPassIncorrect":
+			JOptionPane.showMessageDialog(null,"User/password incorrect!","Error", JOptionPane.INFORMATION_MESSAGE);    
+			break;
+		case "LoginOK":
+			loginGUI.dispose();											 //Close login GUI
+			//make a switch here with GUIS depending on user level
+			User user = new User( (String)en.getParams().get("fname"),
+					(String)en.getParams().get("lname"),
+					(String)en.getParams().get("username"),
+					(String)en.getParams().get("email"),
+					(String)en.getParams().get("permission"));
+			App.client.setCurrentUser(user);
+			/*Change status of user in db*/
+			Map<String, Object> params = new LinkedHashMap<String,Object>();
+			Envelope envelope = new Envelope(params);
+			params.put("username",  user.getUserName());
+			params.put("status", "LOGGED_IN");
+			params.put("msg",  "UpdateUserLoginStatus");
+			sendToServer(envelope);
+			/*End change status*/
+			System.out.println("User is a "+ en.getParams().get("permission"));
+			MainWindowGUI mwg = new MainWindowGUI();
+			MainWindowController mwc = new MainWindowController(mwg);
+			break;
 		}
-		else 
-			if (str.equals("LoginOK"))
-			{
-				loginGUI.dispose();											 //Close login GUI
-				//make a switch here with GUIS depending on user level
-				User user = new User( (String)en.getParams().get("fname"),
-						(String)en.getParams().get("lname"),
-						(String)en.getParams().get("username"),
-						(String)en.getParams().get("email"),
-						(String)en.getParams().get("permission"));
-				App.client.setCurrentUser(user);
-
-				/*Change status of user in db*/
-				Map<String, Object> params = new LinkedHashMap<String,Object>();
-				Envelope envelope = new Envelope(params);
-				params.put("username",  user.getUserName());
-				params.put("status", "LOGGED_IN");
-				params.put("msg",  "UpdateUserLoginStatus");
-				sendToServer(envelope);
-				/*End change status*/
-				System.out.println("User is a "+ en.getParams().get("permission"));
-				MainWindowGUI mwg = new MainWindowGUI();
-				MainWindowController mwc = new MainWindowController(mwg);
 
 
-			} 
 
 	}
 

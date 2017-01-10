@@ -30,6 +30,7 @@ public class LibrarianMenu extends UserMenu{
 	private JButton btnPendingSubscription;
 	private JFrame currentGUI;
 	
+	
 
 	public LibrarianMenu(JFrame GUI) {
 		super(GUI);
@@ -211,13 +212,13 @@ public class LibrarianMenu extends UserMenu{
 		add(SmallMenuLine4);
 		//Background Image END
 		
-		/*if ((App.client.getCurrentUser().getPermission()).equals("LIBRARIAN")){
+		if ((App.client.getCurrentUser().getPermission()).equals("LIBRARIAN")){
         JLabel MenuBackGround = new JLabel();
 		MenuBackGround.setBounds(0, 0, 800, 600);
 		Image img2 = new ImageIcon(this.getClass().getResource("/BigMenu.png")).getImage();
 		MenuBackGround.setIcon(new ImageIcon(img2));
 		add(MenuBackGround);
-		}*/
+		}
 		
 		
 		

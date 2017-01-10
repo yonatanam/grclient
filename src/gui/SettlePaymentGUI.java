@@ -132,6 +132,7 @@ public class SettlePaymentGUI extends JFrame
 		getContentPane().add(cbSubscriptionName);
 		
 	    jtaSubscriptionDes = new JTextArea();
+	    jtaSubscriptionDes.setFont(new Font("Tahoma", Font.PLAIN, 12));
 	    jtaSubscriptionDes.setBounds(24, 285, 300, 126);
 	    jtaSubscriptionDes.setLineWrap(true);
 	    jtaSubscriptionDes.setWrapStyleWord(true);
@@ -173,8 +174,7 @@ public class SettlePaymentGUI extends JFrame
 	}
 
 	public void viewSubscriptionDes()
-	{
-		System.out.println(cbSubscriptionName.getSelectedIndex());
+	{	
 		jtaSubscriptionDes.setText(subscriptioDes[cbSubscriptionName.getSelectedIndex()]);
 	}
 	
@@ -233,10 +233,9 @@ public class SettlePaymentGUI extends JFrame
 		return Integer.valueOf((String)cbYear.getSelectedItem());
 	}
 	
-	public String getSubscriptioType()
+	public int getSubscriptioTypeIndex()
 	{
-		return"aaa";
-		//return String.valueOf(cbSubscriptionName.getSelectedIndex());
+		return cbSubscriptionName.getSelectedIndex();
 	}	
 		
 	public void addCbSubscriptionTypeActionListener(ActionListener listener)

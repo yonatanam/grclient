@@ -2,9 +2,15 @@ package controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.regex.Pattern;
+
+import javax.swing.JOptionPane;
+
 import client.App;
 import gui.MainWindowGUI;
 import gui.SettlePaymentGUI;
@@ -13,10 +19,11 @@ import models.Envelope;
 public class SettlePaymentController extends AbstractController
 {
 	private SettlePaymentGUI spGUI;
-	//private LoginModel loginModel;
-	
-	public SettlePaymentController(SettlePaymentGUI sp/*, LoginModel lm*/)
+	private LocalDateTime today = LocalDateTime.now();
+		
+	public SettlePaymentController(SettlePaymentGUI sp)
 	{
+		App.client.setCurrentController(this);
 		spGUI = sp;
 		getSubscriptionNames();
 		spGUI.addSubmitActionListener(new submitHandler());
@@ -30,11 +37,33 @@ public class SettlePaymentController extends AbstractController
 	class submitHandler implements ActionListener 
 	{
 		private boolean valid;
+		private HashMap<String,Object> params;
+		private String username;
+		private String cardNumber;
+		private String ccv;
+		private int year;
+		private int month;
+		private int subscriptionType;
+		private String todayString;
+		private SimpleDateFormat DateSQLFormat = new SimpleDateFormat("Y-M-d");
+		private Date date = new Date();
+		
+		
 		@Override
 		public void actionPerformed(ActionEvent ae) 
-		{			
+		{	
 			valid = true;
-			if(!isValidlenNumber(spGUI.getCardNumber(), spGUI.getMaxlenCardNumber()))
+			
+			HashMap<String,Object> params = new HashMap<String,Object>();
+			username = App.client.getCurrentUser().getUserName();
+			cardNumber = spGUI.getCardNumber();
+			ccv = spGUI.getSecurityCode();
+			year = spGUI.getYear();
+			month = spGUI.getMonth();
+			subscriptionType = spGUI.getSubscriptioTypeIndex();					
+			todayString = DateSQLFormat.format(date);
+
+			if(!isValidlenNumber(cardNumber, spGUI.getMaxlenCardNumber()))
 			{
 				spGUI.setLblErrorCardNum("Please enter " + spGUI.getMaxlenCardNumber() + " digits.");
 				valid = false;
@@ -42,7 +71,7 @@ public class SettlePaymentController extends AbstractController
 			else
 				spGUI.setLblErrorCardNum("");
 			
-			if(!isValidlenNumber(spGUI.getSecurityCode(), spGUI.getMaxLenSecuritydNumber()))
+			if(!isValidlenNumber(ccv, spGUI.getMaxLenSecuritydNumber()))
 			{
 				spGUI.setLblErrorSecurity("Please enter " + spGUI.getMaxLenSecuritydNumber() + " digits.");
 				valid = false;
@@ -50,7 +79,7 @@ public class SettlePaymentController extends AbstractController
 			else
 				spGUI.setLblErrorSecurity("");
 			
-			if(!isValidDate())
+			if(!isValidDate(year,month))
 			{
 				spGUI.setLblErrorExpiration("Invalid date.");
 				valid = false;
@@ -59,40 +88,41 @@ public class SettlePaymentController extends AbstractController
 				spGUI.setLblErrorExpiration("");
 			
 			if(valid) //everything is valid
-			{
-			
+			{				
+				params.put("msg", "submitSettlePayment");
+				params.put("username", username);
+				params.put("cardNumber", cardNumber);
+				params.put("ccv", ccv);
+				params.put("expirationDate", month + "/" + year);				
+				params.put("subscriptionType", subscriptionType);
+				params.put("commencementOfSubscription", todayString);				
+				Envelope envelope = new Envelope(params);				
+				sendToServer(envelope);
 			}
 
 		}
 	}
 	
-	private SettlePaymentController getSettlePaymentController()
-	{
-		return this;
-	}
-	
-	public boolean isValidlenNumber(String number, int maxLen)
+	private boolean isValidlenNumber(String number, int maxLen)
 	{
 		if(number.length() < maxLen)
 			return false;
 		return true;
 	}
 	
-	public boolean isValidDate()
-	{
-		LocalDateTime now = LocalDateTime.now();
-		if(spGUI.getYear() == now.getYear())
-			if(spGUI.getMonth() < now.getMonthValue())
+	private boolean isValidDate(int year, int month)
+	{		
+		if(year == today.getYear())
+			if(month < today.getMonthValue())
 				return false;
 		return true;
 	}
 	
-	public void getSubscriptionNames()
+	private void getSubscriptionNames()
 	{		
 		HashMap<String,Object> params = new HashMap<String,Object>();
 		params.put("msg", "getSubscriptionsNames");
 		Envelope envelope = new Envelope(params);
-		App.client.setCurrentController(getSettlePaymentController());
 		sendToServer(envelope);
 	}
 	
@@ -111,7 +141,6 @@ public class SettlePaymentController extends AbstractController
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			System.out.println(":aa");
 			spGUI.viewSubscriptionDes();
 		}	
 	}
@@ -120,26 +149,33 @@ public class SettlePaymentController extends AbstractController
 	{	
 		Envelope en = (Envelope)message;
 		String msg = (String) en.getParams().get("msg");
-		if(msg.equals("getSubscriptionsNames"))
+		
+		switch(msg)
 		{
-			Vector<Object> data = (Vector<Object>) en.getParams().get("data");
-			String[] subscriptionsNames = new String[data.size()];
-			String[] descriptions = new String[data.size()];
-			for(int  i = 0; i < data.size(); i++)
-			{
-				subscriptionsNames[i] = ((String)((Vector<Object>) data.get(i)).get(0));
-				descriptions[i] = (String)((Vector<Object>) data.get(i)).get(1);
-			}
+			case "getSubscriptionsNames":
+				Vector<Object> data = (Vector<Object>) en.getParams().get("data");
+				String[] subscriptionsNames = new String[data.size()];
+				String[] descriptions = new String[data.size()];
+				for(int  i = 0; i < data.size(); i++)
+				{
+					subscriptionsNames[i] = ((String)((Vector<Object>) data.get(i)).get(0));
+					descriptions[i] = (String)((Vector<Object>) data.get(i)).get(1);
+					descriptions[i] = descriptions[i].replaceAll(Pattern.quote("\\n"), "\n");
+				}
+				spGUI.setSubscriptionDesc(descriptions);
+				for(int  i = 0; i < data.size(); i++)
+					spGUI.addItemToCbSubscriptionName((String)((Vector<Object>) data.get(i)).get(0));
+							
+				spGUI.viewSubscriptionDes();
+				break;
 			
-			spGUI.setSubscriptionDesc(descriptions);
-			for(int  i = 0; i < data.size(); i++)
-				spGUI.addItemToCbSubscriptionName((String)((Vector<Object>) data.get(i)).get(0));
-						
-			spGUI.viewSubscriptionDes();
-		}
-		else
-		{
-	
+			case "SettlePaymentSucceeded":
+				JOptionPane.showMessageDialog(spGUI,"Settle payment has been succeeded.\nYou can purchase books now.","Confirmation", JOptionPane.INFORMATION_MESSAGE);   
+				break;
+					
+			case "SettlePaymentFalied":
+				JOptionPane.showMessageDialog(spGUI,"User has settled his payment already!","Error", JOptionPane.ERROR_MESSAGE);   
+				break;
 		}
 	}
 }

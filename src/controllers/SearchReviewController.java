@@ -18,6 +18,7 @@ public class SearchReviewController extends AbstractController
 	SearchReviewGUI srGUI;
 	public SearchReviewController(SearchReviewGUI sr)
 	{
+		App.client.setCurrentController(this);
 		srGUI = sr;
 		srGUI.addBtnSearchActionListener(new SearchReviewHandler());
 		srGUI.addJtResultsTableListSelectionListener(new RowListener());
@@ -45,13 +46,13 @@ public class SearchReviewController extends AbstractController
 	{		
 		public void actionPerformed(ActionEvent e) 
 		{
-			System.out.println("SearchReviewHandler");
+			//System.out.println("SearchReviewHandler");
 			HashMap<String, Object> params = new HashMap<String,Object>();
 			Envelope envelope = new Envelope(params);
 			params.put("searchText", srGUI.getSearchFieldText());			
 			params.put("searchType", srGUI.getSearhType());
 			params.put("msg", "SearchReview");
-			App.client.setCurrentController(getSearchReviewController());
+			//App.client.setCurrentController(getSearchReviewController());
 			sendToServer(envelope);				
 		}	
 	}

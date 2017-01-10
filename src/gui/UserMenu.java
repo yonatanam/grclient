@@ -50,7 +50,7 @@ public class UserMenu extends JPanel{
 		//AddReview Button
 		btnAddReview = new JButton("Add Review");
 		btnAddReview.setFont(new Font("Candara", Font.BOLD, 15));
-		Image buttSmall = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
+		Image buttSmall = new ImageIcon(this.getClass().getResource("/Coverbutton.png")).getImage();
 		btnAddReview.addMouseListener(new java.awt.event.MouseAdapter() {
 		    public void mouseEntered(java.awt.event.MouseEvent evt) {
 		    	btnAddReview.setIcon(new ImageIcon(buttSmall));
@@ -60,7 +60,7 @@ public class UserMenu extends JPanel{
 		    	btnAddReview.setIcon(null);
 		    }
 		});
-		btnAddReview.setBounds(-8, 120, 140, 23);
+		btnAddReview.setBounds(-8, 120, 210, 23);
 		btnAddReview.setOpaque(false);
 		btnAddReview.setContentAreaFilled(false);
 		btnAddReview.setBorderPainted(false);
@@ -94,7 +94,7 @@ public class UserMenu extends JPanel{
 		    	btnSettlePayment.setIcon(null);
 		    }
 		});
-		btnSettlePayment.setBounds(-8, 200, 140, 23);
+		btnSettlePayment.setBounds(-8, 200, 210, 23);
 		btnSettlePayment.setOpaque(false);
 		btnSettlePayment.setContentAreaFilled(false);
 		btnSettlePayment.setBorderPainted(false);
@@ -127,7 +127,7 @@ public class UserMenu extends JPanel{
 		    	btnSearchReview.setIcon(null);
 		    }
 		});
-		btnSearchReview.setBounds(-8, 160, 140, 23);
+		btnSearchReview.setBounds(-8, 160, 210, 23);
 		btnSearchReview.setOpaque(false);
 		btnSearchReview.setContentAreaFilled(false);
 		btnSearchReview.setBorderPainted(false);
@@ -153,7 +153,7 @@ public class UserMenu extends JPanel{
 		//AddReview Button
 		btnCancelSubscription = new JButton("Cancel Subscription");
 		btnCancelSubscription.setFont(new Font("Candara", Font.BOLD, 15));
-		Image buttSmall1 = new ImageIcon(this.getClass().getResource("/Button.png")).getImage();
+		Image buttSmall1 = new ImageIcon(this.getClass().getResource("/Coverbutton.png")).getImage();
 		btnCancelSubscription.addMouseListener(new java.awt.event.MouseAdapter() {
 		    public void mouseEntered(java.awt.event.MouseEvent evt) {
 		    	btnCancelSubscription.setIcon(new ImageIcon(buttSmall1));
@@ -163,7 +163,7 @@ public class UserMenu extends JPanel{
 		    	btnCancelSubscription.setIcon(null);
 		    }
 		});
-		btnCancelSubscription.setBounds(-8, 240, 169, 23);
+		btnCancelSubscription.setBounds(-8, 240, 210, 23);
 		btnCancelSubscription.setOpaque(false);
 		btnCancelSubscription.setContentAreaFilled(false);
 		btnCancelSubscription.setBorderPainted(false);
@@ -248,20 +248,20 @@ public class UserMenu extends JPanel{
 		//Background Image
 		JLabel User = new JLabel();
 		User.setBounds(11, 64, 199, 35);
-		Image newImage = new ImageIcon(this.getClass().getResource("/"+App.client.getCurrentUser().getPermission()+".png")).getImage();
-		User.setIcon(new ImageIcon(newImage));
+		//Image newImage = new ImageIcon(this.getClass().getResource("/"+App.client.getCurrentUser().getPermission()+".png")).getImage();
+		//User.setIcon(new ImageIcon(newImage));
 		add(User);
 		//Background Image END
 		
 	
         //Load Menu Background according to permission level
-		if ((App.client.getCurrentUser().getPermission()).equals("USER")){
+		/*if ((App.client.getCurrentUser().getPermission()).equals("USER")){
 			JLabel MenuBackGround = new JLabel();
 			MenuBackGround.setBounds(0, 0, 800, 600);
 			Image img2 = new ImageIcon(this.getClass().getResource("/BigMenu.png")).getImage();
 			MenuBackGround.setIcon(new ImageIcon(img2));
 			add(MenuBackGround);	 
-		}
+		}*/
 		
 	
 	}

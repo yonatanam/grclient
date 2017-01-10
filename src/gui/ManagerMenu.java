@@ -39,9 +39,17 @@ public class ManagerMenu extends LibrarianMenu{
 		//AddReview Button
 		btnManageUsers = new JButton("Manage Users");
 		btnManageUsers.setFont(new Font("Candara", Font.BOLD, 15));
-		//Image buttSmall = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
-		//btnAddReview.setIcon(new ImageIcon(buttSmall));
-		btnManageUsers.setBounds(-8, 440, 140, 23);
+		Image buttSmall1 = new ImageIcon(this.getClass().getResource("/Coverbutton.png")).getImage();
+		btnManageUsers.addMouseListener(new java.awt.event.MouseAdapter() {
+		    public void mouseEntered(java.awt.event.MouseEvent evt) {
+		    	btnManageUsers.setIcon(new ImageIcon(buttSmall1));
+		    }
+
+		    public void mouseExited(java.awt.event.MouseEvent evt) {
+		    	btnManageUsers.setIcon(null);
+		    }
+		});
+		btnManageUsers.setBounds(-8, 440, 199, 23);
 		btnManageUsers.setOpaque(false);
 		btnManageUsers.setContentAreaFilled(false);
 		btnManageUsers.setBorderPainted(false);
@@ -65,9 +73,16 @@ public class ManagerMenu extends LibrarianMenu{
 		//AddReview Button
 		btnReports = new JButton("Reports");
 		btnReports.setFont(new Font("Candara", Font.BOLD, 15));
-		//Image buttSmall = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
-		//btnAddReview.setIcon(new ImageIcon(buttSmall));
-		btnReports.setBounds(-8, 480, 140, 23);
+		btnReports.addMouseListener(new java.awt.event.MouseAdapter() {
+		    public void mouseEntered(java.awt.event.MouseEvent evt) {
+		    	btnReports.setIcon(new ImageIcon(buttSmall1));
+		    }
+
+		    public void mouseExited(java.awt.event.MouseEvent evt) {
+		    	btnReports.setIcon(null);
+		    }
+		});
+		btnReports.setBounds(-8, 480, 199, 23);
 		btnReports.setOpaque(false);
 		btnReports.setContentAreaFilled(false);
 		btnReports.setBorderPainted(false);
@@ -92,9 +107,16 @@ public class ManagerMenu extends LibrarianMenu{
 		//AddReview Button
 		btnManageCatalog = new JButton("Manage Catalog");
 		btnManageCatalog.setFont(new Font("Candara", Font.BOLD, 15));
-		//Image buttSmall = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
-		//btnAddReview.setIcon(new ImageIcon(buttSmall));
-		btnManageCatalog.setBounds(-8, 520, 140, 23);
+		btnManageCatalog.addMouseListener(new java.awt.event.MouseAdapter() {
+		    public void mouseEntered(java.awt.event.MouseEvent evt) {
+		    	btnManageCatalog.setIcon(new ImageIcon(buttSmall1));
+		    }
+
+		    public void mouseExited(java.awt.event.MouseEvent evt) {
+		    	btnManageCatalog.setIcon(null);
+		    }
+		});
+		btnManageCatalog.setBounds(-8, 520, 199, 23);
 		btnManageCatalog.setOpaque(false);
 		btnManageCatalog.setContentAreaFilled(false);
 		btnManageCatalog.setBorderPainted(false);

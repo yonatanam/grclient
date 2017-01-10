@@ -30,6 +30,7 @@ public class LibrarianMenu extends UserMenu{
 	private JButton btnPendingSubscription;
 	private JFrame currentGUI;
 	
+	
 
 	public LibrarianMenu(JFrame GUI) {
 		super(GUI);
@@ -45,7 +46,7 @@ public class LibrarianMenu extends UserMenu{
 		//AddReview Button
 		btnCreateAccount = new JButton("Create Account");
 		btnCreateAccount.setFont(new Font("Candara", Font.BOLD, 15));
-		Image buttSmall = new ImageIcon(this.getClass().getResource("/Button.png")).getImage();
+		Image buttSmall = new ImageIcon(this.getClass().getResource("/Coverbutton.png")).getImage();
 		btnCreateAccount.addMouseListener(new java.awt.event.MouseAdapter() {
 		    public void mouseEntered(java.awt.event.MouseEvent evt) {
 		    	btnCreateAccount.setIcon(new ImageIcon(buttSmall));
@@ -55,7 +56,7 @@ public class LibrarianMenu extends UserMenu{
 		    	btnCreateAccount.setIcon(null);
 		    }
 		});
-		btnCreateAccount.setBounds(-8, 280, 140, 23);
+		btnCreateAccount.setBounds(-8, 280, 198, 23);
 		btnCreateAccount.setOpaque(false);
 		btnCreateAccount.setContentAreaFilled(false);
 		btnCreateAccount.setBorderPainted(false);
@@ -89,7 +90,7 @@ public class LibrarianMenu extends UserMenu{
 		    	btnManageBooks.setIcon(null);
 		    }
 		});
-		btnManageBooks.setBounds(-8, 320, 140, 23);
+		btnManageBooks.setBounds(-8, 320, 198, 23);
 		btnManageBooks.setOpaque(false);
 		btnManageBooks.setContentAreaFilled(false);
 		btnManageBooks.setBorderPainted(false);
@@ -123,7 +124,7 @@ public class LibrarianMenu extends UserMenu{
 		    	btnPendingReview.setIcon(null);
 		    }
 		});
-		btnPendingReview.setBounds(-8, 360, 167, 23);
+		btnPendingReview.setBounds(-8, 360, 198, 23);
 		btnPendingReview.setOpaque(false);
 		btnPendingReview.setContentAreaFilled(false);
 		btnPendingReview.setBorderPainted(false);
@@ -212,7 +213,7 @@ public class LibrarianMenu extends UserMenu{
 		//Background Image END
 		
 		if ((App.client.getCurrentUser().getPermission()).equals("LIBRARIAN")){
-		JLabel MenuBackGround = new JLabel();
+        JLabel MenuBackGround = new JLabel();
 		MenuBackGround.setBounds(0, 0, 800, 600);
 		Image img2 = new ImageIcon(this.getClass().getResource("/BigMenu.png")).getImage();
 		MenuBackGround.setIcon(new ImageIcon(img2));

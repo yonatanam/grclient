@@ -106,6 +106,13 @@ public class EchoServer extends AbstractServer
 				{		//User exists, check if blocked/suspended 
 					res.next();
 					String status = res.getString("status");
+					if (status.equals("LOGGED_IN"))
+					{
+						params.put("msg", "AlreadyLoggedIn");
+						controller.Print("User "+userName+" tried to login while already being logged in");
+						client.sendToClient(envelope);
+						break;
+					}
 					if (status.equals("SUSPENDED"))
 					{
 						params.put("msg", "UserSuspended");

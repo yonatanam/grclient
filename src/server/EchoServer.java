@@ -64,7 +64,7 @@ public class EchoServer extends AbstractServer
 	public EchoServer(int port) 
 	{
 		super(port);
-		
+
 	}
 
 	//Instance methods ************************************************
@@ -80,6 +80,7 @@ public class EchoServer extends AbstractServer
 	{
 		Map<String,Object> params = new LinkedHashMap<String,Object>();	
 		Envelope envelope = new Envelope(params);
+
 		Envelope en=(Envelope) msg;
 		String message = (String) en.getParams().get("msg");
 		String query = null;
@@ -91,31 +92,58 @@ public class EchoServer extends AbstractServer
 			case "LoginOK":
 				String userName = (String) en.getParams().get("username");
 				String password = (String) en.getParams().get("password");
-				//System.out.println("Starting login process");
+				params.put("username", userName);
 				ResultSet res = stmt.executeQuery("SELECT * FROM users WHERE username = '"+userName+"' LIMIT 1;"); //Check If username exists
 				int rcount = getRowCount(res);
-				//System.out.println("rcount is "+rcount);
 				if (rcount == 0) 
 				{ //If not exists  
 					controller.Print("User "+userName+" tried to login");
 					params.put("msg", "NoSuchUser");
 					client.sendToClient(envelope);
+					break;
 				}
 				else
-				{			  
+				{		//User exists, check if blocked/suspended 
+					res.next();
+					String status = res.getString("status");
+					if (status.equals("SUSPENDED"))
+					{
+						params.put("msg", "UserSuspended");
+						controller.Print("User "+userName+" is suspended and tried to login");
+						client.sendToClient(envelope);
+						break;
+					}
+					if (status.equals("BLOCKED"))
+					{
+						params.put("msg", "UserBlocked");
+						controller.Print("User "+userName+" is blocked and tried to login");
+						client.sendToClient(envelope);
+						break;
+					}
+					//Check if password is valid
 					res = stmt.executeQuery("SELECT * FROM users WHERE username='"+userName+"' AND password='"+password+"' LIMIT 1;");
 					rcount = getRowCount(res);
 					if (rcount == 0) 
 					{
-						params.put("msg", "UserOrPassIncorrect");
-						client.sendToClient(envelope);
 						res = stmt.executeQuery("SELECT login_attempts FROM users WHERE username='"+userName+"'");
-						if (res.next())
+						res.next();
+						int currentLoginAttempts = res.getInt("login_attempts");
+						params.put("msg", "IncorrectPassword");
+						params.put("login_attempts", currentLoginAttempts+1);
+						client.sendToClient(envelope);
+						if (currentLoginAttempts +1 >=3)
 						{
-							int currentLoginAttempts = res.getInt("login_attempts");
-
-							stmt.executeUpdate("UPDATE users SET login_attempts="+(currentLoginAttempts+1)+" WHERE username='"+userName+"'");
+							//block user
+							stmt.executeUpdate("UPDATE users SET status='BLOCKED', login_attempts=0 WHERE username='"+userName+"'");
+							Map<String,Object> params2 = new LinkedHashMap<String,Object>();	
+							Envelope en2 = new Envelope(params2);
+							params2.put("username", userName);
+							params2.put("msg", "BlockUser");
+							client.sendToClient(en2);
+							break;
 						}
+						stmt.executeUpdate("UPDATE users SET login_attempts="+(currentLoginAttempts+1)+" WHERE username='"+userName+"'");
+
 					}
 					else 
 					{ //If  user exists	
@@ -123,8 +151,8 @@ public class EchoServer extends AbstractServer
 						res = stmt.executeQuery("SELECT * from users WHERE username='"+userName+"'");
 						if (res.next())
 						{
+							
 							String permission = res.getString("permission");
-							String status = res.getString("status");
 							params.put("msg", "LoginOK");
 							params.put("permission", permission);
 							params.put("username", res.getString("username"));
@@ -133,6 +161,7 @@ public class EchoServer extends AbstractServer
 							params.put("lname", res.getString("lname"));
 							params.put("status",status);
 							client.sendToClient(envelope);
+							stmt.executeUpdate("UPDATE users SET login_attempts=0 where userName='"+userName+"'");
 						}
 					}
 				}

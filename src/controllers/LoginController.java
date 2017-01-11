@@ -132,8 +132,21 @@ public class LoginController extends  AbstractController
 		case "NoSuchUser":
 			JOptionPane.showMessageDialog(null,"No such user!","Error", JOptionPane.INFORMATION_MESSAGE);    
 			break;
-		case "UserOrPassIncorrect":
-			JOptionPane.showMessageDialog(null,"User/password incorrect!","Error", JOptionPane.INFORMATION_MESSAGE);    
+		case "IncorrectPassword":
+			int loginAttempts = (Integer)en.getParams().get("login_attempts");
+			JOptionPane.showMessageDialog(null,"Password is incorrect, "+loginAttempts+" out of 3 attempts","Error", JOptionPane.INFORMATION_MESSAGE);    
+			break;
+		case "AlreadyLoggedIn":
+			JOptionPane.showMessageDialog(null,"User "+(String)en.getParams().get("username")+" is already logged in!","Error", JOptionPane.INFORMATION_MESSAGE);    
+			break;
+		case "UserBlocked":
+			JOptionPane.showMessageDialog(null,"User "+(String)en.getParams().get("username")+" is blocked!","Error", JOptionPane.INFORMATION_MESSAGE);    
+			break;		
+		case "UserSuspended":
+			JOptionPane.showMessageDialog(null,"User "+(String)en.getParams().get("username")+" is suspended!","Error", JOptionPane.INFORMATION_MESSAGE);    
+			break;
+		case "BlockUser":
+			JOptionPane.showMessageDialog(null,"User "+(String)en.getParams().get("username")+" failed to enter correct password 3 times and is now blocked!","Error", JOptionPane.INFORMATION_MESSAGE);    
 			break;
 		case "LoginOK":
 			loginGUI.dispose();											 //Close login GUI

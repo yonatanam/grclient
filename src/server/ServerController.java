@@ -1,13 +1,25 @@
 package server;
 
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
+
+import javax.swing.JTextArea;
+
+import gui.ServerLogGUI;
 
 
 /**
@@ -18,24 +30,38 @@ public class ServerController
 {
 	private ServerController serverController;
 	private Connection conn; 
-	private String username ;
-	private String password ;
+	private String username="root" ;
+	private String password="" ;
 	private int port = 5555;
 	private String database ;
-	private String dbname;
-	private String host;
+	private String dbname="grproj";
+	private String host="localhost";
 	private EchoServer echoServer;
-
+    private String openedtime;
+	
 	public ServerController()
 	{
+		
+		Date date = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("MM_dd_yyyy_h_mm_ss");
+    	 openedtime = sdf.format(date);
+	}
+	public void disconnect()
+	{
+		if(echoServer.isListening())
+		{
 		try {
-			readProperties();
-			System.out.println("Config file loaded successfuly!");
+			echoServer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Configuration file config.properties not found!");
-			System.exit(0);
+			e.printStackTrace();
 		}
+		System.out.println("zdfgzdfg");
+		}
+	}
+	public boolean  Connect() 
+	{
+		database = "jdbc:mysql://"+host+"/"+dbname;
 		if(openConnectionDB())
 		{
 			echoServer = new EchoServer(port);
@@ -44,16 +70,17 @@ public class ServerController
 			{
 				echoServer.listen(); //Start listening for connections
 				echoServer.setController(serverController);
+				return true;
 			} 
 			catch (Exception ex) 
 			{
 				//TODO Change this to log4j
-				System.out.println("ERROR - Could not listen for clients!");
+				Print("ERROR - Could not listen for clients!");
+				
 			}
 		}
+		return false;
 	}
-
-
 	/**
 	 * openConnectionDB is method that check if the open Connection to DB
 	 * @return boolean
@@ -71,12 +98,12 @@ public class ServerController
 		{
 			conn = DriverManager.getConnection(database,username,password);
 			server.GoogleMail.getDBConnection(conn);
-			System.out.println("SQL connection succeed");
+			Print("SQL connection succeed");
 			return true;
 		} catch (SQLException ex) 
 		{/* handle any errors*/
 			//TODO change to log4j
-			System.out.println("SQL ex"+ ex.getMessage());
+			Print("SQL ex"+ ex.getMessage());
 			return false;
 		}
 	}
@@ -88,7 +115,17 @@ public class ServerController
 	public void setUserName(String userName) {
 		this.username = userName;
 	}
-
+	public void setDbName(String DBname) {
+		this.dbname = DBname;
+	}
+	public void setHostName(String HostName) {
+		this.host = HostName;
+	}
+	public static void Print(String msg)
+	{
+		 ServerLogGUI.Print(msg);	
+		 
+	}
 	public void readProperties() throws IOException
 	{
 
@@ -111,7 +148,7 @@ public class ServerController
 			database = "jdbc:mysql://"+host+"/"+dbname;
 
 		} catch (IOException ex) {
-			System.out.println("Config file not found!");
+			Print("Config file not found!");
 			System.exit(0);
 		} finally {
 			if (input != null) {
@@ -126,6 +163,30 @@ public class ServerController
 
 	}
 
+    public void SaveLog(JTextArea textArea) 
+    {
+    	
+    	FileWriter fw;
+    	
+		try {
+			fw = new FileWriter("Log_"+openedtime+".txt");
+			PrintWriter print=new PrintWriter(fw);
+	    	print.println(textArea.getText());
+	    	fw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		
+    		
+			
+    		
+    }
+    	
+        
+       
+         
 
+          
 
 }

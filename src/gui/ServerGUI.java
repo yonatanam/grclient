@@ -59,7 +59,7 @@ public class ServerGUI extends JFrame {
 		getContentPane().add(lblHost);
 		
 		UserNameText = new JTextField();
-		UserNameText.setText("root");
+		UserNameText.setText("grproj");
 		UserNameText.setBounds(131, 31, 86, 20);
 		getContentPane().add(UserNameText);
 		UserNameText.setColumns(10);
@@ -91,7 +91,7 @@ public class ServerGUI extends JFrame {
 		 		servercon.setHostName(HostText.getText());
 		 		servercon.setPassword1(PasswordText.getText());*/
 		 		servercon.setDbName("grproj");
-		 		servercon.setUserName("root");
+		 		servercon.setUserName("grproj");
 		 		servercon.setHostName("localhost");
 		 		ServerLogGUI serverLogGUI = new ServerLogGUI(servercon);
 		 		ServerGUI.serverGUI.dispose();

@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import client.App;
 import gui.AddCategoryGUI;
 import gui.MainWindowGUI;
+import gui.ManageBooksGUI;
 import models.Envelope;
 
 public class CategoryController extends AbstractController{
@@ -98,8 +99,8 @@ public class CategoryController extends AbstractController{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			addCategoryGUI.dispose();
-			MainWindowGUI mwg = new MainWindowGUI();
-			MainWindowController mwc = new MainWindowController(mwg);	
+			ManageBooksGUI mbg = new ManageBooksGUI();
+			ManageBooksController mbc = new ManageBooksController(mbg);	
 		}
 				
 	}

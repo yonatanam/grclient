@@ -19,6 +19,7 @@ import controllers.CategoryController.TextCategNameMouseListener;
 import gui.AddCategoryGUI;
 import gui.AddSubjectGUI;
 import gui.MainWindowGUI;
+import gui.ManageBooksGUI;
 import models.Envelope;
 
 public class SubjectController extends AbstractController{
@@ -104,8 +105,8 @@ public SubjectController(AddSubjectGUI addsub) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			addsubjectGUI.dispose();
-			MainWindowGUI mwg = new MainWindowGUI();
-			MainWindowController mwc = new MainWindowController(mwg);	
+			ManageBooksGUI mbg = new ManageBooksGUI();
+			ManageBooksController mbc = new ManageBooksController(mbg);	
 		}
 				
 	}

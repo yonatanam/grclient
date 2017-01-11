@@ -19,6 +19,7 @@ import java.util.Map;
 
 import gui.AddBookGUI;
 import gui.MainWindowGUI;
+import gui.ManageBooksGUI;
 import models.Envelope;
 
 
@@ -387,8 +388,8 @@ public class BookController extends AbstractController{
 	{
 		public void actionPerformed(ActionEvent e){
 			addBookGUI.dispose();
-			MainWindowGUI mwg = new MainWindowGUI();
-			MainWindowController mwc = new MainWindowController(mwg);	
+			ManageBooksGUI mbg = new ManageBooksGUI();
+			ManageBooksController mbc = new ManageBooksController(mbg);	
 		}
 	}
 	

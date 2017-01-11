@@ -203,7 +203,7 @@ public class ManagerMenu extends LibrarianMenu{
 		public void actionPerformed(ActionEvent e) 
 		{
 			currentGUI.dispose();
-			//TODO		
+				
 		}		
 	}	
 	/**End action listeners*/

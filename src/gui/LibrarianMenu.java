@@ -5,7 +5,7 @@ import javax.swing.SwingConstants;
 
 import client.App;
 import controllers.CategoryController;
-
+import controllers.ManageBooksController;
 import gui.UserMenu.CancelSubscriptionListener;
 import controllers.PendingReviewsController;
 
@@ -232,7 +232,7 @@ public class LibrarianMenu extends UserMenu{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			currentGUI.dispose();
-			//TODO
+			new ManageBooksController(new ManageBooksGUI());
 		}
 		
 	}

@@ -11,58 +11,64 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 import client.App;
+import controllers.AbstractController.CustomWindowListener;
+import controllers.CategoryController.ButtonApplyActionListener;
+import controllers.CategoryController.ButtonCancelActionListener;
+import controllers.CategoryController.TextCategIdMouseListener;
+import controllers.CategoryController.TextCategNameMouseListener;
 import gui.AddCategoryGUI;
+import gui.AddSubjectGUI;
 import gui.MainWindowGUI;
 import models.Envelope;
 
-public class CategoryController extends AbstractController{
+public class SubjectController extends AbstractController{
 	
-	private CategoryController categoryController;
-	private AddCategoryGUI addCategoryGUI;
+	private SubjectController subjectController;
+	private AddSubjectGUI addsubjectGUI;
 	private Validate_textFields val;
 	
-	public CategoryController(AddCategoryGUI addcat) {
+public SubjectController(AddSubjectGUI addsub) {
 		
-		addCategoryGUI = addcat;
-		categoryController = this;
+	addsubjectGUI = addsub;
+	subjectController = this;
 		
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("msg", "GetCategories");
+		params.put("msg", "GetSubjects");
 		Envelope envelope = new Envelope(params);
-		App.client.setCurrentController(categoryController);
+		App.client.setCurrentController(subjectController);
 		sendToServer(envelope);	
 		
 		
 		val = new Validate_textFields();
 		
-		addcat.AddbuttonApplyactionListener(new ButtonApplyActionListener());
-		addcat.addButtonCancelFromCreateNewCategActionListener(new ButtonCancelActionListener());
-		addcat.AddTextCategIdMouseListener(new TextCategIdMouseListener());
-		addcat.AddTextCategNameMouseListener(new TextCategNameMouseListener());
-		addcat.addWindowListener(new CustomWindowListener());
+		addsub.AddbuttonApplyactionListener(new ButtonApplyActionListener());
+		addsub.addButtonCancelFromCreateNewSubjActionListener(new ButtonCancelActionListener());
+		addsub.AddTextSubjIdMouseListener(new TextSubjIdMouseListener());
+		addsub.AddTextSubjNameMouseListener(new TextSubjNameMouseListener());
+		addsub.addWindowListener(new CustomWindowListener());
 	}
-	
 	
 	class ButtonApplyActionListener implements ActionListener
 	{
-
+	
 		
 		public void actionPerformed(ActionEvent e) {
 			
 			int flag1 = 0;
 			int flag2 = 0;
+
 			
-			addCategoryGUI.getId_Warning().setText("");
-			addCategoryGUI.getName_Warning().setText("");
+			addsubjectGUI.getId_Warning().setText("");
+			addsubjectGUI.getName_Warning().setText("");
 			
-			if(val.Check_text_empty(addCategoryGUI.getTextCatId(), addCategoryGUI.getId_Warning(), "Category id"))
+			if(val.Check_text_empty(addsubjectGUI.getTextSubId(), addsubjectGUI.getId_Warning(), "Subject id"))
 				flag1 = 0;
-			else if(val.Check_text_onlyNumbers(addCategoryGUI.getTextCatId(), addCategoryGUI.getId_Warning()))
+			else if(val.Check_text_onlyNumbers(addsubjectGUI.getTextSubId(), addsubjectGUI.getId_Warning()))
 				flag1 = 1;
 			else
 				flag1 = 0;
 			
-			if(val.Check_text_empty(addCategoryGUI.getTextCatName(), addCategoryGUI.getName_Warning(), "Category name"))
+			if(val.Check_text_empty(addsubjectGUI.getTextSubName(), addsubjectGUI.getName_Warning(), "Subject name"))
 				flag2 = 0;
 			else
 				flag2 = 1;
@@ -73,17 +79,17 @@ public class CategoryController extends AbstractController{
 			if(flag1 == 1 && flag2 == 1)
 			{
 			
-				String CatId = addCategoryGUI.getTextCatId().getText();
-				String CatName = addCategoryGUI.getTextCatName().getText();
+				String SubId = addsubjectGUI.getTextSubId().getText();
+				String SubName = addsubjectGUI.getTextSubName().getText();
 				
 				Map<String, Object> params = new HashMap<String, Object>();
 				
-				params.put("msg", "CreateNewCategory");
-				params.put("CatId", CatId);
-				params.put("CatName", CatName);
+				params.put("msg", "CreateNewSubject");
+				params.put("SubId", SubId);
+				params.put("SubName", SubName);
 				
 				Envelope envelope = new Envelope(params);
-				App.client.setCurrentController(categoryController);
+				App.client.setCurrentController(subjectController);
 				sendToServer(envelope);	
 			}
 				
@@ -97,7 +103,7 @@ public class CategoryController extends AbstractController{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			addCategoryGUI.dispose();
+			addsubjectGUI.dispose();
 			MainWindowGUI mwg = new MainWindowGUI();
 			MainWindowController mwc = new MainWindowController(mwg);	
 		}
@@ -106,12 +112,12 @@ public class CategoryController extends AbstractController{
 	
 	
 	
-	class TextCategIdMouseListener implements MouseListener
+	class TextSubjIdMouseListener implements MouseListener
 	{
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			addCategoryGUI.getTextCatId().setText("");
+			addsubjectGUI.getTextSubId().setText("");
 		}
 
 		@Override
@@ -142,12 +148,12 @@ public class CategoryController extends AbstractController{
 		
 	}
 	
-	class TextCategNameMouseListener implements MouseListener
+	class TextSubjNameMouseListener implements MouseListener
 	{
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			addCategoryGUI.getTextCatName().setText("");
+			addsubjectGUI.getTextSubName().setText("");
 			
 		}
 
@@ -178,10 +184,6 @@ public class CategoryController extends AbstractController{
 	
 		
 	}
-	
-	
-	
-	
 	
 	
 	
@@ -195,21 +197,20 @@ public class CategoryController extends AbstractController{
 		
 		switch (msg)
 		{
-			case "CreateNewCategoryOK":
-				JOptionPane.showMessageDialog(null,"Category was inserted successfuly!");
+			case "CreateNewSubjectOK":
+				JOptionPane.showMessageDialog(null,"subject was inserted successfuly!");
 				break;
-			case "CategoryidExist":
-				JOptionPane.showMessageDialog(null,"This category id is already in the DataBase!","Error", JOptionPane.ERROR_MESSAGE);
+			case "SubjectidExist":
+				JOptionPane.showMessageDialog(null,"This subject id is already in the DataBase!","Error", JOptionPane.ERROR_MESSAGE);
 				break;
-			case "Category_nameExist":
-				JOptionPane.showMessageDialog(null,"This category name is already in the DataBase!","Error", JOptionPane.ERROR_MESSAGE);
+			case "Subject_nameExist":
+				JOptionPane.showMessageDialog(null,"This subject name is already in the DataBase!","Error", JOptionPane.ERROR_MESSAGE);
 				break;
-			case "AllCategoriesInDB":
-				ArrayList<String> categories = (ArrayList<String>)((Envelope)message).getParams().get("categories");
-				if(!categories.isEmpty())
-					addCategoryGUI.getWhat_Categories().setText(categories.toString());
+			case "AllSubjectsInDB":
+				ArrayList<String> subjects = (ArrayList<String>)((Envelope)message).getParams().get("subjects");
+				if(!subjects.isEmpty())
+					addsubjectGUI.getWhat_Subjects().setText(subjects.toString());
 				break;
 		}
 	}
-
 }

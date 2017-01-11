@@ -33,8 +33,15 @@ import javax.swing.JTextArea;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+
+import client.App;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
+import javax.swing.JSplitPane;
+import java.awt.Component;
+import javax.swing.Box;
+import javax.swing.JMenuItem;
 
 public class AddBookGUI extends JFrame {
 	
@@ -64,8 +71,26 @@ public class AddBookGUI extends JFrame {
 	private JTextArea TOC_area;
 	private JTextArea keywords_area;
 	private JLabel BpriceWarningLabel;
+	private JLabel lblSelectBookAfilliation;
+	private JLabel label_3;
+	private JTextField txtBookAuthorid;
+	private JLabel BAuthoridWarningLabel;
+	private JLabel label_4;
+	private JTextField txtBookAuthorname;
+	private JLabel BAuthornameWarningLabel;
+	private JComboBox<String> Subject_combobox;
+	private JComboBox<String> Category_combobox;
+	private UserMenu userMenu;
+	
+	
 	public AddBookGUI() {
 		
+		/** Menu */
+		userMenu = App.client.menuSwitcher(this); //Gets the specific menu per user permission
+		Menu menu = new Menu(userMenu);
+		menu.setBounds(10,11,165,550);
+		getContentPane().add(menu);	
+		/** End menu */
 		
 		this.setTitle("Adding new book - Initial Config");
 		this.setSize(800, 600);
@@ -85,7 +110,7 @@ public class AddBookGUI extends JFrame {
 		JLabel lblAddingABook = new JLabel("Adding new book");
 		lblAddingABook.setForeground(Color.WHITE);
 		lblAddingABook.setFont(new Font("Arial", Font.BOLD, 24));
-		lblAddingABook.setBounds(31, 3, 203, 29);
+		lblAddingABook.setBounds(79, 13, 203, 29);
 		panel.add(lblAddingABook);
 		
 		txtBookId = new JTextField();
@@ -93,7 +118,7 @@ public class AddBookGUI extends JFrame {
 		txtBookId.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		txtBookId.setForeground(Color.white);
 		txtBookId.setText("Enter Book id*");
-		txtBookId.setBounds(13, 87, 110, 16);
+		txtBookId.setBounds(13, 87, 200, 16);
 		panel.add(txtBookId);
 		txtBookId.setColumns(10);
 		
@@ -127,25 +152,25 @@ public class AddBookGUI extends JFrame {
 		
 		BidWarningLabel = new JLabel("");
 		BidWarningLabel.setFont(new Font("Arial", Font.BOLD, 15));
-		BidWarningLabel.setBounds(244, 84, 224, 22);
+		BidWarningLabel.setBounds(244, 84, 202, 22);
 		panel.add(BidWarningLabel);
 		
 		BNameWarningLabel = new JLabel("");
 		BNameWarningLabel.setFont(new Font("Arial", Font.BOLD, 15));
-		BNameWarningLabel.setBounds(246, 125, 224, 29);
+		BNameWarningLabel.setBounds(245, 129, 200, 21);
 		panel.add(BNameWarningLabel);
 		
 		JLabel lblLanguage = new JLabel("Language:");
 		lblLanguage.setForeground(Color.LIGHT_GRAY);
 		lblLanguage.setFont(new Font("Arial", Font.BOLD, 18));
-		lblLanguage.setBounds(12, 176, 93, 22);
+		lblLanguage.setBounds(16, 258, 93, 22);
 		panel.add(lblLanguage);
 		
 		comboBox = new JComboBox(langs);
 		comboBox.setBackground(Color.WHITE);
 		comboBox.setFont(new Font("Arial", Font.BOLD, 15));
 		comboBox.setForeground(Color.DARK_GRAY);
-		comboBox.setBounds(124, 176, 110, 24);
+		comboBox.setBounds(128, 258, 110, 24);
 		panel.add(comboBox);
 		
 		formats = new ButtonGroup();
@@ -153,7 +178,7 @@ public class AddBookGUI extends JFrame {
 		Image buttoncan = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
 		
 		JScrollPane sc = new JScrollPane();
-		sc.setLocation(526, 280);
+		sc.setLocation(526, 303);
 		sc.setSize(243, 45);
 		sc.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		panel.add(sc);
@@ -197,13 +222,13 @@ public class AddBookGUI extends JFrame {
 		ApplyButton.setBorderPainted(false);
 		
 		lblWillItBe = new JLabel("Will the book be in the catalog?");
-		lblWillItBe.setBounds(15, 331, 273, 22);
+		lblWillItBe.setBounds(19, 392, 273, 22);
 		panel.add(lblWillItBe);
 		lblWillItBe.setForeground(Color.LIGHT_GRAY);
 		lblWillItBe.setFont(new Font("Arial", Font.BOLD, 18));
 		
 		rdbtnNo = new JRadioButton("NO");
-		rdbtnNo.setBounds(13, 388, 51, 27);
+		rdbtnNo.setBounds(16, 439, 51, 27);
 		panel.add(rdbtnNo);
 		rdbtnNo.setForeground(Color.LIGHT_GRAY);
 		rdbtnNo.setFont(new Font("Arial", Font.BOLD, 15));
@@ -212,7 +237,7 @@ public class AddBookGUI extends JFrame {
 		yesno.add(rdbtnNo);
 		
 		rdbtnYes = new JRadioButton("YES");
-		rdbtnYes.setBounds(133, 388, 59, 27);
+		rdbtnYes.setBounds(136, 439, 59, 27);
 		panel.add(rdbtnYes);
 		rdbtnYes.setSelected(true);
 		rdbtnYes.setForeground(Color.LIGHT_GRAY);
@@ -221,7 +246,7 @@ public class AddBookGUI extends JFrame {
 		yesno.add(rdbtnYes);
 		
 		Price = new JTextField();
-		Price.setBounds(18, 455, 116, 22);
+		Price.setBounds(18, 485, 116, 22);
 		Price.setOpaque(false);   
 		Price.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		Price.setForeground(Color.white);	
@@ -230,13 +255,13 @@ public class AddBookGUI extends JFrame {
 		Price.setColumns(10);
 		
 		JLabel lblFormat = new JLabel("Format:");
-		lblFormat.setBounds(13, 218, 69, 22);
+		lblFormat.setBounds(17, 300, 69, 22);
 		panel.add(lblFormat);
 		lblFormat.setForeground(Color.LIGHT_GRAY);
 		lblFormat.setFont(new Font("Arial", Font.BOLD, 18));
 		
 				rdbtnDoc = new JRadioButton("DOC");
-				rdbtnDoc.setBounds(13, 263, 63, 27);
+				rdbtnDoc.setBounds(17, 345, 63, 27);
 				panel.add(rdbtnDoc);
 				rdbtnDoc.setForeground(Color.LIGHT_GRAY);
 				rdbtnDoc.setFont(new Font("Arial", Font.BOLD, 15));
@@ -245,7 +270,7 @@ public class AddBookGUI extends JFrame {
 				formats.add(rdbtnDoc);
 				
 				rdbtnFb = new JRadioButton("FB2");
-				rdbtnFb.setBounds(133, 263, 57, 27);
+				rdbtnFb.setBounds(137, 345, 57, 27);
 				panel.add(rdbtnFb);
 				rdbtnFb.setForeground(Color.LIGHT_GRAY);
 				rdbtnFb.setFont(new Font("Arial", Font.BOLD, 15));
@@ -253,7 +278,7 @@ public class AddBookGUI extends JFrame {
 				formats.add(rdbtnFb);
 				
 				rdbtnPdf = new JRadioButton("PDF");
-				rdbtnPdf.setBounds(251, 263, 59, 27);
+				rdbtnPdf.setBounds(255, 345, 59, 27);
 				panel.add(rdbtnPdf);
 				rdbtnPdf.setFont(new Font("Arial", Font.BOLD, 15));
 				rdbtnPdf.setForeground(Color.LIGHT_GRAY);
@@ -267,11 +292,11 @@ public class AddBookGUI extends JFrame {
 				label_2 = new JLabel("");
 				Image thirdimgfield = new ImageIcon(this.getClass().getResource("/Label.png")).getImage();
 				label_2.setIcon(new ImageIcon(thirdimgfield));
-				label_2.setBounds(13, 451, 224, 32);
+				label_2.setBounds(13, 481, 224, 32);
 				panel.add(label_2);
 				
 				JScrollPane sc3 = new JScrollPane();
-				sc3.setLocation(526, 432);
+				sc3.setLocation(526, 455);
 				sc3.setSize(243, 45);
 	
 				sc3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -283,7 +308,7 @@ public class AddBookGUI extends JFrame {
 				sc3.setViewportView(TOC_area);
 				
 				JScrollPane sc2 = new JScrollPane();
-				sc2.setLocation(526, 355);
+				sc2.setLocation(526, 378);
 				sc2.setSize(243, 46);
 				sc2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 				panel.add(sc2);
@@ -296,14 +321,83 @@ public class AddBookGUI extends JFrame {
 				
 				BpriceWarningLabel = new JLabel("");
 				BpriceWarningLabel.setFont(new Font("Arial", Font.BOLD, 15));
-				BpriceWarningLabel.setBounds(244, 451, 224, 29);
+				BpriceWarningLabel.setBounds(244, 482, 224, 29);
 				panel.add(BpriceWarningLabel);
 				
 				JLabel Optional_Options = new JLabel("Additional Options:");
 				Optional_Options.setFont(new Font("Arial", Font.BOLD, 18));
 				Optional_Options.setForeground(Color.LIGHT_GRAY);
-				Optional_Options.setBounds(528, 228, 180, 31);
+				Optional_Options.setBounds(458, 259, 180, 31);
 				panel.add(Optional_Options);
+				
+				JLabel lblChooseCategory = new JLabel("Choose Category*:");
+				lblChooseCategory.setForeground(Color.LIGHT_GRAY);
+				lblChooseCategory.setFont(new Font("Arial", Font.BOLD, 18));
+				lblChooseCategory.setBounds(458, 96, 180, 31);
+				panel.add(lblChooseCategory);
+				
+				Category_combobox = new JComboBox<String>();
+				Category_combobox.setFont(new Font("Arial", Font.BOLD, 15));
+				Category_combobox.setForeground(Color.DARK_GRAY);
+				Category_combobox.setBounds(635, 100, 134, 22);
+				panel.add(Category_combobox);
+				
+				JLabel lblChooseSubject = new JLabel("Choose Subject*:");
+				lblChooseSubject.setForeground(Color.LIGHT_GRAY);
+				lblChooseSubject.setFont(new Font("Arial", Font.BOLD, 18));
+				lblChooseSubject.setBounds(458, 152, 180, 31);
+				panel.add(lblChooseSubject);
+				
+				Subject_combobox = new JComboBox<String>();
+				Subject_combobox.setFont(new Font("Arial", Font.BOLD, 15));
+				Subject_combobox.setBounds(635, 156, 134, 22);
+				panel.add(Subject_combobox);
+				
+				lblSelectBookAfilliation = new JLabel("Select book affiliation (obligatory)");
+				lblSelectBookAfilliation.setForeground(Color.GRAY);
+				lblSelectBookAfilliation.setFont(new Font("Arial", Font.BOLD, 15));
+				lblSelectBookAfilliation.setBounds(454, 49, 334, 18);
+				panel.add(lblSelectBookAfilliation);
+				Image forthimgfield = new ImageIcon(this.getClass().getResource("/Label.png")).getImage();
+				
+				txtBookAuthorid = new JTextField();
+				txtBookAuthorid.setBounds(16, 176, 197, 16);
+				txtBookAuthorid.setOpaque(false);   
+				txtBookAuthorid.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+				txtBookAuthorid.setForeground(Color.white);
+				txtBookAuthorid.setText("Enter Book Author id *");
+				panel.add(txtBookAuthorid);
+				txtBookAuthorid.setColumns(10);
+				
+				label_3 = new JLabel("");
+				label_3.setIcon(new ImageIcon(forthimgfield));
+				label_3.setBounds(10, 169, 224, 32);
+				panel.add(label_3);
+				
+				BAuthoridWarningLabel = new JLabel("");
+				BAuthoridWarningLabel.setFont(new Font("Arial", Font.BOLD, 15));
+				BAuthoridWarningLabel.setBounds(244, 173, 200, 21);
+				panel.add(BAuthoridWarningLabel);
+				
+				label_4 = new JLabel("");
+				Image fifthimgfield = new ImageIcon(this.getClass().getResource("/Label.png")).getImage();
+				
+				txtBookAuthorname = new JTextField();
+				txtBookAuthorname.setText("Enter Book Author name*");
+				txtBookAuthorname.setOpaque(false);   
+				txtBookAuthorname.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+				txtBookAuthorname.setForeground(Color.white);
+				txtBookAuthorname.setBounds(14, 218, 182, 22);
+				panel.add(txtBookAuthorname);
+				txtBookAuthorname.setColumns(10);
+				label_4.setIcon(new ImageIcon(fifthimgfield));
+				label_4.setBounds(10, 213, 224, 32);
+				panel.add(label_4);
+				
+				BAuthornameWarningLabel = new JLabel("");
+				BAuthornameWarningLabel.setFont(new Font("Arial", Font.BOLD, 15));
+				BAuthornameWarningLabel.setBounds(240, 220, 200, 21);
+				panel.add(BAuthornameWarningLabel);
 				
 				BackGround = new JLabel("");
 				BackGround.setBounds(0, 0, 794, 566);
@@ -406,18 +500,43 @@ public class AddBookGUI extends JFrame {
 		return keywords_area;
 	}
 	
-	
+	public JTextField getTxtBookAuthorid() {
+		return txtBookAuthorid;
+	}
+
+
+	public JLabel getBAuthoridWarningLabel() {
+		return BAuthoridWarningLabel;
+	}
+
+	public JLabel getBAuthornameWarningLabel() {
+		return BAuthornameWarningLabel;
+	}
+
+	public JTextField getTxtBookAuthorname() {
+		return txtBookAuthorname;
+	}
+
+
+	public JComboBox getSubject_combobox() {
+		return Subject_combobox;
+	}
+
+
+	public JComboBox getCategory_combobox() {
+		return Category_combobox;
+	}
+
+
+
+
+
 	// ----------------------------------- end of getters and setters -------------------------------------------//
 	
 	
 	//listeners for AddBookGUI
+
 	
-
-
-
-
-
-
 
 	public void AddTextBookIdMouseListener(MouseListener e)
 	{
@@ -432,6 +551,16 @@ public class AddBookGUI extends JFrame {
 	public void AddTextPriceMouseListener(MouseListener e)
 	{
 		Price.addMouseListener(e);
+	}
+	
+	public void AddTextAuthoridMouseListener(MouseListener e)
+	{
+		txtBookAuthorid.addMouseListener(e);
+	}
+	
+	public void AddTextAuthorNameMouseListener(MouseListener e)
+	{
+		txtBookAuthorname.addMouseListener(e);
 	}
 	
 	public void AddbuttonApplyactionListener(ActionListener e)

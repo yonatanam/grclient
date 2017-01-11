@@ -1,44 +1,41 @@
 package gui;
 
-import java.awt.EventQueue;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.Color;
-import javax.swing.JButton;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import client.App;
 
-import javax.swing.JTextField;
-
-public class AddCategoryGUI extends JFrame {
-
+public class AddSubjectGUI extends JFrame {
+	
 	private JLabel BackGround;
-	private JTextField TextCatId;
-	private JTextField TextCatName;
-	private JLabel lblCategoriesThatWere;
-	private JLabel lblCreateNewCategories; 
+	private JTextField TextSubId;
+	private JTextField TextSubName;
+	private JLabel lblSubjectsThatWere;
+	private JLabel lblCreateNewSubjects; 
 	private JLabel Name_Warning;
 	private JLabel Id_Warning;
-	private JLabel lblAddingNewCategory;
+	private JLabel lblAddingNewSubject;
 	private JLabel label_1;
 	private JLabel label;
 	private JButton Button_Cancel;
 	private JButton Button_Apply;
-	private JLabel What_Categories;
+	private JLabel What_Subjects;
 	private UserMenu userMenu;
 	
-	
-	public AddCategoryGUI() {
+	public AddSubjectGUI() {
 		initialize();
 	}
-
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -50,20 +47,20 @@ public class AddCategoryGUI extends JFrame {
 		userMenu = App.client.menuSwitcher(this); //Gets the specific menu per user permission
 		Menu menu = new Menu(userMenu);
 		menu.setBounds(10,11,165,550);
-		getContentPane().add(menu);	
-		/** End menu */
+		getContentPane().add(menu);
 		
+		/** End menu */
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		
 		Image imgbg = new ImageIcon(this.getClass().getResource("/bgWithoutLogo.png")).getImage();
 		getContentPane().setLayout(null);
 		
-		lblAddingNewCategory = new JLabel("Adding new category");
-		lblAddingNewCategory.setForeground(Color.WHITE);
-		lblAddingNewCategory.setFont(new Font("Arial", Font.BOLD, 24));
-		lblAddingNewCategory.setBounds(75, 11, 255, 29);
-		getContentPane().add(lblAddingNewCategory);
+		lblAddingNewSubject = new JLabel("Adding new Subject");
+		lblAddingNewSubject.setForeground(Color.WHITE);
+		lblAddingNewSubject.setFont(new Font("Arial", Font.BOLD, 24));
+		lblAddingNewSubject.setBounds(69, 11, 255, 29);
+		getContentPane().add(lblAddingNewSubject);
 		
 		label_1 = new JLabel("");
 		Image firstimg = new ImageIcon(this.getClass().getResource("/Label.png")).getImage();
@@ -104,55 +101,55 @@ public class AddCategoryGUI extends JFrame {
 		
 		getContentPane().add(Button_Apply);
 		
-		TextCatId = new JTextField();
-		TextCatId.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		TextCatId.setText("Enter Category id");
-		TextCatId.setOpaque(false);   
-		TextCatId.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		TextCatId.setForeground(Color.white);
-		TextCatId.setBounds(278, 218, 206, 22);
-		getContentPane().add(TextCatId);
-		TextCatId.setColumns(10);
+		TextSubId = new JTextField();
+		TextSubId.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		TextSubId.setText("Enter Subject id");
+		TextSubId.setOpaque(false);   
+		TextSubId.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		TextSubId.setForeground(Color.white);
+		TextSubId.setBounds(278, 218, 206, 22);
+		getContentPane().add(TextSubId);
+		TextSubId.setColumns(10);
 		
-		TextCatName = new JTextField();
-		TextCatName.setText("Enter Category name");
-		TextCatName.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		TextCatName.setOpaque(false);   
-		TextCatName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		TextCatName.setForeground(Color.white);
-		TextCatName.setBounds(280, 263, 206, 22);
-		getContentPane().add(TextCatName);
-		TextCatName.setColumns(10);
+		TextSubName = new JTextField();
+		TextSubName.setText("Enter Subject name");
+		TextSubName.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		TextSubName.setOpaque(false);   
+		TextSubName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		TextSubName.setForeground(Color.white);
+		TextSubName.setBounds(280, 263, 206, 22);
+		getContentPane().add(TextSubName);
+		TextSubName.setColumns(10);
 		
 		Id_Warning = new JLabel("");
 		Id_Warning.setFont(new Font("Arial", Font.BOLD, 15));
 		Id_Warning.setForeground(Color.RED);
-		Id_Warning.setBounds(508, 218, 213, 22);
+		Id_Warning.setBounds(504, 217, 213, 22);
 		getContentPane().add(Id_Warning);
 		
 		Name_Warning = new JLabel("");
 		Name_Warning.setFont(new Font("Arial", Font.BOLD, 15));
 		Name_Warning.setForeground(Color.RED);
-		Name_Warning.setBounds(507, 263, 213, 22);
+		Name_Warning.setBounds(504, 265, 213, 22);
 		getContentPane().add(Name_Warning);
 		
-		lblCreateNewCategories = new JLabel("Create new categories for your library ");
-		lblCreateNewCategories.setForeground(Color.LIGHT_GRAY);
-		lblCreateNewCategories.setFont(new Font("Arial", Font.BOLD, 19));
-		lblCreateNewCategories.setBounds(23, 78, 380, 29);
-		getContentPane().add(lblCreateNewCategories);
+		lblCreateNewSubjects = new JLabel("Create new Subjects for your library ");
+		lblCreateNewSubjects.setForeground(Color.LIGHT_GRAY);
+		lblCreateNewSubjects.setFont(new Font("Arial", Font.BOLD, 19));
+		lblCreateNewSubjects.setBounds(23, 78, 380, 29);
+		getContentPane().add(lblCreateNewSubjects);
 		
-		lblCategoriesThatWere = new JLabel("Categories that were already created are:");
-		lblCategoriesThatWere.setFont(new Font("Arial", Font.BOLD, 19));
-		lblCategoriesThatWere.setForeground(Color.LIGHT_GRAY);
-		lblCategoriesThatWere.setBounds(23, 352, 393, 22);
-		getContentPane().add(lblCategoriesThatWere);
+		lblSubjectsThatWere = new JLabel("Subjects that were already created are:");
+		lblSubjectsThatWere.setFont(new Font("Arial", Font.BOLD, 19));
+		lblSubjectsThatWere.setForeground(Color.LIGHT_GRAY);
+		lblSubjectsThatWere.setBounds(23, 352, 393, 22);
+		getContentPane().add(lblSubjectsThatWere);
 		
-		What_Categories = new JLabel("");
-		What_Categories.setForeground(Color.LIGHT_GRAY);
-		What_Categories.setFont(new Font("Arial", Font.BOLD, 19));
-		What_Categories.setBounds(23, 387, 737, 29);
-		getContentPane().add(What_Categories);
+		What_Subjects = new JLabel("");
+		What_Subjects.setForeground(Color.LIGHT_GRAY);
+		What_Subjects.setFont(new Font("Arial", Font.BOLD, 19));
+		What_Subjects.setBounds(23, 387, 737, 29);
+		getContentPane().add(What_Subjects);
 		
 		
 		BackGround = new JLabel("");
@@ -164,23 +161,21 @@ public class AddCategoryGUI extends JFrame {
 	
 		
 		
-		this.setTitle("Adding new Category - Initial Config");
+		this.setTitle("Adding new Subject - Initial Config");
 		
 		this.setVisible(true);
 		
 	}
 
 	
+	// Setters and Getters 
 	
-	// Setters and Getters
-	
-	
-	public JTextField getTextCatId() {
-		return TextCatId;
+	public JTextField getTextSubId() {
+		return TextSubId;
 	}
 
-	public JTextField getTextCatName() {
-		return TextCatName;
+	public JTextField getTextSubName() {
+		return TextSubName;
 	}
 
 	public JLabel getName_Warning() {
@@ -191,22 +186,21 @@ public class AddCategoryGUI extends JFrame {
 		return Id_Warning;
 	}
 
-	public JLabel getWhat_Categories() {
-		return What_Categories;
+	public JLabel getWhat_Subjects() {
+		return What_Subjects;
 	}
 	
-	
-	
+
 	// Adding Action Listeners
 	
-	public void AddTextCategIdMouseListener(MouseListener e)
+	public void AddTextSubjIdMouseListener(MouseListener e)
 	{
-		TextCatId.addMouseListener(e);
+		TextSubId.addMouseListener(e);
 	}
 	
-	public void AddTextCategNameMouseListener(MouseListener e)
+	public void AddTextSubjNameMouseListener(MouseListener e)
 	{
-		TextCatName.addMouseListener(e);
+		TextSubName.addMouseListener(e);
 	}
 	
 	public void AddbuttonApplyactionListener(ActionListener e)
@@ -214,20 +208,10 @@ public class AddCategoryGUI extends JFrame {
 		Button_Apply.addActionListener(e);
 	}
 	
-	public void addButtonCancelFromCreateNewCategActionListener(ActionListener e)
+	public void addButtonCancelFromCreateNewSubjActionListener(ActionListener e)
 	{
 		Button_Cancel.addActionListener(e);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
+
 }

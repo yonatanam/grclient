@@ -59,6 +59,11 @@ public class PublishReviewController extends AbstractController {
 		public void actionPerformed(ActionEvent e){
 			Map<String,Object> params = new HashMap<String,Object>();
 			Envelope en = new Envelope(params);
+			if (publishReviewGUI.getChooseBookComboBox().getSelectedItem() == null)
+			{
+				JOptionPane.showMessageDialog(null,"No book was chosen!","Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			if (publishReviewGUI.getTextArea().getText().equals(""))
 			{
 				JOptionPane.showMessageDialog(null,"Review text is empty!","Error", JOptionPane.ERROR_MESSAGE);
@@ -86,7 +91,6 @@ public class PublishReviewController extends AbstractController {
 		switch ((String)en.getParams().get("msg"))
 				{
 				case "GetBooksRead":
-
 					ArrayList<String> bookTitles = (ArrayList<String>)en.getParams().get("booktitles");
 					for (String bookTitle : bookTitles)
 						publishReviewGUI.getChooseBookComboBox().addItem(bookTitle);
@@ -94,7 +98,7 @@ public class PublishReviewController extends AbstractController {
 				case "PublishReviewOK":
 					JOptionPane.showMessageDialog(null,"Review was published successfuly!");
 					break;
-				case "PublishReviewNotOK":
+				case "PublishReviewNOTOK":
 					JOptionPane.showMessageDialog(null,"Review already exists!","Error", JOptionPane.ERROR_MESSAGE);
 					break;
 				case "ReviewPopUp":

@@ -46,16 +46,26 @@ public class EditReviewGUI extends JFrame {
 	 * Initialize the contents of the 
 	 */
 	private void initialize() {
-		setBounds(100, 100, 600, 498);
+		setBounds(100, 100, 600, 420);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
+		getContentPane().setBackground(Color.BLACK);
 		setUndecorated(true);
+		Image imgLogin = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
 
 
 
 		//Back button
 		BackButton = new JButton("Back");
-		BackButton.setBounds(370, 407, 89, 23);
+		BackButton.setBounds(137, 380, 131, 41);
+		BackButton.setFont(new Font("Arial", Font.BOLD, 15));
+		BackButton.setIcon(new ImageIcon(imgLogin));
+		BackButton.setOpaque(false);
+		BackButton.setContentAreaFilled(false);
+		BackButton.setBorderPainted(false);
+		BackButton.setHorizontalTextPosition(JButton.CENTER);
+		BackButton.setVerticalTextPosition(JButton.CENTER);
+		BackButton.setForeground(Color.WHITE);
 		getContentPane().add(BackButton);
 
 
@@ -69,11 +79,21 @@ public class EditReviewGUI extends JFrame {
 
 		/*Submit button*/
 		btnSubmit = new JButton("Submit");
-		btnSubmit.setBounds(116, 407, 89, 23);
+		btnSubmit.setBounds(292, 380, 131, 41);
+		btnSubmit.setFont(new Font("Arial", Font.BOLD, 15));
+		btnSubmit.setIcon(new ImageIcon(imgLogin));
+		btnSubmit.setOpaque(false);
+		btnSubmit.setContentAreaFilled(false);
+		btnSubmit.setBorderPainted(false);
+		btnSubmit.setHorizontalTextPosition(JButton.CENTER);
+		btnSubmit.setVerticalTextPosition(JButton.CENTER);
+		btnSubmit.setForeground(Color.WHITE);
 		getContentPane().add(btnSubmit);
 
 		JLabel lblEditReviewText = new JLabel("Edit review text:");
-		lblEditReviewText.setBounds(20, 11, 120, 14);
+		lblEditReviewText.setForeground(Color.WHITE);
+		lblEditReviewText.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblEditReviewText.setBounds(20, 11, 154, 14);
 		getContentPane().add(lblEditReviewText);
 
 		setLocationRelativeTo(null);

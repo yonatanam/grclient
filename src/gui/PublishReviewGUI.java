@@ -32,9 +32,6 @@ public class PublishReviewGUI extends JFrame {
 	private JButton BackButton;
 	private JLabel lblChooseBook;
 	private JComboBox chooseBookComboBox;
-
-
-
 	private JLabel lblKeywords;
 	private JTextField keywordTextField;
 	private JLabel lblSign;
@@ -60,20 +57,21 @@ public class PublishReviewGUI extends JFrame {
 		userMenu = App.client.menuSwitcher(this); //Gets the specific menu per user permission
 		Menu menu = new Menu(userMenu);
 		menu.setBounds(10,11,165,550);
-		add(menu);	
+		getContentPane().add(menu);	
 		/** End menu */
 		
-		
+		Image buttonIcon = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
 		//Back button
 		BackButton = new JButton("Back");
-		BackButton.setFont(new Font("Arial", Font.BOLD, 15));
-		BackButton.setBounds(28, 499, 106, 41);
+		BackButton.setBounds(387, 504, 131, 31);
+		BackButton.setFont(new Font("Arial", Font.BOLD, 16));
+		BackButton.setForeground(Color.WHITE);
+		BackButton.setIcon(new ImageIcon(buttonIcon));
+		BackButton.setHorizontalTextPosition(JButton.CENTER);
+		BackButton.setVerticalTextPosition(JButton.CENTER);
 		BackButton.setOpaque(false);
 		BackButton.setContentAreaFilled(false);
 		BackButton.setBorderPainted(false);
-		BackButton.setHorizontalTextPosition(JButton.CENTER);
-		BackButton.setVerticalTextPosition(JButton.CENTER);
-		BackButton.setForeground(Color.WHITE);
 		getContentPane().add(BackButton);
 
 		setLocationRelativeTo(null);
@@ -130,7 +128,15 @@ public class PublishReviewGUI extends JFrame {
 		
 		/*Submit button*/
 		btnSubmit = new JButton("Submit");
-		btnSubmit.setBounds(322, 482, 89, 23);
+		btnSubmit.setBounds(246, 504, 131, 31);
+		btnSubmit.setFont(new Font("Arial", Font.BOLD, 16));
+		btnSubmit.setForeground(Color.WHITE);
+		btnSubmit.setIcon(new ImageIcon(buttonIcon));
+		btnSubmit.setHorizontalTextPosition(JButton.CENTER);
+		btnSubmit.setVerticalTextPosition(JButton.CENTER);
+		btnSubmit.setOpaque(false);
+		btnSubmit.setContentAreaFilled(false);
+		btnSubmit.setBorderPainted(false);
 		getContentPane().add(btnSubmit);
 		/*End submit button*/
 		

@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import com.mysql.jdbc.ResultSet;
 
 import client.App;
+import controllers.AbstractController.CustomWindowListener;
 import gui.EditReviewGUI;
 import gui.MainWindowGUI;
 import gui.PendingReviewsGUI;
@@ -38,6 +39,7 @@ public class PendingReviewsController extends AbstractController {
 		prg.addButtonApproveReviewActionListener(new ApproveReviewActionListener());
 		prg.addButtonDenyReviewActionListener(new DenyReviewActionListener());
 		prg.addButtonEditReviewActionListener(new EditReviewActionListener());
+		prg.addWindowListener(new CustomWindowListener());
 		fetchReviewData();
 
 

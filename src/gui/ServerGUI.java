@@ -59,7 +59,7 @@ public class ServerGUI extends JFrame {
 		getContentPane().add(lblHost);
 		
 		UserNameText = new JTextField();
-		UserNameText.setText("grproj");
+		UserNameText.setText("root");
 		UserNameText.setBounds(131, 31, 86, 20);
 		getContentPane().add(UserNameText);
 		UserNameText.setColumns(10);
@@ -86,13 +86,13 @@ public class ServerGUI extends JFrame {
 		 ConnectButton.addActionListener(new ActionListener() {
 		 	public void actionPerformed(ActionEvent e) {		 		
 		 		servercon=new ServerController();
-		 		/*servercon.setDbName(DataBaseText.getText());
+		 		servercon.setDbName(DataBaseText.getText());
 		 		servercon.setUserName(UserNameText.getText());
 		 		servercon.setHostName(HostText.getText());
-		 		servercon.setPassword1(PasswordText.getText());*/
-		 		servercon.setDbName("grproj");
-		 		servercon.setUserName("grproj");
-		 		servercon.setHostName("localhost");
+		 		servercon.setPassword1(PasswordText.getText());
+		 		/*servercon.setDbName("grproj");
+		 		servercon.setUserName("root");
+		 		servercon.setHostName("localhost");*/
 		 		ServerLogGUI serverLogGUI = new ServerLogGUI(servercon);
 		 		ServerGUI.serverGUI.dispose();
 		 		if(servercon.Connect()) serverLogGUI.addDisconnectButton();			

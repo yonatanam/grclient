@@ -63,7 +63,7 @@ public class PendingReviewsGUI extends JFrame {
 		BackButton = new JButton("Back");
 		BackButton.setFont(new Font("Arial", Font.BOLD, 15));
 		BackButton.setIcon(new ImageIcon(imgLogin));
-		BackButton.setBounds(28, 499, 106, 41);
+		BackButton.setBounds(32, 464, 106, 41);
 		BackButton.setOpaque(false);
 		BackButton.setContentAreaFilled(false);
 		BackButton.setBorderPainted(false);
@@ -85,16 +85,40 @@ public class PendingReviewsGUI extends JFrame {
 		setVisible(true);
 		
 		btnEditReview = new JButton("Edit review");
-		btnEditReview.setBounds(39, 423, 89, 23);
+		btnEditReview.setBounds(22, 412, 131, 41);
+		btnEditReview.setFont(new Font("Arial", Font.BOLD, 15));
+		btnEditReview.setIcon(new ImageIcon(imgLogin));
+		btnEditReview.setOpaque(false);
+		btnEditReview.setContentAreaFilled(false);
+		btnEditReview.setBorderPainted(false);
+		btnEditReview.setHorizontalTextPosition(JButton.CENTER);
+		btnEditReview.setVerticalTextPosition(JButton.CENTER);
+		btnEditReview.setForeground(Color.WHITE);
 		getContentPane().add(btnEditReview);
 		
 		
 		btnApprove = new JButton("Approve");
-		btnApprove.setBounds(187, 423, 89, 23);
+		btnApprove.setBounds(290, 412, 131, 41);
+		btnApprove.setFont(new Font("Arial", Font.BOLD, 15));
+		btnApprove.setIcon(new ImageIcon(imgLogin));
+		btnApprove.setOpaque(false);
+		btnApprove.setContentAreaFilled(false);
+		btnApprove.setBorderPainted(false);
+		btnApprove.setHorizontalTextPosition(JButton.CENTER);
+		btnApprove.setVerticalTextPosition(JButton.CENTER);
+		btnApprove.setForeground(Color.WHITE);
 		getContentPane().add(btnApprove);
 		
 		btnDeny = new JButton("Deny");
-		btnDeny.setBounds(333, 423, 89, 23);
+		btnDeny.setBounds(151, 412, 131, 41);
+		btnDeny.setFont(new Font("Arial", Font.BOLD, 15));
+		btnDeny.setIcon(new ImageIcon(imgLogin));
+		btnDeny.setOpaque(false);
+		btnDeny.setContentAreaFilled(false);
+		btnDeny.setBorderPainted(false);
+		btnDeny.setHorizontalTextPosition(JButton.CENTER);
+		btnDeny.setVerticalTextPosition(JButton.CENTER);
+		btnDeny.setForeground(Color.WHITE);
 		getContentPane().add(btnDeny);
 		
 		//Background

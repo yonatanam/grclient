@@ -34,6 +34,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import client.App;
+import controllers.Functions;
 import models.LoginModel;
 import models.Envelope;
 import models.User;
@@ -84,6 +85,7 @@ public class EchoServer extends AbstractServer
 		Envelope en=(Envelope) msg;
 		String message = (String) en.getParams().get("msg");
 		String query = null;
+		String searchExp = null;
 		try 
 		{
 			Statement stmt = conn.createStatement();  
@@ -377,23 +379,23 @@ public class EchoServer extends AbstractServer
 				stmt.executeUpdate(query);
 				break;
 
-				/**----------------------------Search Review----------------------------*/ 
+				/*----------------------------Search Review----------------------------*/ 
 			case "SearchReview":	
-				controller.Print("SearchReview");
+				
 				String searchType = (String)en.getParams().get("searchType");
 				String searchText = (String)en.getParams().get("searchText");
+				searchExp = Functions.getSearchExp(searchText);
 				switch(searchType)
-				{
-				case "Book's name":
-					//query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.booktitle = '" + searchText + "'"; 
-					query = "SELECT R.username, R.date, R.content FROM reviews AS R WHERE R.status = 'APPROVED' AND R.username = '" + searchText + "'";
-					break;
-				case "Book's writer":
-					//query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.bookid = B.bookid AND B.booktitle = '" + searchText + "'";
-					break;
-				case "Key words":
-					query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.keywords = '" + searchText + "'";
-					break;
+				{				
+					case "Book's name":											
+						query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.booktitle REGEXP '" + searchExp + "'";
+						break;
+					case "Book's writer":	
+						query = "SELECT DISTINCT R.username, R.date, R.content FROM reviews AS R, books AS B, authors AS A, book_authors as B_A WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND A.authorid = B_A.authorid AND A.authorname REGEXP '" + searchExp + "'";
+						break;
+					case "Key words":
+						query = "SELECT DISTINCT R.username, R.date, R.content FROM reviews AS R, books AS B, authors AS A WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.keywords REGEXP '" + searchExp + "'";				
+						break;
 				}
 
 				res = stmt.executeQuery(query);
@@ -424,7 +426,7 @@ public class EchoServer extends AbstractServer
 				}
 				client.sendToClient(envelope);
 				break;	
-				/**----------------------------Search Review----------------------------*/ 
+				/*----------------------------Search Review----------------------------*/ 
 
 				/**----------------------------Get Subscriptions Names----------------------------*/ 	
 			case "getSubscriptionsNames":
@@ -446,7 +448,31 @@ public class EchoServer extends AbstractServer
 				client.sendToClient(envelope);
 				break;
 				/**----------------------------End of Get Subscriptions Names----------------------------*/ 
-
+				/*----------------------------Settle Payment----------------------------*/ 	
+			case "submitSettlePayment":
+				username = (String)en.getParams().get("username");
+				String cardNumber = (String)en.getParams().get("cardNumber");
+				String ccv = (String)en.getParams().get("ccv");
+				String expirationDate = (String)en.getParams().get("expirationDate");
+				int subscriptionType = (int)en.getParams().get("subscriptionType");
+				String today = (String)en.getParams().get("commencementOfSubscription");			
+						
+				
+				query = "SELECT username FROM accounts WHERE username = '" + username + "'";
+				res = stmt.executeQuery(query);
+				
+				if(getRowCount(res) == 0)
+				{
+					query = "INSERT into accounts (username, creditcard, creditdate, ccv, subscription_type, creation_date) values ('"+ username + "','" + cardNumber + "','" + expirationDate + "','" + ccv + "','" + subscriptionType + "','" + today + "')";
+					params.put("msg","SettlePaymentSucceeded");
+					stmt.executeUpdate(query);
+				}
+				else
+					params.put("msg","SettlePaymentFalied");
+				
+				client.sendToClient(envelope);
+				break;
+				/*----------------------------End Of Settle Payment----------------------------*/	
 			case "CreateNewCategory":      // insert new category for the library
 				//System.out.println("in here!!!");
 				String CatId = (String) en.getParams().get("CatId");

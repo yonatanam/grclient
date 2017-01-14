@@ -12,14 +12,28 @@ public class User extends AbstractModel {
 	/**email of user  */
 	private String email ;
 	private String permission;
-	
-	public User(String firstName, String lastName, String userName, String email, String permission) {
+	private String status;
+
+	public User(String firstName, String lastName, String userName, String email, String permission, String status) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.userName = userName;
 		this.email = email;
 		this.permission = permission;
+		this.status=status;
+	}
+	
+	public User(String username, String password, String fname, String lname, String email, String permission, String status)
+	{
+		super();
+		this.userName = username;
+		this.password = password;
+		this.firstName = fname;
+		this.lastName = lname;
+		this.email = email;
+		this.permission = permission;
+		this.status=status;
 	}
 	
 	public String getFirstName() {
@@ -72,6 +86,14 @@ public class User extends AbstractModel {
 	
 
 	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	
 }
 

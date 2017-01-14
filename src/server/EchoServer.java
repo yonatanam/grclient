@@ -381,21 +381,21 @@ public class EchoServer extends AbstractServer
 
 				/*----------------------------Search Review----------------------------*/ 
 			case "SearchReview":	
-				
+
 				String searchType = (String)en.getParams().get("searchType");
 				String searchText = (String)en.getParams().get("searchText");
 				searchExp = Functions.getSearchExp(searchText);
 				switch(searchType)
 				{				
-					case "Book's name":											
-						query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.booktitle REGEXP '" + searchExp + "'";
-						break;
-					case "Book's writer":	
-						query = "SELECT DISTINCT R.username, R.date, R.content FROM reviews AS R, books AS B, authors AS A, book_authors as B_A WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND A.authorid = B_A.authorid AND A.authorname REGEXP '" + searchExp + "'";
-						break;
-					case "Key words":
-						query = "SELECT DISTINCT R.username, R.date, R.content FROM reviews AS R, books AS B, authors AS A WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.keywords REGEXP '" + searchExp + "'";				
-						break;
+				case "Book's name":											
+					query = "SELECT R.username, R.date, R.content FROM reviews AS R, books AS B WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.booktitle REGEXP '" + searchExp + "'";
+					break;
+				case "Book's writer":	
+					query = "SELECT DISTINCT R.username, R.date, R.content FROM reviews AS R, books AS B, authors AS A, book_authors as B_A WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND A.authorid = B_A.authorid AND A.authorname REGEXP '" + searchExp + "'";
+					break;
+				case "Key words":
+					query = "SELECT DISTINCT R.username, R.date, R.content FROM reviews AS R, books AS B, authors AS A WHERE R.status = 'APPROVED' AND R.bookid = B.bookid AND B.keywords REGEXP '" + searchExp + "'";				
+					break;
 				}
 
 				res = stmt.executeQuery(query);
@@ -456,11 +456,11 @@ public class EchoServer extends AbstractServer
 				String expirationDate = (String)en.getParams().get("expirationDate");
 				int subscriptionType = (int)en.getParams().get("subscriptionType");
 				String today = (String)en.getParams().get("commencementOfSubscription");			
-						
-				
+
+
 				query = "SELECT username FROM accounts WHERE username = '" + username + "'";
 				res = stmt.executeQuery(query);
-				
+
 				if(getRowCount(res) == 0)
 				{
 					query = "INSERT into accounts (username, creditcard, creditdate, ccv, subscription_type, creation_date) values ('"+ username + "','" + cardNumber + "','" + expirationDate + "','" + ccv + "','" + subscriptionType + "','" + today + "')";
@@ -469,7 +469,7 @@ public class EchoServer extends AbstractServer
 				}
 				else
 					params.put("msg","SettlePaymentFalied");
-				
+
 				client.sendToClient(envelope);
 				break;
 				/*----------------------------End Of Settle Payment----------------------------*/	
@@ -610,6 +610,52 @@ public class EchoServer extends AbstractServer
 					params.put("msg", "editReviewNOTOK");
 					client.sendToClient(envelope);	
 				}
+				break;
+			case "getUsersData":
+				res = stmt.executeQuery("SELECT username,password,fname,lname,email,permission,status from users");	
+				Vector<Object> usersColumnNames = new Vector<Object>();
+				Vector<Object> usersData = new Vector<Object>();
+				ResultSetMetaData rmd2 = res.getMetaData();
+				int usersColumnCount = rmd2.getColumnCount();
+				for (int i = 1; i <= usersColumnCount; i++)
+					usersColumnNames.addElement( rmd2.getColumnName(i) );
+				while (res.next())
+				{
+					Vector<Object> row = new Vector<Object>(usersColumnCount);
+					for (int i = 1; i <= usersColumnCount; i++)
+					{
+						row.addElement( res.getObject(i) );
+					}
+					usersData.addElement( row );
+				}
+				params.put("usersColumnNames", usersColumnNames);
+				params.put("usersData", usersData);
+				params.put("msg", "UsersData");
+				client.sendToClient(envelope);
+				break;
+				/**End get users data*/
+			case "changeUserData":
+				User newUserData = (User)en.getParams().get("user");
+				try
+				{
+					stmt.executeUpdate("UPDATE users SET "
+							+ "password='"+newUserData.getPassword()+"', "
+							+ "fname='"+newUserData.getFirstName()+"', "
+							+ "lname='"+newUserData.getLastName()+"', "
+							+ "email='"+newUserData.getEmail()+"', "
+							+ "permission='"+newUserData.getPermission()+"', "
+							+ "status='"+newUserData.getStatus()+"' WHERE username='"+newUserData.getUserName()+"'");
+					params.put("msg", "editUserOK");
+					client.sendToClient(envelope);
+
+				}
+				catch (Exception ex)
+				{
+					params.put("msg", "editUserNOTOK");
+					client.sendToClient(envelope);
+				}
+
+				break;
 			}
 
 		} catch (Exception x) {

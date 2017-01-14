@@ -40,7 +40,7 @@ public class EditReviewController extends AbstractController {
 		editReviewController = this;  //IMPORTANT
 		editReviewGUI.addButtonBackFromEditReviewActionListener(new BackFromEditReviewListener());
 		editReviewGUI.addButtonSubmitEditReviewActionListener(new SubmitEditListener());
-		editReviewGUI.addWindowListener(new CustomWindowListener());
+		
 
 	}
 

@@ -155,7 +155,8 @@ public class LoginController extends  AbstractController
 					(String)en.getParams().get("lname"),
 					(String)en.getParams().get("username"),
 					(String)en.getParams().get("email"),
-					(String)en.getParams().get("permission"));
+					(String)en.getParams().get("permission"),
+					(String)en.getParams().get("status"));
 			App.client.setCurrentUser(user);
 			/*Change status of user in db*/
 			Map<String, Object> params = new LinkedHashMap<String,Object>();

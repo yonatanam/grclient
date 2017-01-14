@@ -32,8 +32,6 @@ public class PublishReviewGUI extends JFrame {
 	private JButton BackButton;
 	private JLabel lblChooseBook;
 	private JComboBox chooseBookComboBox;
-	private JLabel lblKeywords;
-	private JTextField keywordTextField;
 	private JLabel lblSign;
 	private JCheckBox chckbxNewCheckBox;
 	private JButton btnSubmit;
@@ -97,20 +95,7 @@ public class PublishReviewGUI extends JFrame {
 		getContentPane().add(textArea);
 		/*End text area*/
 		
-		/*Keywords label*/
-		lblKeywords = new JLabel("Keywords:");
-		lblKeywords.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblKeywords.setForeground(Color.WHITE);
-		lblKeywords.setBounds(89, 390, 106, 31);
-		getContentPane().add(lblKeywords);
-		/*End keywords label*/
-		
-		/*Keywords textfield */
-		keywordTextField = new JTextField();
-		keywordTextField.setBounds(194, 398, 488, 20);
-		getContentPane().add(keywordTextField);
-		keywordTextField.setColumns(10);
-		/*End keywords textfield*/
+
 		
 		/*Sign label*/
 		lblSign = new JLabel("Sign:");
@@ -180,13 +165,7 @@ public class PublishReviewGUI extends JFrame {
 	public void setChooseBookComboBox(JComboBox chooseBookComboBox) {
 		this.chooseBookComboBox = chooseBookComboBox;
 	}
-	public JTextField getKeywordTextField() {
-		return keywordTextField;
-	}
 
-	public void setKeywordTextField(JTextField keywordTextField) {
-		this.keywordTextField = keywordTextField;
-	}
 
 	public JCheckBox getChckbxNewCheckBox() {
 		return chckbxNewCheckBox;

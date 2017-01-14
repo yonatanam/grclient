@@ -309,7 +309,6 @@ public class EchoServer extends AbstractServer
 
 				username = (String) en.getParams().get("username");
 				String content = (String) en.getParams().get("content");
-				String keywords = (String) en.getParams().get("keywords");
 				String bookid = null;
 
 				/*Get book id*/
@@ -334,7 +333,7 @@ public class EchoServer extends AbstractServer
 					java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					String currentTime = sdf.format(dt);
 					query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+currentTime+"','"+content+"','"
-							+username+"','PENDING','"+keywords+"')";
+							+username+"','PENDING')";
 					stmt.executeUpdate(query);
 
 					/*Send notification regarding new review*/

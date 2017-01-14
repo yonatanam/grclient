@@ -75,7 +75,6 @@ public class PublishReviewController extends AbstractController {
 				params.put("booktitle", publishReviewGUI.getChooseBookComboBox().getSelectedItem().toString());
 				params.put("username", App.client.getCurrentUser().getUserName());
 				params.put("content", publishReviewGUI.getTextArea().getText());
-				params.put("keywords", publishReviewGUI.getKeywordTextField().getText());
 				App.client.setCurrentController(getPublishReviewController());
 				sendToServer(en);
 			}

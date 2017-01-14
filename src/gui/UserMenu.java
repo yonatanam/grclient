@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import client.App;
+import controllers.CreateAccountController;
 import controllers.LoginController;
 import controllers.PublishReviewController;
 import controllers.SearchReviewController;
@@ -306,7 +307,9 @@ public class UserMenu extends JPanel{
 			currentGUI.dispose();
 			new SearchReviewController(new SearchReviewGUI());			
 		}		
-	}		
+	}
+	
+	
 
 	class CancelSubscriptionListener implements ActionListener
 	{

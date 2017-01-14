@@ -1,6 +1,8 @@
 package controllers;
 
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.LinkedHashMap;
@@ -24,6 +26,7 @@ public class MainWindowController extends  AbstractController {
 	private LoginController lc;
 	private MainWindowGUI mwGui;
 	private MainWindowController tempL;
+	private boolean status = true;
 	public static final long DEFAULT_THREAD = 0;
 
 	
@@ -37,7 +40,29 @@ public class MainWindowController extends  AbstractController {
 		this.mwGui = mwGui;
 		tempL = this;		
 		mwGui.addWindowListener(new CustomWindowListener());
+		mwGui.advancedSearchcActionListener(new advancedSearchListener());
 	}
+	
+	
+	class advancedSearchListener implements ActionListener 
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			if(status)
+			{
+				mwGui.displayAdvancedSearchField();
+				status = false;
+			}
+			else
+			{
+				mwGui.disposeAdvancedSearchField();
+				status = true;
+			}
+
+			
+		}	
+	}//action
 	
 	
 }

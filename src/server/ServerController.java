@@ -31,7 +31,7 @@ public class ServerController
 	private ServerController serverController;
 	private Connection conn; 
 	private String username="root" ;
-	private String password="" ;
+	private String password="root" ;
 	private int port = 5555;
 	private String database ;
 	private String dbname="grproj";

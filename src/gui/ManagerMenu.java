@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import controllers.CreateAccountController;
+import controllers.ManageUsersController;
 import controllers.SearchReviewController;
 import controllers.SettlePaymentController;
 import gui.UserMenu.CancelSubscriptionListener;
@@ -186,7 +187,7 @@ public class ManagerMenu extends LibrarianMenu{
 		public void actionPerformed(ActionEvent e) 
 		{
 			currentGUI.dispose();
-			//TODO
+			new ManageUsersController(new ManageUsersGUI());
 		}		
 	}	
 	

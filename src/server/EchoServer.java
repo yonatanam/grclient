@@ -472,6 +472,36 @@ public class EchoServer extends AbstractServer
 				client.sendToClient(envelope);
 				break;
 				/*----------------------------End Of Settle Payment----------------------------*/	
+				
+				
+				/*----------------------------Create Account----------------------------*/ 	
+			case "createAccount":
+				username = (String)en.getParams().get("UserName");
+				password = (String)en.getParams().get("Password");
+				String email = (String)en.getParams().get("Email");
+				String firstname = (String)en.getParams().get("FirstName");
+				String lastname = (String)en.getParams().get("LastName");
+				String permission = (String)en.getParams().get("Permission");
+				int loginattempts = (int)en.getParams().get("login_attempts");
+				status = (String)en.getParams().get("status");
+				threadnum = 0;
+						
+				
+				query = "SELECT username FROM users WHERE username = '" + username + "'";
+				res = stmt.executeQuery(query);
+				if(getRowCount(res) == 0)
+				{
+					stmt.executeUpdate("INSERT into users (username,password,fname,lname,email,permission,login_attempts,status,threadnum) values ('"+ username +"','"+ password +"','"+ firstname +"','"+ lastname +"','"+ email +"','"+ permission +"','"+ loginattempts +"','"+ status +"','"+ threadnum +"')");
+					params.put("msg","CreateAccountOK");
+				}
+				else
+					params.put("msg","CreateAccountFailed");
+				
+				client.sendToClient(envelope);
+				break;
+				/*----------------------------End Of Create Account----------------------------*/
+				
+				
 			case "CreateNewCategory":      // insert new category for the library
 				//System.out.println("in here!!!");
 				String CatId = (String) en.getParams().get("CatId");

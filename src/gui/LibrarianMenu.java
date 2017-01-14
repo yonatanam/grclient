@@ -5,6 +5,7 @@ import javax.swing.SwingConstants;
 
 import client.App;
 import controllers.CategoryController;
+import controllers.CreateAccountController;
 import controllers.ManageBooksController;
 import gui.UserMenu.CancelSubscriptionListener;
 import controllers.PendingReviewsController;
@@ -238,14 +239,13 @@ public class LibrarianMenu extends UserMenu{
 	}
 	class CreateAccountListener implements ActionListener
 	{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) 
+		{
 			currentGUI.dispose();
-			//TODO
-		}
-		
+			new CreateAccountController(new CreateAccountGUI());			
+		}		
 	}
+	
 	class PendingReviewListener implements ActionListener
 	{
 

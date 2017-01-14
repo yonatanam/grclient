@@ -3,6 +3,7 @@ package gui;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import controllers.CreateAccountController;
 import controllers.ManageUsersController;
 import controllers.SearchReviewController;
 import controllers.SettlePaymentController;
@@ -189,6 +190,8 @@ public class ManagerMenu extends LibrarianMenu{
 			new ManageUsersController(new ManageUsersGUI());
 		}		
 	}	
+	
+	
 
 	class ReportsListener implements ActionListener
 	{

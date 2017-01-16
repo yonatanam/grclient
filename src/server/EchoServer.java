@@ -500,6 +500,25 @@ public class EchoServer extends AbstractServer
 				client.sendToClient(envelope);
 				break;
 				/*----------------------------End Of Create Account----------------------------*/
+				
+				
+				/*----------------------------Cancel Subscription----------------------------*/ 	
+			case "cancelSubscription":
+				username = (String)en.getParams().get("username");
+
+				query = "SELECT username FROM accounts WHERE username = '" + username + "'";
+				res = stmt.executeQuery(query);
+				if(getRowCount(res) == 1)
+				{
+					stmt.executeUpdate("DELETE from accounts WHERE username='"+username+"'");
+					params.put("msg","CancelSubscriptionOK");
+				}
+				else
+					params.put("msg","CancelSubscriptionFailed");
+
+				client.sendToClient(envelope);
+				break;
+				/*----------------------------End Of Cancel Subscription----------------------------*/
 
 
 			case "CreateNewCategory":      // insert new category for the library

@@ -79,6 +79,8 @@ public class MainWindowGUI extends JFrame {
 	private JPanel contentPane;
 	private UserMenu userMenu;
 	private JTextField searchBar;
+
+
 	private JTextField keywordField;
 	private JLabel keywordLabel;
 	private JButton searchButton;
@@ -224,6 +226,10 @@ public class MainWindowGUI extends JFrame {
 		setVisible(true);
 	} 
 	
+	public void addSearchButtonActionListener(ActionListener listener)
+	{
+		searchButton.addActionListener(listener);
+	}	
 	
 	
 	public void advancedSearchcActionListener(ActionListener e)
@@ -243,5 +249,15 @@ public class MainWindowGUI extends JFrame {
 		keywordField.setVisible(false);
 	}
 
+	
+	/**Getters and setters*/
+	public JTextField getSearchBar() {
+		return searchBar;
+	}
+
+	public void setSearchBar(JTextField searchBar) {
+		this.searchBar = searchBar;
+	}
+	/**End getters and setters*/
 
 }

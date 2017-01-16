@@ -23,17 +23,16 @@ import client.App;
 
 import java.awt.Color;
 
-public class PendingSubscriptionGUI extends JFrame {
+public class SearchGUI extends JFrame {
 
 
 	private JButton BackButton;
-	private JTable subscriptionData;
+	private JTable searchData;
 	private JScrollPane scrollPane;
 	private UserMenu userMenu;
-	private JButton btnApprove;
-	private JButton btnDeny;
+	private JButton btnAddToCart;
 
-	public PendingSubscriptionGUI() {
+	public SearchGUI() {
 		initialize();
 	}
 
@@ -53,11 +52,11 @@ public class PendingSubscriptionGUI extends JFrame {
 		getContentPane().add(menu);	
 		/** End menu */
 		
-		JLabel lblPendingSubscription = new JLabel("Pending subscription requests");
-		lblPendingSubscription.setForeground(Color.WHITE);
-		lblPendingSubscription.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblPendingSubscription.setBounds(39, 17, 349, 31);
-		getContentPane().add(lblPendingSubscription);
+		JLabel lblSearchResults = new JLabel("Search results:");
+		lblSearchResults.setForeground(Color.WHITE);
+		lblSearchResults.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblSearchResults.setBounds(39, 17, 179, 31);
+		getContentPane().add(lblSearchResults);
 		
 
 		
@@ -82,37 +81,28 @@ public class PendingSubscriptionGUI extends JFrame {
 		scrollPane.setBounds(39, 63, 713, 338);
 		getContentPane().add(scrollPane);
 		
-		subscriptionData = new JTable();
-		scrollPane.setViewportView(subscriptionData);
-		subscriptionData.setDefaultEditor(Object.class, null); //prevents from editing the fields but allows row selection
-		subscriptionData.getTableHeader().setReorderingAllowed(false);
+		searchData = new JTable();
+		scrollPane.setViewportView(searchData);
+		searchData.setDefaultEditor(Object.class, null); //prevents from editing the fields but allows row selection
+		searchData.getTableHeader().setReorderingAllowed(false);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		
+
 		
-		btnApprove = new JButton("Approve");
-		btnApprove.setBounds(163, 412, 131, 41);
-		btnApprove.setFont(new Font("Arial", Font.BOLD, 15));
-		btnApprove.setIcon(new ImageIcon(imgLogin));
-		btnApprove.setOpaque(false);
-		btnApprove.setContentAreaFilled(false);
-		btnApprove.setBorderPainted(false);
-		btnApprove.setHorizontalTextPosition(JButton.CENTER);
-		btnApprove.setVerticalTextPosition(JButton.CENTER);
-		btnApprove.setForeground(Color.WHITE);
-		getContentPane().add(btnApprove);
 		
-		btnDeny = new JButton("Deny");
-		btnDeny.setBounds(22, 412, 131, 41);
-		btnDeny.setFont(new Font("Arial", Font.BOLD, 15));
-		btnDeny.setIcon(new ImageIcon(imgLogin));
-		btnDeny.setOpaque(false);
-		btnDeny.setContentAreaFilled(false);
-		btnDeny.setBorderPainted(false);
-		btnDeny.setHorizontalTextPosition(JButton.CENTER);
-		btnDeny.setVerticalTextPosition(JButton.CENTER);
-		btnDeny.setForeground(Color.WHITE);
-		getContentPane().add(btnDeny);
+		btnAddToCart = new JButton("Add to Cart");
+		btnAddToCart.setBounds(290, 412, 131, 41);
+		btnAddToCart.setFont(new Font("Arial", Font.BOLD, 15));
+		btnAddToCart.setIcon(new ImageIcon(imgLogin));
+		btnAddToCart.setOpaque(false);
+		btnAddToCart.setContentAreaFilled(false);
+		btnAddToCart.setBorderPainted(false);
+		btnAddToCart.setHorizontalTextPosition(JButton.CENTER);
+		btnAddToCart.setVerticalTextPosition(JButton.CENTER);
+		btnAddToCart.setForeground(Color.WHITE);
+		getContentPane().add(btnAddToCart);
+		
 		
 		//Background
 		JLabel bg = new JLabel();
@@ -130,32 +120,61 @@ public class PendingSubscriptionGUI extends JFrame {
 
 
 	//Action Listeners
-	public void addButtonApproveSubscriptionActionListener(ActionListener e)
+	public void addButtonAddToCartActionListener(ActionListener e)
 	{
-		btnApprove.addActionListener(e);
+		btnAddToCart.addActionListener(e);
 	}
-	public void addButtonDenySubscriptionActionListener(ActionListener e)
-	{
-		btnDeny.addActionListener(e);
-	}
-	public void addButtonBackFromPendingSubscriptionrActionListener(ActionListener e)
+
+	public void addButtonBackFromSearchGUIActionListener(ActionListener e)
 	{
 		BackButton.addActionListener(e);
 	}
 	
-//Setters and Getters
-	
-	public JTable getSubscriptionData() {
-		return subscriptionData;
+
+	/**Setters and Getters*/
+	public JButton getBackButton() {
+		return BackButton;
 	}
 
-	public void setSubscriptionData(JTable data) {
-		this.subscriptionData = data;
+	public void setBackButton(JButton backButton) {
+		BackButton = backButton;
 	}
-	
+
+	public JTable getSearchData() {
+		return searchData;
+	}
+
+	public void setSearchData(JTable searchData) {
+		this.searchData = searchData;
+	}
+
+	public JScrollPane getScrollPane() {
+		return scrollPane;
+	}
+
+	public void setScrollPane(JScrollPane scrollPane) {
+		this.scrollPane = scrollPane;
+	}
+
+	public UserMenu getUserMenu() {
+		return userMenu;
+	}
+
+	public void setUserMenu(UserMenu userMenu) {
+		this.userMenu = userMenu;
+	}
+
+	public JButton getBtnAddToCart() {
+		return btnAddToCart;
+	}
+
+	public void setBtnAddToCart(JButton btnAddToCart) {
+		this.btnAddToCart = btnAddToCart;
+	}
+	/**End getters and setters*/
 	public void populateTable(Vector<Object> columnNames, Vector<Object> data)
 	{
 		DefaultTableModel model = new DefaultTableModel(data, columnNames);
-		subscriptionData.setModel(model);
+		searchData.setModel(model);
 	}
 }

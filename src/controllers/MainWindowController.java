@@ -14,6 +14,7 @@ import client.App;
 import models.Envelope;
 
 import gui.MainWindowGUI;
+import gui.SearchGUI;
 
 
 
@@ -41,8 +42,21 @@ public class MainWindowController extends  AbstractController {
 		tempL = this;		
 		mwGui.addWindowListener(new CustomWindowListener());
 		mwGui.advancedSearchcActionListener(new advancedSearchListener());
+		mwGui.addSearchButtonActionListener(new SearchListener());
 	}
 	
+	class SearchListener implements ActionListener 
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			mwGui.dispose();
+			String searchStr = mwGui.getSearchBar().getText();
+			SearchController sc = new SearchController(new SearchGUI(), searchStr);
+
+			
+		}	
+	}
 	
 	class advancedSearchListener implements ActionListener 
 	{

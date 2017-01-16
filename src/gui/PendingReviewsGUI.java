@@ -54,7 +54,13 @@ public class PendingReviewsGUI extends JFrame {
 		lblPendingReviews.setBounds(39, 17, 179, 31);
 		getContentPane().add(lblPendingReviews);
 		
-
+		
+		/** Menu */
+		userMenu = App.client.menuSwitcher(this); //Gets the specific menu per user permission
+		Menu menu = new Menu(userMenu);
+		menu.setBounds(10,11,165,550);
+		getContentPane().add(menu);	
+		/** End menu */
 		
 		
 		
@@ -80,7 +86,7 @@ public class PendingReviewsGUI extends JFrame {
 		reviewsData = new JTable();
 		scrollPane.setViewportView(reviewsData);
 		reviewsData.setDefaultEditor(Object.class, null); //prevents from editing the fields but allows row selection
-
+		reviewsData.getTableHeader().setReorderingAllowed(false);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		

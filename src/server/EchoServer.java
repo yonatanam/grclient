@@ -740,6 +740,33 @@ public class EchoServer extends AbstractServer
 				subUserName = (String)en.getParams().get("username");
 				stmt.executeUpdate("DELETE from accounts WHERE username='"+subUserName+"'");
 				break;
+			case "getSimpleSearchData":
+				/**Simple search via booktitle only*/
+				String simpleSearchStr = (String)en.getParams().get("simpleSearchStr");
+				res = stmt.executeQuery("SELECT booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE booktitle like '%"+simpleSearchStr+"%' AND incatalog='YES'");	
+				Vector<Object> booksColumnNames = new Vector<Object>();
+				Vector<Object> booksData = new Vector<Object>();
+				ResultSetMetaData bsd = res.getMetaData();
+				int booksColumnCount = bsd.getColumnCount();
+				for (int i = 1; i <= booksColumnCount; i++)
+					booksColumnNames.addElement( bsd.getColumnName(i) );
+				while (res.next())
+				{
+					Vector<Object> row = new Vector<Object>(booksColumnCount);
+					for (int i = 1; i <= booksColumnCount; i++)
+					{
+						row.addElement( res.getObject(i) );
+						//TODO Add matching books to book searches
+					}
+					booksData.addElement( row );
+				}
+
+				params.put("booksColumnNames", booksColumnNames);
+				params.put("booksData", booksData);
+				params.put("msg", "BooksData");
+				client.sendToClient(envelope);
+				
+				break;
 			}
 
 		} catch (Exception x) {

@@ -63,10 +63,8 @@ public class ManageUsersController extends AbstractController {
 	class EditUserActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e){
-
-			if ( manageUsersGUI.getUsersData().getSelectedRow() != -1 )
+			try
 			{
-
 				String userName = (String)manageUsersGUI.getUsersData().getValueAt(manageUsersGUI.getUsersData().getSelectedRow(), 0);
 				String password = (String)manageUsersGUI.getUsersData().getValueAt(manageUsersGUI.getUsersData().getSelectedRow(), 1);
 				String fname = (String)manageUsersGUI.getUsersData().getValueAt(manageUsersGUI.getUsersData().getSelectedRow(), 2);
@@ -79,7 +77,10 @@ public class ManageUsersController extends AbstractController {
 				manageUsersGUI.dispose();
 				EditUserController euc = new EditUserController(new EditUserGUI(), user);
 			}
-
+			catch (Exception ex)
+			{
+				JOptionPane.showMessageDialog(null,"User wasn't selected!","Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 

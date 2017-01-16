@@ -65,11 +65,18 @@ public class PendingSubscriptionController extends AbstractController {
 		public void actionPerformed(ActionEvent e){
 			Map<String,Object> params = new HashMap<String,Object>();
 			Envelope en = new Envelope(params);
+			try
+			{
 			params.put("msg", "approve_subscription");
 			params.put("username", pendingSubscriptionGUI.getSubscriptionData().getValueAt(pendingSubscriptionGUI.getSubscriptionData().getSelectedRow(), 0));
 			System.out.println("selected user id is "+ params.get("username"));	
 			sendToServer(en);
 			fetchSubscriptionData();
+			}
+			catch (Exception ex)
+			{
+				JOptionPane.showMessageDialog(null,"Subscription request wasn't selected!","Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 	class DenySubscriptionActionListener implements ActionListener
@@ -77,11 +84,18 @@ public class PendingSubscriptionController extends AbstractController {
 		public void actionPerformed(ActionEvent e){
 			Map<String,Object> params = new HashMap<String,Object>();
 			Envelope en = new Envelope(params);
+			try
+			{
 			params.put("msg", "deny_subscription");
 			params.put("username", pendingSubscriptionGUI.getSubscriptionData().getValueAt(pendingSubscriptionGUI.getSubscriptionData().getSelectedRow(), 0));
 			System.out.println("selected user id is "+ params.get("username"));	
 			sendToServer(en);
 			fetchSubscriptionData();
+			}
+			catch (Exception ex)
+			{
+				JOptionPane.showMessageDialog(null,"Subscription request wasn't selected!","Error", JOptionPane.ERROR_MESSAGE);
+			}
 
 		}
 	}

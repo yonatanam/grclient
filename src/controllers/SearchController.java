@@ -39,6 +39,7 @@ public class SearchController extends AbstractController {
 		this.searchStr  = searchStr;
 		sg.addButtonBackFromSearchGUIActionListener(new BackFromSearchGUIListener());
 		sg.addButtonAddToCartActionListener(new AddToCartActionListener());
+		sg.addButtonCheckoutActionListner(new CheckOutActionListener());
 		sg.addWindowListener(new CustomWindowListener());
 		fetchSearchData();
 
@@ -60,6 +61,16 @@ public class SearchController extends AbstractController {
 		}
 	}
 
+	class CheckOutActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e){
+			//TODO
+			searchGUI.dispose();
+			MainWindowGUI mwg = new MainWindowGUI();
+			MainWindowController mwc = new MainWindowController(mwg);
+		}
+	}
+	
 	class AddToCartActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e){
@@ -98,8 +109,6 @@ public class SearchController extends AbstractController {
 	public void handleDBResult(Object message)
 	{	
 		Envelope en = (Envelope)message;
-
-
 		Vector<Object> columnNames = (Vector<Object>) en.getParams().get("booksColumnNames");
 		Vector<Object> data = (Vector<Object>) en.getParams().get("booksData");
 		searchGUI.populateTable(columnNames, data);

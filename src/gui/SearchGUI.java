@@ -31,7 +31,7 @@ public class SearchGUI extends JFrame {
 	private JScrollPane scrollPane;
 	private UserMenu userMenu;
 	private JButton btnAddToCart;
-
+	private JButton btnCheckout;
 	public SearchGUI() {
 		initialize();
 	}
@@ -103,6 +103,18 @@ public class SearchGUI extends JFrame {
 		btnAddToCart.setForeground(Color.WHITE);
 		getContentPane().add(btnAddToCart);
 		
+		btnCheckout = new JButton("Checkout");
+		btnCheckout.setBounds(441, 412, 131, 41);
+		btnCheckout.setFont(new Font("Arial", Font.BOLD, 15));
+		btnCheckout.setIcon(new ImageIcon(imgLogin));
+		btnCheckout.setOpaque(false);
+		btnCheckout.setContentAreaFilled(false);
+		btnCheckout.setBorderPainted(false);
+		btnCheckout.setHorizontalTextPosition(JButton.CENTER);
+		btnCheckout.setVerticalTextPosition(JButton.CENTER);
+		btnCheckout.setForeground(Color.WHITE);
+		getContentPane().add(btnCheckout);
+		
 		
 		//Background
 		JLabel bg = new JLabel();
@@ -128,6 +140,11 @@ public class SearchGUI extends JFrame {
 	public void addButtonBackFromSearchGUIActionListener(ActionListener e)
 	{
 		BackButton.addActionListener(e);
+	}
+	
+	public void addButtonCheckoutActionListner(ActionListener e)
+	{
+		btnCheckout.addActionListener(e);
 	}
 	
 
@@ -171,6 +188,7 @@ public class SearchGUI extends JFrame {
 	public void setBtnAddToCart(JButton btnAddToCart) {
 		this.btnAddToCart = btnAddToCart;
 	}
+	
 	/**End getters and setters*/
 	public void populateTable(Vector<Object> columnNames, Vector<Object> data)
 	{

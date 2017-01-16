@@ -65,11 +65,17 @@ public class PendingReviewsController extends AbstractController {
 		public void actionPerformed(ActionEvent e){
 			Map<String,Object> params = new HashMap<String,Object>();
 			Envelope en = new Envelope(params);
+			try
+			{
 			params.put("msg", "approveReview");
 			params.put("reviewid", pendingReviewsGUI.getReviewsData().getValueAt(pendingReviewsGUI.getReviewsData().getSelectedRow(), 0));
-			System.out.println("selected review id is "+ params.get("reviewid"));	
 			sendToServer(en);
 			fetchReviewData();
+			}
+			catch (Exception ex)
+			{
+				JOptionPane.showMessageDialog(null,"Review wasn't selected!","Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 	class DenyReviewActionListener implements ActionListener
@@ -77,22 +83,32 @@ public class PendingReviewsController extends AbstractController {
 		public void actionPerformed(ActionEvent e){
 			Map<String,Object> params = new HashMap<String,Object>();
 			Envelope en = new Envelope(params);
+			try
+			{
 			params.put("msg", "denyReview");
-			params.put("reviewid", pendingReviewsGUI.getReviewsData().getValueAt(pendingReviewsGUI.getReviewsData().getSelectedRow(), 0));
-			System.out.println("selected review id is "+ params.get("reviewid"));	
+			params.put("reviewid", pendingReviewsGUI.getReviewsData().getValueAt(pendingReviewsGUI.getReviewsData().getSelectedRow(), 0));	
 			sendToServer(en);
 			fetchReviewData();
+			}
+			catch (Exception ex)
+			{
+				JOptionPane.showMessageDialog(null,"Review wasn't selected!","Error", JOptionPane.ERROR_MESSAGE);
+			}
 
 		}
 	}
 	class EditReviewActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e){
-			if ( pendingReviewsGUI.getReviewsData().getSelectedRow() != -1)
+			try
 			{
 				String reviewText = (String)pendingReviewsGUI.getReviewsData().getValueAt(pendingReviewsGUI.getReviewsData().getSelectedRow(), 3);
 				int reviewID = (Integer)pendingReviewsGUI.getReviewsData().getValueAt(pendingReviewsGUI.getReviewsData().getSelectedRow(), 0);
 				EditReviewController erc = new EditReviewController(new EditReviewGUI(reviewText), reviewID, pendingReviewsController);
+			}
+			catch (Exception ex)
+			{
+				JOptionPane.showMessageDialog(null,"Review wasn't selected!","Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

@@ -1,5 +1,7 @@
 package models;
 
+import java.util.ArrayList;
+
 public class User extends AbstractModel {
 	
 	private String firstName;
@@ -13,6 +15,9 @@ public class User extends AbstractModel {
 	private String email ;
 	private String permission;
 	private String status;
+	private ArrayList<Book> cart;
+	
+
 
 	public User(String firstName, String lastName, String userName, String email, String permission, String status) {
 		super();
@@ -22,6 +27,7 @@ public class User extends AbstractModel {
 		this.email = email;
 		this.permission = permission;
 		this.status=status;
+		this.cart = new ArrayList<Book>();
 	}
 	
 	public User(String username, String password, String fname, String lname, String email, String permission, String status)
@@ -34,6 +40,7 @@ public class User extends AbstractModel {
 		this.email = email;
 		this.permission = permission;
 		this.status=status;
+		this.cart = new ArrayList<Book>();
 	}
 	
 	public String getFirstName() {
@@ -93,7 +100,13 @@ public class User extends AbstractModel {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public ArrayList<Book> getCart() {
+		return cart;
+	}
 
+	public void setCart(ArrayList<Book> cart) {
+		this.cart = cart;
+	}
 	
 }
 

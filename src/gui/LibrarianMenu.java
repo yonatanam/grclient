@@ -9,6 +9,7 @@ import controllers.CreateAccountController;
 import controllers.ManageBooksController;
 import gui.UserMenu.CancelSubscriptionListener;
 import controllers.PendingReviewsController;
+import controllers.PendingSubscriptionController;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -263,6 +264,7 @@ public class LibrarianMenu extends UserMenu{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			currentGUI.dispose();
+			PendingSubscriptionController psc = new PendingSubscriptionController(new PendingSubscriptionGUI());
 			//TODO
 		}
 		

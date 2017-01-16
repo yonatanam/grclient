@@ -472,8 +472,8 @@ public class EchoServer extends AbstractServer
 				client.sendToClient(envelope);
 				break;
 				/*----------------------------End Of Settle Payment----------------------------*/	
-				
-				
+
+
 				/*----------------------------Create Account----------------------------*/ 	
 			case "createAccount":
 				username = (String)en.getParams().get("UserName");
@@ -485,8 +485,8 @@ public class EchoServer extends AbstractServer
 				int loginattempts = (int)en.getParams().get("login_attempts");
 				status = (String)en.getParams().get("status");
 				threadnum = 0;
-						
-				
+
+
 				query = "SELECT username FROM users WHERE username = '" + username + "'";
 				res = stmt.executeQuery(query);
 				if(getRowCount(res) == 0)
@@ -496,12 +496,12 @@ public class EchoServer extends AbstractServer
 				}
 				else
 					params.put("msg","CreateAccountFailed");
-				
+
 				client.sendToClient(envelope);
 				break;
 				/*----------------------------End Of Create Account----------------------------*/
-				
-				
+
+
 			case "CreateNewCategory":      // insert new category for the library
 				//System.out.println("in here!!!");
 				String CatId = (String) en.getParams().get("CatId");
@@ -684,6 +684,42 @@ public class EchoServer extends AbstractServer
 					client.sendToClient(envelope);
 				}
 
+				break;
+			case "getPendingSubscription":
+				res = stmt.executeQuery("SELECT * from accounts WHERE status='PENDING'");	
+				Vector<Object> subscriptionColumnNames = new Vector<Object>();
+				Vector<Object> subscriptionData = new Vector<Object>();
+				ResultSetMetaData smd = res.getMetaData();
+				int subscriptionColumnCount = smd.getColumnCount();
+
+				//  Get column names
+				for (int i = 1; i <= subscriptionColumnCount; i++)
+					subscriptionColumnNames.addElement( smd.getColumnName(i) );
+				//  Get row data
+
+				while (res.next())
+				{
+					Vector<Object> row = new Vector<Object>(subscriptionColumnCount);
+					for (int i = 1; i <= subscriptionColumnCount; i++)
+					{
+						row.addElement( res.getObject(i) );
+					}
+					subscriptionData.addElement( row );
+				}
+
+				params.put("subscriptionColumnNames", subscriptionColumnNames);
+				params.put("subscriptionData", subscriptionData);
+				params.put("msg", "SubscriptionData");
+				client.sendToClient(envelope);
+				//End get worker data
+				break;
+			case "approve_subscription":
+				String subUserName = (String)en.getParams().get("username");
+				stmt.executeUpdate("UPDATE accounts SET status='APPROVED' WHERE username='"+subUserName+"'");
+				break;
+			case "deny_subscription":
+				subUserName = (String)en.getParams().get("username");
+				stmt.executeUpdate("DELETE from accounts WHERE username='"+subUserName+"'");
 				break;
 			}
 

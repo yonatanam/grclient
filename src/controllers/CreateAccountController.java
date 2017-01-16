@@ -37,6 +37,7 @@ public class CreateAccountController extends AbstractController{
 		
 		craccount.AddbuttonApplyactionListener(new ButtonApplyActionListener());
 		craccount.addButtonCancelActionListener(new ButtonCancelActionListener());
+		createAccountGUI.addWindowListener(new CustomWindowListener());
 		/*addcat.AddTextCategIdMouseListener(new TextCategIdMouseListener());
 		addcat.AddTextCategNameMouseListener(new TextCategNameMouseListener());
 		addcat.addWindowListener(new CustomWindowListener());*/

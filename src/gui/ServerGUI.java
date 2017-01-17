@@ -59,7 +59,8 @@ public class ServerGUI extends JFrame {
 		getContentPane().add(lblHost);
 		
 		UserNameText = new JTextField();
-		UserNameText.setText("root");
+		//UserNameText.setText("root");
+		UserNameText.setText("grpojUser");		
 		UserNameText.setBounds(131, 31, 86, 20);
 		getContentPane().add(UserNameText);
 		UserNameText.setColumns(10);

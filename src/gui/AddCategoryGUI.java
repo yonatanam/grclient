@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
 import client.App;
+import javafx.scene.Cursor;
 
 import javax.swing.JTextField;
 

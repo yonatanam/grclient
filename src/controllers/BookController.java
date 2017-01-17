@@ -3,13 +3,17 @@ package controllers;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 
+import javax.swing.Action;
 import javax.swing.JOptionPane;
 
 import client.App;
@@ -35,6 +39,7 @@ public class BookController extends AbstractController{
 	private int flag_price = 0;
 	private int flag_authorid = 0;
 	private int flag_authorname = 0;
+	private int flag_categoryANDsubject = 0;
 	private Validate_textFields val;
 	
 	public BookController(AddBookGUI abg){  // add your GUI functionality here ('AddBook' is one of them)
@@ -43,21 +48,11 @@ public class BookController extends AbstractController{
 		
 		// getting the *categories* that are in the db
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("msg", "GetCategories");
+		params.put("msg", "GetCategoriesAtLeast1");
 		Envelope envelope = new Envelope(params);
 		App.client.setCurrentController(bookController);
 		sendToServer(envelope);	
-		
-		// getting the *subjects* that are in the db
-		Map<String, Object> params2 = new HashMap<String, Object>();
-		params2.put("msg", "GetSubjects");
-		Envelope envelope2 = new Envelope(params2);
-		App.client.setCurrentController(bookController);
-		sendToServer(envelope2);	
-		
-		
-		
-		
+
 		abg.AddTextBookIdMouseListener(new TextBookIdMouseListener());
 		abg.AddTextBookNameMouseListener(new TextBookNameMouseListener());
 		abg.AddTextPriceMouseListener(new TextPriceMouseListener());
@@ -66,7 +61,101 @@ public class BookController extends AbstractController{
 		abg.AddbuttonApplyactionListener(new buttonApplyActionListener());
 		abg.addButtonCancelFromAddBookActionListener(new CancelFromReadFromWorkerListener());
 		abg.addWindowListener(new CustomWindowListener());
+		abg.AddCategoryComboItemListener(new CategoryComboItemListener());
+		abg.addButtonremCategoryFromListActionListener(new remCategoryFromListActionListener());
+		abg.addButtonAddCategoryToListActionListener(new addCategoryFromListActionListener());
 	}
+	
+	public class addCategoryFromListActionListener implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int flag = 1;
+			
+			// this block of code checks if there is a category in the array list.
+			// if there is ==> we won't add it to the array list because book cannot affiliated 
+			// to 2 same categories.
+			
+			
+			String temp[];
+			for(int i = 0; i < addBookGUI.getBook_Sub_Cat().size() ; i++)
+			{
+				if(addBookGUI.getBook_Sub_Cat().get(i).contains((String)addBookGUI.getCategory_combobox().getSelectedItem()))
+					flag = 0;			
+			}
+			
+			if(flag == 1)
+			{
+				addBookGUI.getBook_Sub_Cat().add((String)addBookGUI.getSubject_combobox().getSelectedItem() + "->" + (String)addBookGUI.getCategory_combobox().getSelectedItem());
+				addBookGUI.getNoAddedCatSubWarning().setForeground(Color.red);
+				addBookGUI.getNoAddedCatSubWarning().setText("");
+			}
+				
+			else
+				addBookGUI.getNoAddedCatSubWarning().setText("No same books in same category");
+			
+			
+			
+			temp = new String[addBookGUI.getBook_Sub_Cat().size()];
+			for(int i = 0 ; i < temp.length; i++)
+				temp[i] = addBookGUI.getBook_Sub_Cat().get(i);
+			
+			addBookGUI.getCategory_SubjectList().setListData(temp);            
+			// TODO -- NEED TO ARRAY LIST , AND CHECK FOR DUPLICATE STRINGS IN ARRAY
+			// TODO -- NEED CHANGE ECHO SERVER -- BUILD ITERATION -- NUM OF CATEGORIES GET IN THE 
+			// TODO -- JLIST. DONT FORGET TO SAVE ARRAYLIST AND STRING[] IN ADDBOOKGUI
+			
+		}
+		
+	}
+	
+	
+	public class remCategoryFromListActionListener implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(addBookGUI.getCategory_SubjectList().getSelectedIndex() == -1)
+			{
+				//TODO - dont need to
+			}
+			else
+			{
+				addBookGUI.getBook_Sub_Cat().remove(addBookGUI.getCategory_SubjectList().getSelectedIndex());
+				String[] temp = new String[addBookGUI.getBook_Sub_Cat().size()];
+				for(int i = 0 ; i < temp.length; i++)
+					temp[i] = addBookGUI.getBook_Sub_Cat().get(i);
+				
+				addBookGUI.getCategory_SubjectList().setListData(temp);
+			}
+		}
+		
+	}
+	
+	
+	
+	public class CategoryComboItemListener implements ItemListener
+	{
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			if(e.getStateChange() == ItemEvent.SELECTED)
+			{
+				String CategoryName = (String)addBookGUI.getCategory_combobox().getSelectedItem();
+				// getting the *subjects* which in this category
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("msg", "GetSubjects");
+				params.put("CategoryName", CategoryName);
+				Envelope envelope2 = new Envelope(params);
+				App.client.setCurrentController(bookController);
+				sendToServer(envelope2);	
+			}
+			
+		}
+		
+	}
+	
 	
 	public class TextBookIdMouseListener implements MouseListener
 	{
@@ -258,6 +347,7 @@ public class BookController extends AbstractController{
 			addBookGUI.getBAuthornameWarningLabel().setText("");
 			addBookGUI.getBAuthoridWarningLabel().setText("");
 			addBookGUI.getBpriceWarningLabel().setText("");
+			addBookGUI.getNoAddedCatSubWarning().setText("");
 			
 			// Checking relevant fields that the user must fill in
 			
@@ -324,12 +414,21 @@ public class BookController extends AbstractController{
 			else
 				flag_authorname = 1;
 			
-			if(flag_name == 1 && flag_id == 1 && flag_price == 1 && flag_authorid == 1 && flag_authorname == 1)
+			if(addBookGUI.getCategory_SubjectList().getModel().getSize() == 0)
+			{
+				addBookGUI.getNoAddedCatSubWarning().setForeground(Color.red);
+				addBookGUI.getNoAddedCatSubWarning().setText("You must add at least 1 category and subject");
+			}
+			else
+				flag_categoryANDsubject = 1;
+			
+			//this if statement checks all the flags (should all be 1 to send to server)
+			
+			if(flag_name == 1 && flag_id == 1 && flag_price == 1 && flag_authorid == 1 && flag_authorname == 1 && flag_categoryANDsubject == 1)
 			{
 				String Book_id = (addBookGUI.getBookIdText()).getText();
 				String Book_Name = (addBookGUI.getBookNameText()).getText();
 				String Book_lang = (addBookGUI.getComboBox().getSelectedItem()).toString();
-				String Book_Format = null;
 				String Book_Price = addBookGUI.getPrice().getText();
 				String Book_inCatalog = null;
 				String Book_Synopsis = addBookGUI.getSynopsisArea().getText();
@@ -337,20 +436,16 @@ public class BookController extends AbstractController{
 				String Book_Keywords = addBookGUI.getKeywords_area().getText();
 				String Book_Author_id = addBookGUI.getTxtBookAuthorid().getText();
 				String Book_Author_name = addBookGUI.getTxtBookAuthorname().getText();
-				String Book_Category = (addBookGUI.getCategory_combobox().getSelectedItem()).toString();
-				String Book_Subject = (addBookGUI.getSubject_combobox().getSelectedItem()).toString();
-				
-				if(addBookGUI.getRdbtnDoc().isSelected())
-					Book_Format = "DOC";
-				else if(addBookGUI.getRdbtnFb().isSelected())
-					Book_Format = "FB2";
-				else if(addBookGUI.getRdbtnPdf().isSelected())
-					Book_Format = "PDF";
+				ArrayList<String> subcat = new ArrayList<String>();
+			
+				for(int i = 0 ; i < addBookGUI.getCategory_SubjectList().getModel().getSize() ; i++)
+					subcat.add((String)addBookGUI.getCategory_SubjectList().getModel().getElementAt(i));
 				
 				if(addBookGUI.getRdbtnNo().isSelected())
 					Book_inCatalog = "NO";
 				else
 					Book_inCatalog = "YES";
+				
 				
 				Map<String, Object> params = new HashMap<String, Object>();
 				
@@ -358,7 +453,6 @@ public class BookController extends AbstractController{
 				params.put("Book_id", Book_id);
 				params.put("Book_Name", Book_Name);
 				params.put("Book_lang", Book_lang);
-				params.put("Book_Format", Book_Format);
 				params.put("Book_Price", Book_Price);
 				params.put("Book_inCatalog", Book_inCatalog);
 				params.put("Book_Synopsis", Book_Synopsis);
@@ -366,9 +460,7 @@ public class BookController extends AbstractController{
 				params.put("Book_TOC", Book_TOC);
 				params.put("Book_Author_id", Book_Author_id);
 				params.put("Book_Author_name", Book_Author_name);
-				params.put("Book_Category", Book_Category);
-				params.put("Book_Subject", Book_Subject);
-				
+				params.put("Book_subcat", subcat);
 				Envelope envelope = new Envelope(params);
 				App.client.setCurrentController(bookController);
 				sendToServer(envelope);	
@@ -413,13 +505,14 @@ public class BookController extends AbstractController{
 		case "BookIsInTheDB":
 			JOptionPane.showMessageDialog(null,"This book is already in the DataBase!","Error", JOptionPane.ERROR_MESSAGE);
 			break;
-		case "AllCategoriesInDB":
+		case "AllCategoriesInAtLeast1DB":
 			ArrayList<String> categories = (ArrayList<String>)((Envelope)message).getParams().get("categories");
 			for(int i = 0; i < categories.size(); i++)
 				addBookGUI.getCategory_combobox().addItem(categories.get(i));						
 			break;
 		case "AllSubjectsInDB":
 			ArrayList<String> subjects = (ArrayList<String>)((Envelope)message).getParams().get("subjects");
+			addBookGUI.getSubject_combobox().removeAllItems();
 			for(int i = 0; i < subjects.size(); i++)
 				addBookGUI.getSubject_combobox().addItem(subjects.get(i));		
 			break;

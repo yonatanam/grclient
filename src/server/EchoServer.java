@@ -236,7 +236,7 @@ public class EchoServer extends AbstractServer
 				String Book_id = (String) en.getParams().get("Book_id");
 				String Book_Name = (String) en.getParams().get("Book_Name");
 				String Book_lang = (String) en.getParams().get("Book_lang");
-				String Book_Format = (String) en.getParams().get("Book_Format");
+				//String Book_Format = (String) en.getParams().get("Book_Format");
 				String Book_Price = (String) en.getParams().get("Book_Price");
 				String Book_inCatalog = (String) en.getParams().get("Book_inCatalog");
 				String Book_Synopsis = (String) en.getParams().get("Book_Synopsis");
@@ -248,9 +248,9 @@ public class EchoServer extends AbstractServer
 				String Book_Author_name = (String) en.getParams().get("Book_Author_name");
 
 				// adding this information to diffrent *TABLE* (Book_categories DB)
-				String Book_Category = (String) en.getParams().get("Book_Category");
-				String Book_Subject = (String) en.getParams().get("Book_Subject");
-
+				//String Book_Category = (String) en.getParams().get("Book_Category");
+				//String Book_Subject = (String) en.getParams().get("Book_Subject");
+				ArrayList<String> subcat = (ArrayList<String>) en.getParams().get("Book_subcat");
 				res = stmt.executeQuery("SELECT * from authors WHERE authorid='"+Book_Author_id+"'");
 				rcount = getRowCount(res);
 				if (rcount == 0) //If such author id doesn't exist
@@ -261,10 +261,12 @@ public class EchoServer extends AbstractServer
 				rcount = getRowCount(res);
 				if (rcount == 0) //If such BID doesn't exist
 				{
-					stmt.executeUpdate("INSERT into books (bookid, booktitle, booklang, synopsis, toc, keywords, format, incatalog, price) values ('"+ Book_id +"', '"+ Book_Name +"', '"+ Book_lang +"', '"+ Book_Synopsis +"', '"+ Book_TOC +"', '"+ Book_Keywords +"', '"+ Book_Format +"', '"+ Book_inCatalog +"', '"+ Book_Price +"' )");
+					//stmt.executeUpdate("INSERT into books (bookid, booktitle, booklang, synopsis, toc, keywords, format, incatalog, price) values ('"+ Book_id +"', '"+ Book_Name +"', '"+ Book_lang +"', '"+ Book_Synopsis +"', '"+ Book_TOC +"', '"+ Book_Keywords +"', '"+ Book_Format +"', '"+ Book_inCatalog +"', '"+ Book_Price +"' )");
+					stmt.executeUpdate("INSERT into books (bookid, booktitle, booklang, synopsis, toc, keywords, incatalog, price) values ('"+ Book_id +"', '"+ Book_Name +"', '"+ Book_lang +"', '"+ Book_Synopsis +"', '"+ Book_TOC +"', '"+ Book_Keywords +"', '"+ Book_inCatalog +"', '"+ Book_Price +"' )");
 					// inserting the data into the book_authors TABLE in db
 					stmt.executeUpdate("INSERT into book_authors (bookid, authorid) values ('"+ Book_id +"', '"+ Book_Author_id +"')");
 
+					/*
 					res = stmt.executeQuery("SELECT categoryid from categories WHERE category_name='"+Book_Category+"'");	
 					rcount = getRowCount(res);
 					if (rcount > 0)
@@ -281,6 +283,20 @@ public class EchoServer extends AbstractServer
 								subjectid = res.getString("subjectid");
 							stmt.executeUpdate("INSERT into book_categories values ('"+ Book_id +"', '"+ categoryid +"', '"+ subjectid +"')");
 						}
+					}*/
+					// We need to extract from the arraylist the subject and the category using split
+					for(int i = 0 ; i < subcat.size() ; i++)
+					{
+						String[] temp = subcat.get(i).split("->");
+						res = stmt.executeQuery("SELECT categoryid FROM categories WHERE category_name = '"+temp[1]+"'");
+						res.next();
+						String temp_id_cat = res.getString("categoryid");
+						res = stmt.executeQuery("SELECT DISTINCT subjectid FROM subjects WHERE subjectname = '"+temp[0]+"'");
+						res.next();
+						String temp_id_sub = res.getString("subjectid");
+						//inserting all the data to book_categories in db
+						stmt.executeUpdate("INSERT into book_categories (bookid, categoryid, subjectid) values ('"+Book_id+"', '"+temp_id_cat+"', '"+temp_id_sub+"')"); 
+
 					}
 
 					client.sendToClient("BookInsertedOK");
@@ -503,80 +519,99 @@ public class EchoServer extends AbstractServer
 
 
 			case "CreateNewCategory":      // insert new category for the library
-				//System.out.println("in here!!!");
-				String CatId = (String) en.getParams().get("CatId");
 				String CatName = (String) en.getParams().get("CatName");
-
-				res = stmt.executeQuery("SELECT categoryid from categories where categoryid = '"+ CatId +"'");
-
-
-				if(getRowCount(res) == 0) // checking if there are any categories with the same name or id
+				// check if there is a Category name in db with the same CatName
+				res = stmt.executeQuery("SELECT category_name from categories where category_name = '"+ CatName +"'");
+				if(getRowCount(res) == 0)
 				{
-					res = stmt.executeQuery("SELECT category_name from categories where category_name = '"+ CatName +"'");
-					if(getRowCount(res) == 0)
-					{
-						stmt.executeUpdate("INSERT into categories (categoryid, category_name) values ('"+ CatId +"', '"+ CatName +"')");
-						params.put("msg", "CreateNewCategoryOK");
-						client.sendToClient(envelope);
-					}
+					stmt.executeUpdate("INSERT into categories (category_name) values ('"+ CatName +"')");
+					params.put("msg", "CreateNewCategoryOK");
+					client.sendToClient(envelope);
 				}
 				else if(getRowCount(res) > 0)
 				{
 					params.put("msg", "CategoryidExist");
 					client.sendToClient(envelope);
 				}
-				else
-				{
-					res = stmt.executeQuery("SELECT category_name from categories where category_name = '"+ CatName +"'");
-					if(getRowCount(res) > 0)
-					{
-						params.put("msg", "Category_nameExist");
-						client.sendToClient(envelope);
-					}
-				}
 				break;
 			case "CreateNewSubject":		// insert new subject for the library
-				String SubId = (String) en.getParams().get("SubId");
 				String SubName = (String) en.getParams().get("SubName");
+				String[] SubCat = (String[])en.getParams().get("SubCat");
+				String CategoryId = null;
+				String SubjectId = null;
+				ArrayList<String> temp = new ArrayList<String>();
 
-				res = stmt.executeQuery("SELECT subjectid from subjects where subjectid = '"+ SubId +"'");
+				int flag = 0;
 
-
-				if(getRowCount(res) == 0) // checking if there are any categories with the same name or id
+				for(int i = 0 ; i < SubCat.length; i++) // for every category that the user inserted we check for duplicates
 				{
-					res = stmt.executeQuery("SELECT subjectname from subjects where subjectname = '"+ SubName +"'");
-					if(getRowCount(res) == 0)
+					res = stmt.executeQuery("SELECT categoryid FROM categories WHERE category_name = '" +SubCat[i]+ "'");
+					while(res.next()) // insert the answer to CategoryId
+						CategoryId = res.getString("categoryid");
+
+					res = stmt.executeQuery("SELECT subjectid FROM subjects WHERE subjectname = '"+ SubName +"'");
+
+					if(getRowCount(res) == 0) // check if there is a subject name in db and if there is we will get the subject id
+					{ // this is new subject, otherwise we would find it's name in other rows with it's id
+						stmt.executeUpdate("INSERT into subjects (categoryid, subjectname) values ('"+CategoryId+"', '"+SubName+"')");
+						flag = 1;
+					}
+					else
 					{
-						stmt.executeUpdate("INSERT into subjects (subjectid, subjectname) values ('"+ SubId +"', '"+ SubName +"')");
-						params.put("msg", "CreateNewSubjectOK");
-						client.sendToClient(envelope);
+						res.next();
+						SubjectId = res.getString("subjectid");
+						// now we will have to check duplicates of rows - can't be in the same category 2 subjects for example
+
+						res = stmt.executeQuery("SELECT categoryid, subjectid FROM subjects WHERE categoryid = '"+ CategoryId +"' AND subjectid = '"+ SubjectId +"'" );
+
+						if(getRowCount(res) == 0) // check if there is row with the same category id and subject id.... it means 2 subjects in the same category
+						{ 
+							stmt.executeUpdate("INSERT into subjects (categoryid, subjectid, subjectname) values ('"+CategoryId+"', '"+SubjectId+"', '"+SubName+"')");
+							flag = 1;
+
+						}
+						else
+						{     // there is subject name affiliated to this category
+							flag = 0;
+							temp.add(SubCat[i]);
+						}		
 					}
 				}
-				else if(getRowCount(res) > 0)
+
+				if(flag == 1)
 				{
-					params.put("msg", "SubjectidExist");
+					params.put("msg", "CreateNewSubjectOK");
 					client.sendToClient(envelope);
 				}
 				else
 				{
-					res = stmt.executeQuery("SELECT subjectname from subjects where subjectname = '"+ SubName +"'");
-					if(getRowCount(res) > 0)
-					{
-						params.put("msg", "Subject_nameExist");
-						client.sendToClient(envelope);
-					}
+					params.put("msg", "Subject_nameExist");
+					params.put("CatBadId", temp);
+					client.sendToClient(envelope);
 				}
 				break;
 			case "GetSubjects":
 				ArrayList<String> subjects = new ArrayList<String>();
+				String CategoryName = (String) en.getParams().get("CategoryName");
+				String Category_id = null;
 
-				ResultSet res4 = stmt.executeQuery("SELECT subjectname from subjects");
+				//getting the id of the category, then check which subjects affiliated to this category
+
+				ResultSet res4 = stmt.executeQuery("SELECT categoryid FROM categories WHERE category_name = '"+CategoryName+"'");
+				while(res4.next())
+					Category_id = res4.getString("categoryid");
+
+				res4 = stmt.executeQuery("SELECT subjectname FROM subjects WHERE categoryid = '"+Category_id+"'");
+				//adding all subjects affiliated to this category
+
 				while(res4.next())
 					subjects.add(res4.getString("subjectname"));
+
 
 				params.put("msg", "AllSubjectsInDB");
 				params.put("subjects", subjects);
 				client.sendToClient(envelope);
+
 				break;
 			case "GetCategories":
 				ArrayList<String> categories = new ArrayList<String>();
@@ -587,6 +622,25 @@ public class EchoServer extends AbstractServer
 
 				params.put("msg", "AllCategoriesInDB");
 				params.put("categories", categories);
+				client.sendToClient(envelope);
+				break;
+			case "GetCategoriesAtLeast1":	 /* this case is for BookController to show only categories with at 
+			 	least 1 subject affiliated.
+			   (you cannot addbook without subject and category affiliation)*/
+				ArrayList<String> categories2 = new ArrayList<String>();
+				ArrayList<String> id = new ArrayList<String>();
+				ResultSet res6 = stmt.executeQuery("SELECT DISTINCT categoryid FROM subjects");
+				while(res6.next())
+					id.add(res6.getString("categoryid"));
+
+				for(int i = 0 ; i < id.size() ;  i++)
+				{
+					res6 = stmt.executeQuery("SELECT category_name FROM categories WHERE categoryid='"+id.get(i)+"'");
+					res6.next();
+					categories2.add(res6.getString("category_name"));
+				}
+				params.put("msg", "AllCategoriesInAtLeast1DB");
+				params.put("categories", categories2);
 				client.sendToClient(envelope);
 				break;
 			case "getPendingReviews":
@@ -746,7 +800,7 @@ public class EchoServer extends AbstractServer
 				params.put("booksData", booksData);
 				params.put("msg", "BooksData");
 				client.sendToClient(envelope);
-				
+
 				break;
 			}
 

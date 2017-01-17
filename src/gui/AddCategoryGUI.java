@@ -20,15 +20,12 @@ import javax.swing.JTextField;
 public class AddCategoryGUI extends JFrame {
 
 	private JLabel BackGround;
-	private JTextField TextCatId;
 	private JTextField TextCatName;
 	private JLabel lblCategoriesThatWere;
 	private JLabel lblCreateNewCategories; 
 	private JLabel Name_Warning;
-	private JLabel Id_Warning;
 	private JLabel lblAddingNewCategory;
 	private JLabel label_1;
-	private JLabel label;
 	private JButton Button_Cancel;
 	private JButton Button_Apply;
 	private JLabel What_Categories;
@@ -68,19 +65,15 @@ public class AddCategoryGUI extends JFrame {
 		label_1 = new JLabel("");
 		Image firstimg = new ImageIcon(this.getClass().getResource("/Label.png")).getImage();
 		label_1.setIcon(new ImageIcon(firstimg));
-		label_1.setBounds(271, 259, 224, 32);
+		label_1.setBounds(263, 265, 224, 32);
 		getContentPane().add(label_1);
-		
-		label = new JLabel("");
 		Image secondimg = new ImageIcon(this.getClass().getResource("/Label.png")).getImage();
-		label.setIcon(new ImageIcon(secondimg));
-		label.setBounds(271, 213, 224, 32);
-		getContentPane().add(label);
 		
 		Button_Cancel = new JButton("Cancel");
 		Image canimg = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
 		Button_Cancel.setIcon(new ImageIcon(canimg));
 		Button_Cancel.setVerticalTextPosition(SwingConstants.CENTER);
+		
 		Button_Cancel.setOpaque(false);
 		Button_Cancel.setHorizontalTextPosition(SwingConstants.CENTER);
 		Button_Cancel.setForeground(Color.WHITE);
@@ -88,11 +81,13 @@ public class AddCategoryGUI extends JFrame {
 		Button_Cancel.setContentAreaFilled(false);
 		Button_Cancel.setBorderPainted(false);
 		Button_Cancel.setBounds(231, 485, 131, 31);
+
 		getContentPane().add(Button_Cancel);
 		
 		Button_Apply = new JButton("Apply");
 		Image appimg = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
 		Button_Apply.setIcon(new ImageIcon(appimg));
+	
 		Button_Apply.setVerticalTextPosition(SwingConstants.CENTER);
 		Button_Apply.setOpaque(false);
 		Button_Apply.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -104,36 +99,20 @@ public class AddCategoryGUI extends JFrame {
 		
 		getContentPane().add(Button_Apply);
 		
-		TextCatId = new JTextField();
-		TextCatId.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		TextCatId.setText("Enter Category id");
-		TextCatId.setOpaque(false);   
-		TextCatId.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		TextCatId.setForeground(Color.white);
-		TextCatId.setBounds(278, 218, 206, 22);
-		getContentPane().add(TextCatId);
-		TextCatId.setColumns(10);
-		
 		TextCatName = new JTextField();
 		TextCatName.setText("Enter Category name");
 		TextCatName.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		TextCatName.setOpaque(false);   
 		TextCatName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		TextCatName.setForeground(Color.white);
-		TextCatName.setBounds(280, 263, 206, 22);
+		TextCatName.setBounds(272, 269, 206, 22);
 		getContentPane().add(TextCatName);
 		TextCatName.setColumns(10);
-		
-		Id_Warning = new JLabel("");
-		Id_Warning.setFont(new Font("Arial", Font.BOLD, 15));
-		Id_Warning.setForeground(Color.RED);
-		Id_Warning.setBounds(508, 218, 213, 22);
-		getContentPane().add(Id_Warning);
 		
 		Name_Warning = new JLabel("");
 		Name_Warning.setFont(new Font("Arial", Font.BOLD, 15));
 		Name_Warning.setForeground(Color.RED);
-		Name_Warning.setBounds(507, 263, 213, 22);
+		Name_Warning.setBounds(499, 269, 213, 22);
 		getContentPane().add(Name_Warning);
 		
 		lblCreateNewCategories = new JLabel("Create new categories for your library ");
@@ -175,20 +154,12 @@ public class AddCategoryGUI extends JFrame {
 	// Setters and Getters
 	
 	
-	public JTextField getTextCatId() {
-		return TextCatId;
-	}
-
 	public JTextField getTextCatName() {
 		return TextCatName;
 	}
 
 	public JLabel getName_Warning() {
 		return Name_Warning;
-	}
-
-	public JLabel getId_Warning() {
-		return Id_Warning;
 	}
 
 	public JLabel getWhat_Categories() {
@@ -199,10 +170,6 @@ public class AddCategoryGUI extends JFrame {
 	
 	// Adding Action Listeners
 	
-	public void AddTextCategIdMouseListener(MouseListener e)
-	{
-		TextCatId.addMouseListener(e);
-	}
 	
 	public void AddTextCategNameMouseListener(MouseListener e)
 	{

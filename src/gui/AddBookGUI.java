@@ -16,6 +16,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -34,14 +36,21 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
+import com.sun.javafx.collections.MappingChange.Map;
+
 import client.App;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JSplitPane;
 import java.awt.Component;
+import java.awt.Cursor;
+
 import javax.swing.Box;
 import javax.swing.JMenuItem;
+import javax.swing.ListSelectionModel;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class AddBookGUI extends JFrame {
 	
@@ -52,13 +61,9 @@ public class AddBookGUI extends JFrame {
 	private JLabel BidWarningLabel;
 	private JLabel BackGround;
 	private String[] langs = {"Hebrew", "English", "Arabic", "Albanian", "Franch", "Pakistanian"};
-	private ButtonGroup formats;
 	private ButtonGroup yesno;
 	private JButton btnCancel;
 	private JComboBox comboBox;
-	private JRadioButton rdbtnPdf;
-	private JRadioButton rdbtnDoc;
-	private JRadioButton rdbtnFb;
 	private JTextField Price;
 	private JLabel lblWillItBe;
 	private JRadioButton rdbtnYes;
@@ -81,8 +86,13 @@ public class AddBookGUI extends JFrame {
 	private JComboBox<String> Subject_combobox;
 	private JComboBox<String> Category_combobox;
 	private UserMenu userMenu;
-	
-	
+	private JList Category_SubjectList;
+	private JButton AddCatSubButton;
+	private JButton RemoveCatSubButton;
+	private ArrayList<String> Book_Sub_Cat;
+	private JLabel NoAddedCatSubWarning;
+
+
 	public AddBookGUI() {
 		
 		/** Menu */
@@ -90,7 +100,7 @@ public class AddBookGUI extends JFrame {
 		Menu menu = new Menu(userMenu);
 		menu.setBounds(10,11,165,550);
 		getContentPane().add(menu);	
-		/** End menu */
+		/* End menu */
 		
 		this.setTitle("Adding new book - Initial Config");
 		this.setSize(800, 600);
@@ -99,7 +109,7 @@ public class AddBookGUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		
-		
+		Book_Sub_Cat = new ArrayList<String>();
 		
 		
 		panel = new JPanel();
@@ -173,7 +183,7 @@ public class AddBookGUI extends JFrame {
 		comboBox.setBounds(128, 258, 110, 24);
 		panel.add(comboBox);
 		
-		formats = new ButtonGroup();
+		
 		yesno = new ButtonGroup();
 		Image buttoncan = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
 		
@@ -193,6 +203,7 @@ public class AddBookGUI extends JFrame {
 		Image imgbg = new ImageIcon(this.getClass().getResource("/bgWithoutLogo.png")).getImage();
 		
 		btnCancel = new JButton("Cancel");
+		btnCancel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnCancel.setBounds(258, 513, 131, 31);
 		panel.add(btnCancel);
 		btnCancel.setVerticalTextPosition(SwingConstants.CENTER);
@@ -215,6 +226,7 @@ public class AddBookGUI extends JFrame {
 		
 		
 		ApplyButton.setIcon(new ImageIcon(buttonapp));
+		ApplyButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		ApplyButton.setHorizontalTextPosition(JButton.CENTER);
 		ApplyButton.setVerticalTextPosition(JButton.CENTER);
 		ApplyButton.setOpaque(false);
@@ -253,41 +265,6 @@ public class AddBookGUI extends JFrame {
 		panel.add(Price);
 		Price.setText("Enter Book price*");
 		Price.setColumns(10);
-		
-		JLabel lblFormat = new JLabel("Format:");
-		lblFormat.setBounds(17, 300, 69, 22);
-		panel.add(lblFormat);
-		lblFormat.setForeground(Color.LIGHT_GRAY);
-		lblFormat.setFont(new Font("Arial", Font.BOLD, 18));
-		
-				rdbtnDoc = new JRadioButton("DOC");
-				rdbtnDoc.setBounds(17, 345, 63, 27);
-				panel.add(rdbtnDoc);
-				rdbtnDoc.setForeground(Color.LIGHT_GRAY);
-				rdbtnDoc.setFont(new Font("Arial", Font.BOLD, 15));
-				rdbtnDoc.setBackground(Color.BLACK);
-				rdbtnDoc.setOpaque(false);
-				formats.add(rdbtnDoc);
-				
-				rdbtnFb = new JRadioButton("FB2");
-				rdbtnFb.setBounds(137, 345, 57, 27);
-				panel.add(rdbtnFb);
-				rdbtnFb.setForeground(Color.LIGHT_GRAY);
-				rdbtnFb.setFont(new Font("Arial", Font.BOLD, 15));
-				rdbtnFb.setOpaque(false);
-				formats.add(rdbtnFb);
-				
-				rdbtnPdf = new JRadioButton("PDF");
-				rdbtnPdf.setBounds(255, 345, 59, 27);
-				panel.add(rdbtnPdf);
-				rdbtnPdf.setFont(new Font("Arial", Font.BOLD, 15));
-				rdbtnPdf.setForeground(Color.LIGHT_GRAY);
-				rdbtnPdf.setOpaque(false);
-				
-				rdbtnPdf.setSelected(true);
-				
-				// for radio buttons to work properly
-				formats.add(rdbtnPdf);
 				
 				label_2 = new JLabel("");
 				Image thirdimgfield = new ImageIcon(this.getClass().getResource("/Label.png")).getImage();
@@ -333,24 +310,25 @@ public class AddBookGUI extends JFrame {
 				JLabel lblChooseCategory = new JLabel("Choose Category*:");
 				lblChooseCategory.setForeground(Color.LIGHT_GRAY);
 				lblChooseCategory.setFont(new Font("Arial", Font.BOLD, 18));
-				lblChooseCategory.setBounds(458, 96, 180, 31);
+				lblChooseCategory.setBounds(458, 87, 180, 31);
 				panel.add(lblChooseCategory);
 				
 				Category_combobox = new JComboBox<String>();
+				
 				Category_combobox.setFont(new Font("Arial", Font.BOLD, 15));
 				Category_combobox.setForeground(Color.DARK_GRAY);
-				Category_combobox.setBounds(635, 100, 134, 22);
+				Category_combobox.setBounds(635, 91, 134, 22);
 				panel.add(Category_combobox);
 				
 				JLabel lblChooseSubject = new JLabel("Choose Subject*:");
 				lblChooseSubject.setForeground(Color.LIGHT_GRAY);
 				lblChooseSubject.setFont(new Font("Arial", Font.BOLD, 18));
-				lblChooseSubject.setBounds(458, 152, 180, 31);
+				lblChooseSubject.setBounds(458, 124, 180, 31);
 				panel.add(lblChooseSubject);
 				
 				Subject_combobox = new JComboBox<String>();
 				Subject_combobox.setFont(new Font("Arial", Font.BOLD, 15));
-				Subject_combobox.setBounds(635, 156, 134, 22);
+				Subject_combobox.setBounds(635, 128, 134, 22);
 				panel.add(Subject_combobox);
 				
 				lblSelectBookAfilliation = new JLabel("Select book affiliation (obligatory)");
@@ -399,6 +377,55 @@ public class AddBookGUI extends JFrame {
 				BAuthornameWarningLabel.setBounds(240, 220, 200, 21);
 				panel.add(BAuthornameWarningLabel);
 				
+				JLabel lblNewLabel = new JLabel("ADI INSERTION");
+				lblNewLabel.setFont(new Font("Arial", Font.BOLD, 15));
+				lblNewLabel.setForeground(Color.WHITE);
+				lblNewLabel.setBounds(52, 316, 146, 45);
+				panel.add(lblNewLabel);
+				
+				Category_SubjectList = new JList();
+				Category_SubjectList.setBackground(Color.LIGHT_GRAY);
+				Category_SubjectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				Category_SubjectList.setFont(new Font("Arial", Font.BOLD, 15));
+				Category_SubjectList.setBounds(568, 206, 200, 53);
+				JScrollPane scrollPane = new JScrollPane(Category_SubjectList);
+				scrollPane.setLocation(454, 195);
+				scrollPane.setSize(211, 62);
+				panel.add(scrollPane);
+		
+				AddCatSubButton = new JButton("Add");
+				AddCatSubButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Image addimg = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
+				AddCatSubButton.setIcon(new ImageIcon(addimg));
+				AddCatSubButton.setVerticalTextPosition(SwingConstants.CENTER);
+				AddCatSubButton.setOpaque(false);
+				AddCatSubButton.setHorizontalTextPosition(SwingConstants.CENTER);
+				AddCatSubButton.setForeground(Color.WHITE);
+				AddCatSubButton.setFont(new Font("Arial", Font.BOLD, 16));
+				AddCatSubButton.setContentAreaFilled(false);
+				AddCatSubButton.setBorderPainted(false);
+				AddCatSubButton.setBounds(670, 196, 116, 31);
+				panel.add(AddCatSubButton);
+				
+				RemoveCatSubButton = new JButton("Remove");
+				RemoveCatSubButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Image remimg = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
+				RemoveCatSubButton.setIcon(new ImageIcon(remimg));
+				RemoveCatSubButton.setVerticalTextPosition(SwingConstants.CENTER);
+				RemoveCatSubButton.setOpaque(false);
+				RemoveCatSubButton.setHorizontalTextPosition(SwingConstants.CENTER);
+				RemoveCatSubButton.setForeground(Color.WHITE);
+				RemoveCatSubButton.setFont(new Font("Arial", Font.BOLD, 16));
+				RemoveCatSubButton.setContentAreaFilled(false);
+				RemoveCatSubButton.setBorderPainted(false);
+				RemoveCatSubButton.setBounds(669, 229, 116, 31);
+				panel.add(RemoveCatSubButton);
+				
+				NoAddedCatSubWarning = new JLabel("");
+				NoAddedCatSubWarning.setFont(new Font("Arial", Font.BOLD, 15));
+				NoAddedCatSubWarning.setBounds(454, 168, 315, 22);
+				panel.add(NoAddedCatSubWarning);
+				
 				BackGround = new JLabel("");
 				BackGround.setBounds(0, 0, 794, 566);
 				panel.add(BackGround);
@@ -422,7 +449,25 @@ public class AddBookGUI extends JFrame {
 		return rdbtnNo;
 	}
 
+	public ArrayList<String> getBook_Sub_Cat() {
+		return Book_Sub_Cat;
+	}
 
+
+	public void setBook_Sub_Cat(ArrayList<String> book_Sub_Cat) {
+		Book_Sub_Cat = book_Sub_Cat;
+	}
+
+
+
+	public JLabel getNoAddedCatSubWarning() {
+		return NoAddedCatSubWarning;
+	}
+
+
+	public JList getCategory_SubjectList() {
+		return Category_SubjectList;
+	}
 
 
 	public JLabel getBpriceWarningLabel() {
@@ -470,19 +515,6 @@ public class AddBookGUI extends JFrame {
 		return comboBox;
 	}
 	
-	public JRadioButton getRdbtnPdf() {
-		return rdbtnPdf;
-	}
-
-
-	public JRadioButton getRdbtnDoc() {
-		return rdbtnDoc;
-	}
-
-
-	public JRadioButton getRdbtnFb() {
-		return rdbtnFb;
-	}
 
 	public JTextArea getSynopsisArea() {
 		return synopsis_area;
@@ -571,5 +603,20 @@ public class AddBookGUI extends JFrame {
 	public void addButtonCancelFromAddBookActionListener(ActionListener e)
 	{
 		btnCancel.addActionListener(e);
+	}
+	
+	public void addButtonAddCategoryToListActionListener(ActionListener e)
+	{
+		AddCatSubButton.addActionListener(e);
+	}
+	
+	public void addButtonremCategoryFromListActionListener(ActionListener e)
+	{
+		RemoveCatSubButton.addActionListener(e);
+	}
+	
+	public void AddCategoryComboItemListener(ItemListener e)
+	{
+		Category_combobox.addItemListener(e);
 	}
 }

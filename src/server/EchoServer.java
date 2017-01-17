@@ -475,7 +475,7 @@ public class EchoServer extends AbstractServer
 				break;
 				/*----------------------------End Of Settle Payment----------------------------*/	
 				
-				/*----------------------------Settle Payment----------------------------*/ 	
+				/*----------------------------Downloads----------------------------*/ 	
 			case "DownloadBooks":
 				Vector<String> bookID = new Vector<String>();
 				Vector<String> filesNames = new Vector<String>();
@@ -526,7 +526,7 @@ public class EchoServer extends AbstractServer
 		        
 				client.sendToClient(envelope);			
 				break;
-				/*----------------------------End Of Settle Payment----------------------------*/					
+				/*----------------------------End Of Downloads----------------------------*/					
 				
 				
 				/*----------------------------Create Account----------------------------*/ 	

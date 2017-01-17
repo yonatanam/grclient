@@ -36,6 +36,7 @@ import javax.swing.table.DefaultTableModel;
 import client.App;
 import controllers.Functions;
 import models.LoginModel;
+import models.Book;
 import models.Envelope;
 import models.User;
 
@@ -464,7 +465,7 @@ public class EchoServer extends AbstractServer
 				client.sendToClient(envelope);
 				break;
 				/*----------------------------End of Get Subscriptions Names----------------------------*/ 
-			
+
 				/*----------------------------Settle Payment----------------------------*/ 	
 			case "submitSettlePayment":
 				username = (String)en.getParams().get("username");
@@ -490,61 +491,49 @@ public class EchoServer extends AbstractServer
 				client.sendToClient(envelope);
 				break;
 				/*----------------------------End Of Settle Payment----------------------------*/	
-				
+
 				/*----------------------------Downloads ----------------------------*/ 	
 			case "DownloadBooks":
-				Vector<String> bookID = new Vector<String>();
+				ArrayList<Book> books = (ArrayList<Book>)en.getParams().get("books");
+				if (books.size() == 0)
+				{
+					params.put("msg","DownloadFailed");
+					client.sendToClient(envelope);
+					break;
+				}
 				Vector<String> filesNames = new Vector<String>();
 				Vector<File> files = new Vector<File>();
 				Vector<byte[]> bytesOfFiles = new Vector<byte[]>();
-		       
+
 				FileInputStream fis = null;
 				String filesDirectory = controller.getFilesDir();
-								
-		        bookID.add("6");
-		        bookID.add("7");
-		        bookID.add("8");
-
-		        boolean valid = true;
-		        
-				for(int i = 0; i < bookID.size() && valid; i++)		
+				boolean valid = true;
+				int j=0;
+				for (Book b : books)
 				{
-					query = "SELECT booktitle,format FROM books WHERE bookid = '" + bookID.get(i) + "'";
-					res = stmt.executeQuery(query);
-					
-					if(getRowCount(res) != 0)
-					{
-						res.next();
-						filesNames.add(res.getString("booktitle") + "." + res.getString("format"));
-						files.add(new File(filesDirectory + filesNames.get(i)));	
-					}
-					else
-					{
-						params.put("msg","DownloadFailed");
-						valid = false;
-					}
+					filesNames.add(b.getBooktitle()+"."+b.getFormat());
+					files.add(new File(filesDirectory + filesNames.get(j)));
+					j++;
 				}
-				
-		        if(valid)
-		        {	
-		        	for(int i = 0; i < files.size(); i++)
-		        	{
-		        		fis = new FileInputStream(files.get(i));
-		        		byte[] temp = new byte[(int) files.get(i).length()];
-		                fis.read(temp);
-		                fis.close();
-		        		bytesOfFiles.add(temp);
-		        	}
-		        	params.put("bytesOfFiles", bytesOfFiles);			
-		    		params.put("filesNames", filesNames); 
-					params.put("msg","DownloadApproved"); 
-		        }
-		        
+
+				for(j = 0; j < files.size(); j++)
+				{
+					fis = new FileInputStream(files.get(j));
+					byte[] temp = new byte[(int) files.get(j).length()];
+					fis.read(temp);
+					fis.close();
+					bytesOfFiles.add(temp);
+				}
+				params.put("bytesOfFiles", bytesOfFiles);			
+				params.put("filesNames", filesNames); 
+				params.put("msg","DownloadApproved"); 
+
+
 				client.sendToClient(envelope);			
 				break;
 				/*----------------------------End Of Downloads----------------------------*/					
-				
-				
+
+
 				/*----------------------------Create Account----------------------------*/ 	
 			case "createAccount":
 				username = (String)en.getParams().get("UserName");
@@ -571,8 +560,8 @@ public class EchoServer extends AbstractServer
 				client.sendToClient(envelope);
 				break;
 				/*----------------------------End Of Create Account----------------------------*/
-				
-				
+
+
 				/*----------------------------Cancel Subscription----------------------------*/ 	
 			case "cancelSubscription":
 				username = (String)en.getParams().get("username");

@@ -33,6 +33,7 @@ public class UserMenu extends JPanel{
 	private JButton btnSettlePayment;
 	private JButton btnSearchReview;
 	private JButton btnCancelSubscription;
+	private JButton btnShoppingCart;
 	private JButton btnLogout;
 	private JFrame currentGUI;
 
@@ -254,6 +255,11 @@ public class UserMenu extends JPanel{
 		Image newImage = new ImageIcon(this.getClass().getResource("/"+App.client.getCurrentUser().getPermission()+".png")).getImage();
 		User.setIcon(new ImageIcon(newImage));
 		add(User);
+		
+		btnShoppingCart = new JButton("ShoppingCart");
+		btnShoppingCart.setBounds(42, 36, 137, 23);
+		btnShoppingCart.addActionListener(new ShoppingCartListener());
+		add(btnShoppingCart);
 		//Background Image END
 		
 	
@@ -298,8 +304,8 @@ public class UserMenu extends JPanel{
 		public void actionPerformed(ActionEvent e) 
 		{
 			currentGUI.dispose();
-			//new SettlePaymentController(new SettlePaymentGUI());
-			new ShoppingCartController(new ShoppingCartGui());
+			new SettlePaymentController(new SettlePaymentGUI());
+			//new ShoppingCartController(new ShoppingCartGUI());
 			
 		}		
 	}	
@@ -324,4 +330,13 @@ public class UserMenu extends JPanel{
 			//TODO		
 		}		
 	}	
+	
+	class ShoppingCartListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			currentGUI.dispose();
+			new ShoppingCartController(new ShoppingCartGUI(), null);
+		}
+	}
 }

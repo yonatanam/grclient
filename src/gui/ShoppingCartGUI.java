@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -10,40 +11,30 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
 import client.App;
 import javax.swing.JTextField;
 
-public class ShoppingCartGui extends JFrame
+public class ShoppingCartGUI extends JFrame
 {
 	
-	private final int PRICE_COLUMN = 2;
+	private final int PRICE_COLUMN = 1;
 	
 	private JLabel lblBooksPayment;
 	private JLabel lblDir;
 	private JLabel lblTotal;
 	private JLabel lblSumResult;
-	
-	
 	private JTable jtBooksTable;
-	
-	
 	private JScrollPane jspBooksTable;
-	
 	private JButton btnPay;
 	private JButton btnBrowse;
 	private JButton btnBack;
-	
 	private UserMenu userMenu;
-	
-	
 	private JTextField jtDir;
 	
 	
-    private Object[][] rowData = { { "Harry Potter 1", "J.K Rowling", "50" },
-            						{ "Harry Potter 2", "J.K Rowling", "90" } };
-    private final String[]  columnNames = { "Book's name", "Authors", "Price" };
-	
-	public ShoppingCartGui()
+	public ShoppingCartGUI()
 	{
 		/** Menu */
 		/*
@@ -61,32 +52,26 @@ public class ShoppingCartGui extends JFrame
 		
 		
 		/*----------------------------Properties of JTable----------------------------*/
-		jtBooksTable = new JTable(rowData, columnNames);
+
+		jtBooksTable = new JTable();
 		jtBooksTable.setDefaultEditor(Object.class, null);
 		jtBooksTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		jtBooksTable.setFillsViewportHeight(true);		
 		jtBooksTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		jtBooksTable.setRowHeight(50);		
-		
+		jtBooksTable.setRowHeight(50);			
 		jspBooksTable = new JScrollPane(jtBooksTable);
 		jspBooksTable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		jspBooksTable.setBorder(
-				BorderFactory.createCompoundBorder(
-						BorderFactory.createCompoundBorder(
-								BorderFactory.createTitledBorder("Books"),
-									BorderFactory.createEmptyBorder(5,5,5,5)),
-						jspBooksTable.getBorder()));	
 		jspBooksTable.setBounds(21, 91, 497, 325);	
 		getContentPane().add(jspBooksTable);
 
 	    /*----------------------------End of properties of JTable----------------------------*/	
 
 		
-		lblTotal = new JLabel("Total (" + rowData.length + " Books):");
+		lblTotal = new JLabel();
 		lblTotal.setBounds(39, 444, 89, 14);
 		getContentPane().add(lblTotal);
 		
-		lblSumResult = new JLabel(getTotalPrice() + "$.");
+		lblSumResult = new JLabel();
 		lblSumResult.setBounds(153, 444, 196, 14);
 		getContentPane().add(lblSumResult);
 		
@@ -123,6 +108,22 @@ public class ShoppingCartGui extends JFrame
 		setVisible(true);
 	}
 
+	public JLabel getLblTotal() {
+		return lblTotal;
+	}
+
+	public void setLblTotal(JLabel lblTotal) {
+		this.lblTotal = lblTotal;
+	}
+
+	public JLabel getLblSumResult() {
+		return lblSumResult;
+	}
+
+	public void setLblSumResult(JLabel lblSumResult) {
+		this.lblSumResult = lblSumResult;
+	}
+
 	public void setJtDir(String path)
 	{
 		jtDir.setText(path);
@@ -135,13 +136,7 @@ public class ShoppingCartGui extends JFrame
 		return jtDir.getText();
 	}
 	
-	public int getTotalPrice() //NOT IN HERE in the controller!!!
-	{
-		int total = 0;
-		for(int i = 0; i < rowData.length; i++)
-			total += Integer.valueOf(jtBooksTable.getValueAt(i, PRICE_COLUMN).toString());
-		return total;
-	}
+
 	
 	public void enableBtnPay()	
 	{
@@ -161,9 +156,15 @@ public class ShoppingCartGui extends JFrame
 	public void addBtnPayActionListener(ActionListener listener)
 	{
 		btnPay.addActionListener(listener);
+	}
+
+	public JTable getJtBooksTable() {
+		return jtBooksTable;
+	}
+
+	public void setJtBooksTable(JTable jtBooksTable) {
+		this.jtBooksTable = jtBooksTable;
 	}	
-	
-	
 	
 	
 }

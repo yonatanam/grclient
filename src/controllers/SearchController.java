@@ -20,6 +20,7 @@ import controllers.AbstractController.CustomWindowListener;
 import gui.EditReviewGUI;
 import gui.MainWindowGUI;
 import gui.SearchGUI;
+import gui.ShoppingCartGUI;
 import gui.ReadWorkerGUI;
 import models.Book;
 import models.Envelope;;
@@ -64,10 +65,8 @@ public class SearchController extends AbstractController {
 	class CheckOutActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e){
-			//TODO
 			searchGUI.dispose();
-			MainWindowGUI mwg = new MainWindowGUI();
-			MainWindowController mwc = new MainWindowController(mwg);
+			new ShoppingCartController(new ShoppingCartGUI(), searchStr);
 		}
 	}
 	
@@ -79,7 +78,8 @@ public class SearchController extends AbstractController {
 			{
 				String booktitle = (String) searchGUI.getSearchData().getValueAt(searchGUI.getSearchData().getSelectedRow(), 0);
 				float bookprice = (float) searchGUI.getSearchData().getValueAt(searchGUI.getSearchData().getSelectedRow(), 6);;
-				Book selectedBook = new Book(booktitle,bookprice);
+				String bookformat = (String) searchGUI.getSearchData().getValueAt(searchGUI.getSearchData().getSelectedRow(), 5);
+				Book selectedBook = new Book(booktitle,bookprice, bookformat);
 				if (App.client.getCurrentUser().getCart().contains(selectedBook))
 					JOptionPane.showMessageDialog(null,"Book is already in cart!","Error", JOptionPane.ERROR_MESSAGE);
 				else
@@ -94,6 +94,7 @@ public class SearchController extends AbstractController {
 			}
 		}
 	}
+	
 
 	public void fetchSearchData()
 	{

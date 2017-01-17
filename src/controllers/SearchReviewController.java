@@ -15,7 +15,8 @@ import models.Envelope;
 public class SearchReviewController extends AbstractController
 {
 	
-	SearchReviewGUI srGUI;
+	private SearchReviewGUI srGUI;
+	
 	public SearchReviewController(SearchReviewGUI sr)
 	{
 		App.client.setCurrentController(this);

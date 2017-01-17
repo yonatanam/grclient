@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import client.App;
+import controllers.ShoppingCartController;
 import controllers.CreateAccountController;
 import controllers.LoginController;
 import controllers.PublishReviewController;
@@ -296,7 +297,9 @@ public class UserMenu extends JPanel{
 		public void actionPerformed(ActionEvent e) 
 		{
 			currentGUI.dispose();
-			new SettlePaymentController(new SettlePaymentGUI());
+			//new SettlePaymentController(new SettlePaymentGUI());
+			new ShoppingCartController(new ShoppingCartGui());
+			
 		}		
 	}	
 

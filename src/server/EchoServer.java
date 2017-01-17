@@ -108,6 +108,7 @@ public class EchoServer extends AbstractServer
 				{		//User exists, check if blocked/suspended 
 					res.next();
 					String status = res.getString("status");
+					status = ""; ///////////////////////////////////////////////////
 					if (status.equals("LOGGED_IN"))
 					{
 						params.put("msg", "AlreadyLoggedIn");
@@ -446,7 +447,8 @@ public class EchoServer extends AbstractServer
 				params.put("data",data);
 				client.sendToClient(envelope);
 				break;
-				/**----------------------------End of Get Subscriptions Names----------------------------*/ 
+				/*----------------------------End of Get Subscriptions Names----------------------------*/ 
+			
 				/*----------------------------Settle Payment----------------------------*/ 	
 			case "submitSettlePayment":
 				username = (String)en.getParams().get("username");
@@ -472,6 +474,59 @@ public class EchoServer extends AbstractServer
 				client.sendToClient(envelope);
 				break;
 				/*----------------------------End Of Settle Payment----------------------------*/	
+				
+				/*----------------------------Settle Payment----------------------------*/ 	
+			case "DownloadBooks":
+				Vector<String> bookID = new Vector<String>();
+				Vector<String> filesNames = new Vector<String>();
+				Vector<File> files = new Vector<File>();
+				Vector<byte[]> bytesOfFiles = new Vector<byte[]>();
+		       
+				FileInputStream fis = null;
+				String filesDirectory = controller.getFilesDir();
+								
+		        bookID.add("6");
+		        bookID.add("7");
+		        bookID.add("8");
+
+		        boolean valid = true;
+		        
+				for(int i = 0; i < bookID.size() && valid; i++)		
+				{
+					query = "SELECT booktitle,format FROM books WHERE bookid = '" + bookID.get(i) + "'";
+					res = stmt.executeQuery(query);
+					
+					if(getRowCount(res) != 0)
+					{
+						res.next();
+						filesNames.add(res.getString("booktitle") + "." + res.getString("format"));
+						files.add(new File(filesDirectory + filesNames.get(i)));	
+					}
+					else
+					{
+						params.put("msg","DownloadFailed");
+						valid = false;
+					}
+				}
+				
+		        if(valid)
+		        {	
+		        	for(int i = 0; i < files.size(); i++)
+		        	{
+		        		fis = new FileInputStream(files.get(i));
+		        		byte[] temp = new byte[(int) files.get(i).length()];
+		                fis.read(temp);
+		                fis.close();
+		        		bytesOfFiles.add(temp);
+		        	}
+		        	params.put("bytesOfFiles", bytesOfFiles);			
+		    		params.put("filesNames", filesNames); 
+					params.put("msg","DownloadApproved"); 
+		        }
+		        
+				client.sendToClient(envelope);			
+				break;
+				/*----------------------------End Of Settle Payment----------------------------*/					
 				
 				
 				/*----------------------------Create Account----------------------------*/ 	

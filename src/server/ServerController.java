@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -19,6 +20,7 @@ import java.util.Properties;
 
 import javax.swing.JTextArea;
 
+import controllers.ShoppingCartController;
 import gui.ServerLogGUI;
 
 
@@ -37,6 +39,7 @@ public class ServerController
 	private String dbname="grproj";
 	private String host="localhost";
 	private EchoServer echoServer;
+	private String filesDir;
     private String openedtime;
 	
 	public ServerController()
@@ -44,7 +47,8 @@ public class ServerController
 		
 		Date date = new Date();
     	SimpleDateFormat sdf = new SimpleDateFormat("MM_dd_yyyy_h_mm_ss");
-    	 openedtime = sdf.format(date);
+    	openedtime = sdf.format(date);
+    	setFilesDir();
 	}
 	public void disconnect()
 	{
@@ -69,7 +73,7 @@ public class ServerController
 			try 
 			{
 				echoServer.listen(); //Start listening for connections
-				echoServer.setController(serverController);
+				echoServer.setController(this);
 				return true;
 			} 
 			catch (Exception ex) 
@@ -109,6 +113,15 @@ public class ServerController
 	}
 	/************************************************Getters and setters***************************************/
 
+	public void setFilesDir()
+	{
+		try 
+		{
+			filesDir = ShoppingCartController.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath() + "Books/";
+		} 
+		catch (URISyntaxException e1) { ServerLogGUI.Print("Files directory not found!");	}
+	}
+	
 	public void setPassword1(String password1) {
 		this.password = password1;
 	}
@@ -121,6 +134,12 @@ public class ServerController
 	public void setHostName(String HostName) {
 		this.host = HostName;
 	}
+	
+	public String getFilesDir() 
+	{
+		return filesDir;
+	}
+	
 	public static void Print(String msg)
 	{
 		 ServerLogGUI.Print(msg);	

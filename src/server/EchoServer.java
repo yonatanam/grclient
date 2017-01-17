@@ -491,7 +491,7 @@ public class EchoServer extends AbstractServer
 				break;
 				/*----------------------------End Of Settle Payment----------------------------*/	
 				
-				/*----------------------------Downloads----------------------------*/ 	
+				/*----------------------------Downloads ----------------------------*/ 	
 			case "DownloadBooks":
 				Vector<String> bookID = new Vector<String>();
 				Vector<String> filesNames = new Vector<String>();

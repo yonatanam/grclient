@@ -124,7 +124,7 @@ public class ShoppingCartController extends AbstractController
 		switch(msg)
 		{
 		case "DownloadFailed":
-
+			JOptionPane.showMessageDialog(null,"Download faild, please contact the manager!","Error", JOptionPane.ERROR_MESSAGE); 
 			break;
 		case "DownloadApproved":
 			System.out.println("Downloading");			

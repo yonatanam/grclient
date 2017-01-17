@@ -117,9 +117,20 @@ public class ServerController
 	{
 		try 
 		{
+			File f = new File(System.getProperty("java.class.path"));
+			File dir = f.getAbsoluteFile().getParentFile();
+			filesDir = dir.toString();
+			String [] temp = filesDir.split(";");
+			filesDir = temp[0];
+			filesDir = filesDir + "\\Books\\";
+			System.out.println("Path is "+filesDir);
+			
+			/*
 			filesDir = ShoppingCartController.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath() + "Books/";
+			filesDir = filesDir.substring(0, filesDir.lastIndexOf("/") + 1);
+			*/
 		} 
-		catch (URISyntaxException e1) { ServerLogGUI.Print("Files directory not found!");	}
+		catch (Exception e1) { ServerLogGUI.Print("Files directory not found!");	}
 	}
 	
 	public void setPassword1(String password1) {

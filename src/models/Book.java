@@ -13,10 +13,11 @@ public class Book extends AbstractModel{
 	private float price;
 
 
-	public Book(String booktitle, float price)
+	public Book(String booktitle, float price, String format)
 	{
 		this.booktitle = booktitle;
 		this.price = price;
+		this.format=format;
 	}
 	public Book(String bookid, String booktitle, String booklang, String synopsis, String toc, String keywords,
 			String format, boolean incatalog, int orders_count, float price) {

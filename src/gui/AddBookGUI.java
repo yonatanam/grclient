@@ -39,7 +39,7 @@ import javax.swing.border.Border;
 import com.sun.javafx.collections.MappingChange.Map;
 
 import client.App;
-
+ 
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JSplitPane;

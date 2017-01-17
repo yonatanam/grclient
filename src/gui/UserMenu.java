@@ -255,12 +255,25 @@ public class UserMenu extends JPanel{
 		Image newImage = new ImageIcon(this.getClass().getResource("/"+App.client.getCurrentUser().getPermission()+".png")).getImage();
 		User.setIcon(new ImageIcon(newImage));
 		add(User);
+			
 		
-		btnShoppingCart = new JButton("ShoppingCart");
-		btnShoppingCart.setBounds(42, 36, 137, 23);
+		
+		btnShoppingCart = new JButton("");
+		btnShoppingCart.setFont(new Font("Arial", Font.BOLD, 15));
+		Image imgCart = new ImageIcon(this.getClass().getResource("/Cart.png")).getImage();
+		btnShoppingCart.setIcon(new ImageIcon(imgCart));
+		btnShoppingCart.setBounds(109, 38, 60, 23);
+		btnShoppingCart.setOpaque(false);
+		btnShoppingCart.setContentAreaFilled(false);
+		btnShoppingCart.setBorderPainted(false);
+		btnShoppingCart.setHorizontalTextPosition(JButton.CENTER);
+		btnShoppingCart.setVerticalTextPosition(JButton.CENTER);
 		btnShoppingCart.addActionListener(new ShoppingCartListener());
+		btnShoppingCart.setForeground(Color.WHITE);
 		add(btnShoppingCart);
-		//Background Image END
+		
+		
+		
 		
 	
         //Load Menu Background according to permission level

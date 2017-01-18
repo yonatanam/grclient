@@ -90,6 +90,9 @@ public class EchoServer extends AbstractServer
 		String message = (String) en.getParams().get("msg");
 		String query = null;
 		String searchExp = null;
+		Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");
+        String formattedDate = sdf.format(date);
 		try 
 		{
 			Statement stmt = conn.createStatement();  
@@ -350,10 +353,7 @@ public class EchoServer extends AbstractServer
 				/*End duplicate check*/
 				else //all good if got here
 				{
-					java.util.Date dt = new java.util.Date();
-					java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					String currentTime = sdf.format(dt);
-					query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+currentTime+"','"+content+"','"
+					query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+formattedDate+"','"+content+"','"
 							+username+"','PENDING')";
 					stmt.executeUpdate(query);
 
@@ -534,9 +534,6 @@ public class EchoServer extends AbstractServer
 				
 				
 				//Generete order ID and Date
-				Date date = new Date();
-		        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");
-		        String formattedDate = sdf.format(date);
 				String[] UID = UUID.randomUUID().toString().split("-", 2);
 		        String uniqueID = UID[0];
 		        userName = (String) en.getParams().get("username");
@@ -548,6 +545,7 @@ public class EchoServer extends AbstractServer
 					query = "INSERT INTO book_orders VALUES ('"+uniqueID+"','"+b.getBookid()+"')";
 					stmt.executeUpdate(query);
 				}
+				
 				client.sendToClient(envelope);			
 				break;
 				/*----------------------------End Of Downloads----------------------------*/					
@@ -859,6 +857,7 @@ public class EchoServer extends AbstractServer
 				break;
 			case "getSimpleSearchData":
 				/**Simple search via booktitle only*/
+				Statement stmt2 = conn.createStatement();
 				String simpleSearchStr = (String)en.getParams().get("simpleSearchStr");
 				res = stmt.executeQuery("SELECT bookid,booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE booktitle like '%"+simpleSearchStr+"%' AND incatalog='YES'");	
 				Vector<Object> booksColumnNames = new Vector<Object>();
@@ -869,6 +868,8 @@ public class EchoServer extends AbstractServer
 					booksColumnNames.addElement( bsd.getColumnName(i) );
 				while (res.next())
 				{
+					String sql = "INSERT INTO book_searches VALUES ('"+res.getString("bookid")+"','"+formattedDate+"')";
+					stmt2.executeUpdate(sql);
 					Vector<Object> row = new Vector<Object>(booksColumnCount);
 					for (int i = 1; i <= booksColumnCount; i++)
 					{
@@ -877,7 +878,7 @@ public class EchoServer extends AbstractServer
 					}
 					booksData.addElement( row );
 				}
-
+				
 				params.put("booksColumnNames", booksColumnNames);
 				params.put("booksData", booksData);
 				params.put("msg", "BooksData");

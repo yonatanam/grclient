@@ -8,14 +8,12 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.UUID;
 import java.util.Vector;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,7 +21,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 
 import ocsf.server.*;
 
@@ -90,9 +87,6 @@ public class EchoServer extends AbstractServer
 		String message = (String) en.getParams().get("msg");
 		String query = null;
 		String searchExp = null;
-		Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");
-        String formattedDate = sdf.format(date);
 		try 
 		{
 			Statement stmt = conn.createStatement();  
@@ -353,7 +347,10 @@ public class EchoServer extends AbstractServer
 				/*End duplicate check*/
 				else //all good if got here
 				{
-					query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+formattedDate+"','"+content+"','"
+					java.util.Date dt = new java.util.Date();
+					java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String currentTime = sdf.format(dt);
+					query = "INSERT into reviews VALUES (NULL,'"+bookid+"','"+currentTime+"','"+content+"','"
 							+username+"','PENDING')";
 					stmt.executeUpdate(query);
 
@@ -531,21 +528,7 @@ public class EchoServer extends AbstractServer
 				params.put("filesNames", filesNames); 
 				params.put("msg","DownloadApproved"); 
 
-				
-				
-				//Generete order ID and Date
-				String[] UID = UUID.randomUUID().toString().split("-", 2);
-		        String uniqueID = UID[0];
-		        userName = (String) en.getParams().get("username");
-		        //Insert order into DB
-		        query = "INSERT INTO orders VALUES ('"+uniqueID+"','"+userName+"','"+formattedDate+"')";
-				stmt.executeUpdate(query);
-				for (Book b : books)
-				{
-					query = "INSERT INTO book_orders VALUES ('"+uniqueID+"','"+b.getBookid()+"')";
-					stmt.executeUpdate(query);
-				}
-				
+
 				client.sendToClient(envelope);			
 				break;
 				/*----------------------------End Of Downloads----------------------------*/					
@@ -670,8 +653,166 @@ public class EchoServer extends AbstractServer
 					client.sendToClient(envelope);
 				}
 				break;
+				case "editsubject":      // edit subject name in the DB
+				String oldsub=(String) en.getParams().get("oldsub");
+	   			String oldcategory=(String) en.getParams().get("oldcategory");
+	   			String newcategory=(String) en.getParams().get("newcategory");
+	   			String newsub=(String) en.getParams().get("newsub");
+	   			String newcategoryid = null;
+	   			String oldcategoryid = null;
+	   			res = stmt.executeQuery("SELECT * from categories where category_name = '"+ oldcategory +"'"
+						+ "or category_name ='"+ newcategory +"'");
+				boolean equalcat=oldcategory.equals(newcategory);
+				if(getRowCount(res) ==0) 
+				{
+					ServerController.Print("error occured during edit subject ,check the subjects table subject name="+
+							oldsub+" category name="+oldcategory);
+					params.clear();
+					params.put("msg", "editsubjectERROR");
+					client.sendToClient(envelope);
+				}
+				else
+				{
+					if(!equalcat)
+					{
+					while(res.next())
+					{	if(res.getString("category_name").equals(oldcategory)) oldcategoryid=Integer.toString(res.getInt("categoryid"));
+						else newcategoryid=Integer.toString(res.getInt("categoryid"));
+					}
+					res = stmt.executeQuery("SELECT * from subjects where categoryid = '"+ newcategoryid +"'"
+							+ "and subjectname ='"+ newsub +"'");
+				    if(getRowCount(res)>0)
+				    {
+				    	params.clear();
+						params.put("newsub", newsub);
+						params.put("newcategory", newcategory);
+						params.put("msg", "subjectalreadyexist");
+						client.sendToClient(envelope);
+						break;
+				    }
+					stmt.executeUpdate("UPDATE subjects SET categoryid='"+newcategoryid+"',subjectname='"+newsub+"'"
+							+ " WHERE categoryid='"+oldcategoryid+"' and subjectname='"+oldsub+"' ");
+					res = stmt.executeQuery("SELECT subjectid from subjects where subjectname = '"+ newsub +"'"
+							+ "and categoryid ='"+ newcategoryid +"'");
+					if(getRowCount(res) ==0) 
+					{
+						ServerController.Print("error occured during edit subject ,check the subjects table subject name="+
+								newsub+" category id="+newcategoryid);
+						params.clear();
+						params.put("msg", "editsubjectERROR");
+						client.sendToClient(envelope);
+						
+					}
+					else
+					{
+					res.next();
+					String subid=Integer.toString(res.getInt("subjectid"));
+					stmt.executeUpdate("UPDATE book_categories SET categoryid='"+newcategoryid+"'"
+							+ " WHERE subjectid='"+subid+"' and categoryid='"+oldcategoryid+"' ");
+					}
+					}
+					else 
+						{
+						res.next();
+						oldcategoryid=Integer.toString(res.getInt("categoryid"));
+						res = stmt.executeQuery("SELECT * from subjects where categoryid = '"+ oldcategoryid +"'"
+								+ "and subjectname ='"+ newsub +"'");
+					    if(getRowCount(res)>0)
+					    {
+					    	params.clear();
+							params.put("newsub", newsub);
+							params.put("newcategory", newcategory);
+							params.put("msg", "subjectalreadyexist");
+							client.sendToClient(envelope);
+							break;
+					    }
+						
+						stmt.executeUpdate("UPDATE subjects SET subjectname='"+newsub+"'"
+							+ " WHERE categoryid='"+oldcategoryid+"' and subjectname='"+oldsub+"' ");
+						}
+					if(!oldsub.equals(newsub))
+					ServerController.Print("subject "+oldsub+"has been changed to "+newsub);
+					if(!equalcat)
+						ServerController.Print("subject "+newsub+"rebind to category "+newcategory);
+					params.clear();
+					params.put("msg", "editsubjectOK");
+					client.sendToClient(envelope);
+				}
+								
+				break;
+			case "GetDisSubjects":
+				ArrayList<String>	subjects = new ArrayList<String>();				
+				res = stmt.executeQuery("SELECT DISTINCT subjectname FROM subjects");
+				while(res.next())
+					subjects.add(res.getString("subjectname"));
+				params.clear();
+				params.put("msg", "AlldisSubjectsInDB");
+				params.put("subjects", subjects);
+				client.sendToClient(envelope);
+				break;
+				
+			case "EditCategory":      // edit category name in the DB
+				
+				
+				 CatName = (String) en.getParams().get("CatName");
+				 String Exist = (String) en.getParams().get("existName");
+
+				res = stmt.executeQuery("SELECT categoryid from categories where category_name = '"+ CatName +"'");
+				
+				if(getRowCount(res) == 0) // checking if there are any categories with the same name 
+					
+				{		res = stmt.executeQuery("SELECT categoryid from categories where category_name = '"+ Exist +"'");
+						res.next();
+						stmt.executeUpdate("UPDATE categories SET category_name='"+CatName+"' WHERE categoryid='"+Integer.toString(res.getInt("categoryid"))+"'");
+						ServerController.Print("category "+Exist+"has been changed to"+CatName);
+						params.put("msg", "CategoryHasBeenChanged");
+						client.sendToClient(envelope);				
+				}
+				else 
+				{
+					params.clear();
+					params.put("msg", "CategoryidExist");
+					client.sendToClient(envelope);
+				}				
+				break;
+			case "RemoveCategory":      // edit category name in the DB
+				
+				
+				 CatName = (String) en.getParams().get("CatName");
+				 res = stmt.executeQuery("SELECT categoryid from categories where category_name = '"+ CatName +"'");
+				res.next();
+				String categoryid=Integer.toString(res.getInt("categoryid"));
+				stmt.executeUpdate("DELETE from categories WHERE category_name='"+CatName+"'");
+				stmt.executeUpdate("DELETE from subjects WHERE categoryid='"+categoryid+"'");
+				params.clear();
+				 params.put("msg", "CategoryRemoved");
+				 client.sendToClient(envelope);
+								
+				break;
+			case "RemoveSubjects":      // edit category name in the DB
+				
+				
+				SubName = (String) en.getParams().get("SubName");
+				CatName = (String) en.getParams().get("CatName");
+				res = stmt.executeQuery("SELECT categoryid from categories where category_name = '"+ CatName +"'");
+				res.next();				
+				try{
+					stmt.executeUpdate("DELETE from subjects WHERE categoryid='"+Integer.toString(res.getInt("categoryid"))+"' and "
+							+ "subjectname='"+ SubName +"'");
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
+				
+				
+				 params.clear();
+				 params.put("msg", "SubjectRemoved");
+				 client.sendToClient(envelope);
+								
+				break;
 			case "GetSubjects":
-				ArrayList<String> subjects = new ArrayList<String>();
+				 subjects = new ArrayList<String>();
 				String CategoryName = (String) en.getParams().get("CategoryName");
 				String Category_id = null;
 
@@ -693,8 +834,23 @@ public class EchoServer extends AbstractServer
 				client.sendToClient(envelope);
 
 				break;
-			case "GetCategories":
+			case "GetrelevantCat":
 				ArrayList<String> categories = new ArrayList<String>();
+				 String s=(String) en.getParams().get("subject");
+				 res = stmt.executeQuery("SELECT c.category_name  FROM grproj.subjects s,grproj.categories c where s.subjectname='"+ s +"' and s.categoryid=c.categoryid ");
+				while(res.next())
+					categories.add(res.getString("category_name"));
+				params.put("incategories", categories);
+				ArrayList<String> outcategories = new ArrayList<String>();
+				res = stmt.executeQuery("SELECT category_name from categories where category_name not in (SELECT c.category_name  FROM grproj.subjects s,grproj.categories c where s.subjectname='"+ s +"' and s.categoryid=c.categoryid) ");
+				while(res.next())
+					outcategories.add(res.getString("category_name"));
+				params.put("outcategories", outcategories);
+				params.put("msg", "relevantCat");
+				client.sendToClient(envelope);
+				break;
+			case "GetCategories":
+				 categories = new ArrayList<String>();
 
 				ResultSet res5 = stmt.executeQuery("SELECT category_name from categories");
 				while(res5.next())
@@ -857,9 +1013,8 @@ public class EchoServer extends AbstractServer
 				break;
 			case "getSimpleSearchData":
 				/**Simple search via booktitle only*/
-				Statement stmt2 = conn.createStatement();
 				String simpleSearchStr = (String)en.getParams().get("simpleSearchStr");
-				res = stmt.executeQuery("SELECT bookid,booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE booktitle like '%"+simpleSearchStr+"%' AND incatalog='YES'");	
+				res = stmt.executeQuery("SELECT booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE booktitle like '%"+simpleSearchStr+"%' AND incatalog='YES'");	
 				Vector<Object> booksColumnNames = new Vector<Object>();
 				Vector<Object> booksData = new Vector<Object>();
 				ResultSetMetaData bsd = res.getMetaData();
@@ -868,8 +1023,6 @@ public class EchoServer extends AbstractServer
 					booksColumnNames.addElement( bsd.getColumnName(i) );
 				while (res.next())
 				{
-					String sql = "INSERT INTO book_searches VALUES ('"+res.getString("bookid")+"','"+formattedDate+"')";
-					stmt2.executeUpdate(sql);
 					Vector<Object> row = new Vector<Object>(booksColumnCount);
 					for (int i = 1; i <= booksColumnCount; i++)
 					{
@@ -878,7 +1031,7 @@ public class EchoServer extends AbstractServer
 					}
 					booksData.addElement( row );
 				}
-				
+
 				params.put("booksColumnNames", booksColumnNames);
 				params.put("booksData", booksData);
 				params.put("msg", "BooksData");

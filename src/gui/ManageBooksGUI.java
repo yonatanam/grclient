@@ -21,6 +21,8 @@ public class ManageBooksGUI extends JFrame {
 	private JButton AddBookButton;
 	private JButton AddCategoryButton;
 	private JButton AddSubjectButton;
+	private JButton editCategory;
+	private JButton editSubject;
 	
 	public ManageBooksGUI()
 	{	
@@ -109,7 +111,37 @@ public class ManageBooksGUI extends JFrame {
 		Image thirdimg = new ImageIcon(this.getClass().getResource("/WriteToDB.png")).getImage();
 		AddSubjectButton.setIcon(new ImageIcon(thirdimg));
 		getContentPane().add(AddSubjectButton);
-		
+		//edit Category 
+				JLabel EditCat = new JLabel("Edit Category");
+				EditCat.setForeground(Color.WHITE);
+				EditCat.setFont(new Font("Arial", Font.BOLD, 15));
+				EditCat.setBounds(249, 446, 96, 18);
+				getContentPane().add(EditCat);
+				editCategory = new JButton("");
+				editCategory.setVerticalTextPosition(SwingConstants.CENTER);
+				editCategory.setOpaque(false);
+				editCategory.setHorizontalTextPosition(SwingConstants.CENTER);
+				editCategory.setContentAreaFilled(false);
+				editCategory.setBorderPainted(false);
+				editCategory.setBounds(229, 381, 140, 119);
+				editCategory.setIcon(new ImageIcon(thirdimg));		
+				getContentPane().add(editCategory);
+				//edit Subject 
+				
+				JLabel EditSub = new JLabel("Edit Subject");
+				EditSub.setForeground(Color.WHITE);
+				EditSub.setFont(new Font("Arial", Font.BOLD, 15));
+				EditSub.setBounds(544, 317, 105, 34);
+				getContentPane().add(EditSub);			
+				editSubject = new JButton("");		
+				editSubject.setVerticalTextPosition(SwingConstants.CENTER);
+				editSubject.setOpaque(false);
+				editSubject.setHorizontalTextPosition(SwingConstants.CENTER);
+				editSubject.setContentAreaFilled(false);
+				editSubject.setBorderPainted(false);		
+				editSubject.setBounds(522, 262, 140, 119);
+				editSubject.setIcon(new ImageIcon(thirdimg));
+				getContentPane().add(editSubject);
 		
 		JLabel BackGround = new JLabel("");
 		Image imgbg = new ImageIcon(this.getClass().getResource("/bgWithLogo.png")).getImage();
@@ -126,8 +158,14 @@ public class ManageBooksGUI extends JFrame {
 	
 	
 	// Adding action listeners to all buttons in manage books gui
-	
-	
+	public void EditSubjectbuttonListener(ActionListener e)
+	{
+		editSubject.addActionListener(e);
+	}
+	public void EditCategorybuttonListener(ActionListener e)
+	{
+		editCategory.addActionListener(e);
+	}
 	public void AddbuttonAddBookactionListener(ActionListener e)
 	{
 		AddBookButton.addActionListener(e);
@@ -142,5 +180,7 @@ public class ManageBooksGUI extends JFrame {
 	{
 		AddSubjectButton.addActionListener(e);
 	}
+	
+	
 	
 }

@@ -129,7 +129,8 @@ public class ShoppingCartController extends AbstractController
 			break;
 		case "DownloadApproved":
 			System.out.println("Downloading");			
-
+			//Clear shopping cart
+			App.client.getCurrentUser().getCart().clear();
 			Vector<String> filesNames = (Vector<String>) en.getParams().get("filesNames");
 			Vector<byte[]> bytesOfFiles = (Vector<byte[]>)en.getParams().get("bytesOfFiles");
 

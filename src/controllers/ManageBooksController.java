@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 import gui.AddBookGUI;
 import gui.AddCategoryGUI;
 import gui.AddSubjectGUI;
-import gui.EditCategoryGUI;
-import gui.EditSubjectGUI;
 import gui.MainWindowGUI;
 import gui.ManageBooksGUI;
 
@@ -24,24 +22,9 @@ public class ManageBooksController extends AbstractController {
 		 mgb.AddbuttonAddBookactionListener(new AddBookActionListener());
 		 mgb.AddbuttonAddCategoryactionListener(new AddCategoryActionListener());
 		 mgb.AddbuttonAddSubjectactionListener(new AddSubjectActionListener());
-		 mgb.EditCategorybuttonListener(new EditCategoryListener());
-		 mgb.EditSubjectbuttonListener(new EditSubjectListener());
-		 mgb.addWindowListener(new CustomWindowListener());
 	 }
-	 class EditCategoryListener implements ActionListener
-		{
-			public void actionPerformed(ActionEvent e){
-				manageBooksGUI.dispose();
-				new CategoryController( new EditCategoryGUI());	
-			}
-		}
-	 class EditSubjectListener implements ActionListener
-		{
-			public void actionPerformed(ActionEvent e){
-				manageBooksGUI.dispose();
-				new SubjectController(new EditSubjectGUI());	
-			}
-		}
+	 
+	 
 	 class AddBookActionListener implements ActionListener
 		{
 			public void actionPerformed(ActionEvent e){

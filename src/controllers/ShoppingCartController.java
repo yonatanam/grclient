@@ -105,6 +105,7 @@ public class ShoppingCartController extends AbstractController
 		{			
 			HashMap<String,Object> params = new HashMap<String,Object>();
 			params.put("msg", "DownloadBooks");
+			params.put("username", App.client.getCurrentUser().getUserName());
 			params.put("books", App.client.getCurrentUser().getCart());
 			Envelope envelope = new Envelope(params);
 			sendToServer(envelope);

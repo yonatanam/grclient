@@ -76,10 +76,11 @@ public class SearchController extends AbstractController {
 
 			try
 			{
-				String booktitle = (String) searchGUI.getSearchData().getValueAt(searchGUI.getSearchData().getSelectedRow(), 0);
-				float bookprice = (float) searchGUI.getSearchData().getValueAt(searchGUI.getSearchData().getSelectedRow(), 6);;
-				String bookformat = (String) searchGUI.getSearchData().getValueAt(searchGUI.getSearchData().getSelectedRow(), 5);
-				Book selectedBook = new Book(booktitle,bookprice, bookformat);
+				String bookID = (String) searchGUI.getSearchData().getValueAt(searchGUI.getSearchData().getSelectedRow(), 0);
+				String booktitle = (String) searchGUI.getSearchData().getValueAt(searchGUI.getSearchData().getSelectedRow(), 1);
+				float bookprice = (float) searchGUI.getSearchData().getValueAt(searchGUI.getSearchData().getSelectedRow(), 7);;
+				String bookformat = (String) searchGUI.getSearchData().getValueAt(searchGUI.getSearchData().getSelectedRow(), 6);
+				Book selectedBook = new Book(booktitle,bookprice, bookformat, bookID);
 				if (App.client.getCurrentUser().getCart().contains(selectedBook))
 					JOptionPane.showMessageDialog(null,"Book is already in cart!","Error", JOptionPane.ERROR_MESSAGE);
 				else

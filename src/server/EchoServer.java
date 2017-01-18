@@ -8,12 +8,14 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.UUID;
 import java.util.Vector;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 
 import ocsf.server.*;
 
@@ -528,7 +531,23 @@ public class EchoServer extends AbstractServer
 				params.put("filesNames", filesNames); 
 				params.put("msg","DownloadApproved"); 
 
-
+				
+				
+				//Generete order ID and Date
+				Date date = new Date();
+		        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");
+		        String formattedDate = sdf.format(date);
+				String[] UID = UUID.randomUUID().toString().split("-", 2);
+		        String uniqueID = UID[0];
+		        userName = (String) en.getParams().get("username");
+		        //Insert order into DB
+		        query = "INSERT INTO orders VALUES ('"+uniqueID+"','"+userName+"','"+formattedDate+"')";
+				stmt.executeUpdate(query);
+				for (Book b : books)
+				{
+					query = "INSERT INTO book_orders VALUES ('"+uniqueID+"','"+b.getBookid()+"')";
+					stmt.executeUpdate(query);
+				}
 				client.sendToClient(envelope);			
 				break;
 				/*----------------------------End Of Downloads----------------------------*/					
@@ -841,7 +860,7 @@ public class EchoServer extends AbstractServer
 			case "getSimpleSearchData":
 				/**Simple search via booktitle only*/
 				String simpleSearchStr = (String)en.getParams().get("simpleSearchStr");
-				res = stmt.executeQuery("SELECT booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE booktitle like '%"+simpleSearchStr+"%' AND incatalog='YES'");	
+				res = stmt.executeQuery("SELECT bookid,booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE booktitle like '%"+simpleSearchStr+"%' AND incatalog='YES'");	
 				Vector<Object> booksColumnNames = new Vector<Object>();
 				Vector<Object> booksData = new Vector<Object>();
 				ResultSetMetaData bsd = res.getMetaData();

@@ -14,14 +14,17 @@ import javax.swing.table.TableColumnModel;
 import client.App;
 
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowListener;
 import java.util.Vector;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import java.awt.Color;
 
 
 public class SearchReviewGUI extends JFrame
@@ -31,6 +34,8 @@ public class SearchReviewGUI extends JFrame
 	private JLabel lblSearchreviews;
 	private JLabel lblSearchBy;
 	private JLabel lblSearchNotFound;
+	private JLabel BackGround;
+	private JLabel miniLogo;
 	
 	private JComboBox<String> cbSearchType;
 		
@@ -59,15 +64,19 @@ public class SearchReviewGUI extends JFrame
 		userMenu = App.client.menuSwitcher(this); //Gets the specific menu per user permission
 		Menu menu = new Menu(userMenu);
 		menu.setBounds(10,11,165,550);
-		add(menu);	
+		getContentPane().add(menu);	
 		/** End menu */
 		
 		lblSearchreviews = new JLabel("Search Reviews");
-		lblSearchreviews.setFont(new Font("Tahoma", Font.PLAIN, 18));		
-		lblSearchreviews.setBounds(95, 44, 174, 14);
+		lblSearchreviews.setForeground(Color.WHITE);
+		lblSearchreviews.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 26));		
+		lblSearchreviews.setBounds(219, 31, 287, 37);
 		getContentPane().add(lblSearchreviews); //JPanel doesn't have contentPane.
 		
+		
+		
 		lblSearchBy = new JLabel("Search by: ");
+		lblSearchBy.setForeground(Color.WHITE);
 		lblSearchBy.setBounds(36, 94, 73, 14);
 		getContentPane().add(lblSearchBy);
 		
@@ -79,13 +88,27 @@ public class SearchReviewGUI extends JFrame
 		SearchFiled.setBounds(226, 91, 235, 21);
 		getContentPane().add(SearchFiled);
 				
-		btnSearch = new JButton("Search");
+		/*btnSearch = new JButton("Search");
 		btnSearch.setBounds(459, 91, 82, 20);
+		getContentPane().add(btnSearch);*/
+		
+		Image buttoncan = new ImageIcon(this.getClass().getResource("/buttSmall.png")).getImage();
+		btnSearch = new JButton("Search");
+		btnSearch.setBounds(457, 84, 122, 33);
 		getContentPane().add(btnSearch);
+		btnSearch.setFont(new Font("Arial", Font.BOLD, 16));
+		btnSearch.setForeground(Color.WHITE);
+		btnSearch.setIcon(new ImageIcon(buttoncan));
+		btnSearch.setHorizontalTextPosition(JButton.CENTER);
+		btnSearch.setVerticalTextPosition(JButton.CENTER);
+		btnSearch.setOpaque(false);
+		btnSearch.setContentAreaFilled(false);
+		btnSearch.setBorderPainted(false);
 		
 		panelResults = new JPanel();
+		panelResults.setBackground(Color.WHITE);
 		panelResults.setLayout(null);
-		panelResults.setBounds(20, 137, 664, 422);
+		panelResults.setBounds(20, 137, 664, 386);
 		getContentPane().add(panelResults);
 		
 		panelResultsFound = new JPanel();
@@ -99,8 +122,16 @@ public class SearchReviewGUI extends JFrame
 		panelResultsNotFound.setVisible(false);
 		
 		btnBack = new JButton("Back");
-		btnBack.setBounds(694, 538, 89, 23);
+		btnBack.setBounds(666, 536, 128, 25);
 		getContentPane().add(btnBack);
+		btnBack.setFont(new Font("Arial", Font.BOLD, 16));
+		btnBack.setForeground(Color.WHITE);
+		btnBack.setIcon(new ImageIcon(buttoncan));
+		btnBack.setHorizontalTextPosition(JButton.CENTER);
+		btnBack.setVerticalTextPosition(JButton.CENTER);
+		btnBack.setOpaque(false);
+		btnBack.setContentAreaFilled(false);
+		btnBack.setBorderPainted(false);
 		
 		initializeResults();
 		
@@ -111,6 +142,18 @@ public class SearchReviewGUI extends JFrame
 		setLocationRelativeTo(null);		
 		getContentPane().setLayout(null);			
 		setVisible(true);
+		
+		miniLogo = new JLabel("");
+		miniLogo.setBounds(680, 13, 93, 55);
+		Image miniLogoImage = new ImageIcon(this.getClass().getResource("/miniLogo.png")).getImage();
+		getContentPane().add(miniLogo);
+		miniLogo.setIcon(new ImageIcon(miniLogoImage));
+		
+		BackGround = new JLabel("");
+		Image imgbg = new ImageIcon(this.getClass().getResource("/bgWithoutLogo.png")).getImage();
+		BackGround.setBounds(0, 0, 794, 566);
+		getContentPane().add(BackGround);
+		BackGround.setIcon(new ImageIcon(imgbg));
 	}
 
 	

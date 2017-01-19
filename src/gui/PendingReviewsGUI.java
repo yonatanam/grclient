@@ -50,8 +50,8 @@ public class PendingReviewsGUI extends JFrame {
 		
 		JLabel lblPendingReviews = new JLabel("Pending reviews:");
 		lblPendingReviews.setForeground(Color.WHITE);
-		lblPendingReviews.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblPendingReviews.setBounds(39, 17, 179, 31);
+		lblPendingReviews.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 26));
+		lblPendingReviews.setBounds(71, 11, 271, 31);
 		getContentPane().add(lblPendingReviews);
 		
 		

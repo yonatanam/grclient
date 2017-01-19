@@ -54,7 +54,7 @@ public class CancelSubscriptionGUI extends JFrame {
 	public CancelSubscriptionGUI() {
 		
 		
-		this.setTitle("Adding new book - Initial Config");
+		this.setTitle("Cancel Subscription - Initial Config");
 		this.setSize(400, 300);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);

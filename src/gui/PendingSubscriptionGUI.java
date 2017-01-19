@@ -55,8 +55,8 @@ public class PendingSubscriptionGUI extends JFrame {
 		
 		JLabel lblPendingSubscription = new JLabel("Pending subscription requests");
 		lblPendingSubscription.setForeground(Color.WHITE);
-		lblPendingSubscription.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblPendingSubscription.setBounds(39, 17, 349, 31);
+		lblPendingSubscription.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 26));
+		lblPendingSubscription.setBounds(63, 11, 453, 31);
 		getContentPane().add(lblPendingSubscription);
 		
 
@@ -68,7 +68,7 @@ public class PendingSubscriptionGUI extends JFrame {
 		BackButton = new JButton("Back");
 		BackButton.setFont(new Font("Arial", Font.BOLD, 15));
 		BackButton.setIcon(new ImageIcon(imgLogin));
-		BackButton.setBounds(32, 464, 106, 41);
+		BackButton.setBounds(646, 499, 106, 41);
 		BackButton.setOpaque(false);
 		BackButton.setContentAreaFilled(false);
 		BackButton.setBorderPainted(false);
@@ -91,7 +91,7 @@ public class PendingSubscriptionGUI extends JFrame {
 		
 		
 		btnApprove = new JButton("Approve");
-		btnApprove.setBounds(163, 412, 131, 41);
+		btnApprove.setBounds(144, 430, 131, 41);
 		btnApprove.setFont(new Font("Arial", Font.BOLD, 15));
 		btnApprove.setIcon(new ImageIcon(imgLogin));
 		btnApprove.setOpaque(false);
@@ -103,7 +103,7 @@ public class PendingSubscriptionGUI extends JFrame {
 		getContentPane().add(btnApprove);
 		
 		btnDeny = new JButton("Deny");
-		btnDeny.setBounds(22, 412, 131, 41);
+		btnDeny.setBounds(24, 430, 131, 41);
 		btnDeny.setFont(new Font("Arial", Font.BOLD, 15));
 		btnDeny.setIcon(new ImageIcon(imgLogin));
 		btnDeny.setOpaque(false);

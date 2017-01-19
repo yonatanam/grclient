@@ -91,8 +91,8 @@ public class EchoServer extends AbstractServer
 		String query = null;
 		String searchExp = null;
 		Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");
-        String formattedDate = sdf.format(date);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");
+		String formattedDate = sdf.format(date);
 		try 
 		{
 			Statement stmt = conn.createStatement();  
@@ -531,21 +531,21 @@ public class EchoServer extends AbstractServer
 				params.put("filesNames", filesNames); 
 				params.put("msg","DownloadApproved"); 
 
-				
-				
+
+
 				//Generete order ID and Date
 				String[] UID = UUID.randomUUID().toString().split("-", 2);
-		        String uniqueID = UID[0];
-		        userName = (String) en.getParams().get("username");
-		        //Insert order into DB
-		        query = "INSERT INTO orders VALUES ('"+uniqueID+"','"+userName+"','"+formattedDate+"')";
+				String uniqueID = UID[0];
+				userName = (String) en.getParams().get("username");
+				//Insert order into DB
+				query = "INSERT INTO orders VALUES ('"+uniqueID+"','"+userName+"','"+formattedDate+"')";
 				stmt.executeUpdate(query);
 				for (Book b : books)
 				{
 					query = "INSERT INTO book_orders VALUES ('"+uniqueID+"','"+b.getBookid()+"')";
 					stmt.executeUpdate(query);
 				}
-				
+
 				client.sendToClient(envelope);			
 				break;
 				/*----------------------------End Of Downloads----------------------------*/					
@@ -878,12 +878,35 @@ public class EchoServer extends AbstractServer
 					}
 					booksData.addElement( row );
 				}
-				
+
 				params.put("booksColumnNames", booksColumnNames);
 				params.put("booksData", booksData);
 				params.put("msg", "BooksData");
 				client.sendToClient(envelope);
 
+				break;
+			case "getUserOrdersData":
+				String ordersUserName = (String) en.getParams().get("username");
+				res = stmt.executeQuery("SELECT orderid, date FROM orders where username='"+ordersUserName+"'");
+				Vector<Object> ordersColumnNames = new Vector<Object>();
+				Vector<Object> ordersData = new Vector<Object>();
+				ResultSetMetaData ormd = res.getMetaData();
+				int ordersColumnCount = ormd.getColumnCount();
+				for (int i = 1; i <= ordersColumnCount; i++)
+					ordersColumnNames.addElement( ormd.getColumnName(i) );
+				while (res.next())
+				{
+					Vector<Object> row = new Vector<Object>(ordersColumnCount);
+					for (int i = 1; i <= ordersColumnCount; i++)
+					{
+						row.addElement( res.getObject(i) );
+					}
+					ordersData.addElement( row );
+				}
+				params.put("ordersColumnNames", ordersColumnNames);
+				params.put("ordersData", ordersData);
+				params.put("msg", "UserOrdersData");
+				client.sendToClient(envelope);
 				break;
 			}
 

@@ -2,6 +2,8 @@ package controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 
@@ -21,6 +24,7 @@ import controllers.CategoryController.ButtonCancelActionListener;
 import controllers.CategoryController.TextCategNameMouseListener;
 import gui.AddCategoryGUI;
 import gui.AddSubjectGUI;
+import gui.EditSubjectGUI;
 import gui.MainWindowGUI;
 import gui.ManageBooksGUI;
 import models.Envelope;
@@ -33,47 +37,148 @@ public class SubjectController extends AbstractController{
 	private SubjectController subjectController;
 	private AddSubjectGUI addsubjectGUI;
 	private Validate_textFields val;
+	private EditSubjectGUI EditSubjectGui=null;
 	
 	
-public SubjectController(AddSubjectGUI addsub) {
+	public SubjectController(AddSubjectGUI addsub) {
 		
-	addsubjectGUI = addsub;
-	subjectController = this;
-	
-	
-	Map<String, Object> params = new HashMap<String, Object>();
-	params.put("msg", "GetCategories");
-	Envelope envelope = new Envelope(params);
-	App.client.setCurrentController(subjectController);
-	sendToServer(envelope);	
+		addsubjectGUI = addsub;
+		subjectController = this;
+		
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("msg", "GetCategories");
+		Envelope envelope = new Envelope(params);
+		App.client.setCurrentController(subjectController);
+		sendToServer(envelope);	
 
-	
-	// DON'T TOUCH THIS COMMENT BLOCK
-	
-	/*System.out.println("flag is :" + flag);
-		if(flag == 0)
-		{
-			addsub.ShowNoCategoriesinDBYetifflag0();	
-			addsub.addButtonBackTomanageActionListener(new BackTomanageActionListener());
 		
+		// DON'T TOUCH THIS COMMENT BLOCK
+		
+		/*System.out.println("flag is :" + flag);
+			if(flag == 0)
+			{
+				addsub.ShowNoCategoriesinDBYetifflag0();	
+				addsub.addButtonBackTomanageActionListener(new BackTomanageActionListener());
+			
+			}
+			else
+			{
+				val = new Validate_textFields();
+				addsubjectGUI.setAllCategories(categoriesvec);
+				addsub.ShowAllComponentsIfFlag1();
+				addsub.AddbuttonApplyactionListener(new ButtonApplyActionListener());
+				addsub.addButtonCancelFromCreateNewSubjActionListener(new ButtonCancelActionListener());
+				addsub.AddTextSubjIdMouseListener(new TextSubjIdMouseListener());
+				addsub.AddTextSubjNameMouseListener(new TextSubjNameMouseListener());
+				addsub.addWindowListener(new CustomWindowListener());
+				addsub.addButtonAddCategoryActionListener(new AddCategoryActionListener());
+				addsub.addButtonRemoveCategoryActionListener(new RemoveCategoryActionListener());
+			}
+			System.out.println("flag is " + flag);*/
 		}
+	public SubjectController(EditSubjectGUI editsub)	
+	{
+		subjectController = this;
+		EditSubjectGui = editsub;
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("msg", "GetDisSubjects");
+		Envelope envelope = new Envelope(params);
+		App.client.setCurrentController(subjectController);
+		sendToServer(envelope);	
+		val = new Validate_textFields();
+		
+		EditSubjectGui.addBackButtonActionListener(new BackButtonActionListener());
+		EditSubjectGui.AddSubjectComboBoxListener(new itemListener());
+		EditSubjectGui.addWindowListener(new CustomWindowListener());
+		EditSubjectGui.AdditemComboBoxListener(new itemListener());
+		EditSubjectGui.addRemoveButtonActionListener(new RemoveButtonActionListener());
+		EditSubjectGui.addChangeButtonActionListener(new ChangeButtonActionListener());
+	}	
+	class itemListener implements ItemListener
+    {
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			int state = e.getStateChange();
+	          if(state == ItemEvent.SELECTED)
+	          {
+	        	  String sub=(String)EditSubjectGui.getSubComboBox().getSelectedItem();
+	     			Map<String, Object> params = new HashMap<String, Object>();
+	     			params.put("msg", "GetrelevantCat");
+	     			params.put("subject", sub);
+	     			Envelope envelope = new Envelope(params);
+	     			sendToServer(envelope);	
+	     			EditSubjectGui.getTextsubName().setText(sub);
+	          }
+			
+		}
+
+		
+    	
+    }
+	class ChangeButtonActionListener implements ActionListener
+   	{
+
+   		@Override
+   		public void actionPerformed(ActionEvent e) {
+   			String oldsub=(String)EditSubjectGui.getSubComboBox().getSelectedItem();
+   			String oldcategory=(String) EditSubjectGui.getcategorylist().getSelectedValue();
+   			String newcategory;
+   			if(oldcategory==null) EditSubjectGui.getCategory_Warning().setText("you must choose subject's category");
+   			else if(!val.Check_text_empty(EditSubjectGui.getTextsubName(), EditSubjectGui.getName_Warning(), "you must fill subject name"))
+   			{    newcategory=(String) EditSubjectGui.getCatComboBox().getSelectedItem();
+   				if(newcategory.equals("none"))newcategory= oldcategory;
+   				
+   				Map<String, Object> params = new HashMap<String, Object>();
+   				params.put("msg", "editsubject");
+   				params.put("oldcategory",oldcategory);
+   				params.put("newcategory", newcategory);
+   				params.put("oldsub", oldsub);
+   				params.put("newsub", EditSubjectGui.getTextsubName().getText());
+   				Envelope envelope = new Envelope(params);
+   				App.client.setCurrentController(subjectController);
+   				sendToServer(envelope);	
+   				
+   			}
+   		}
+   		
+   	}
+class BackButtonActionListener implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			EditSubjectGui.dispose();
+			new ManageBooksController(new ManageBooksGUI());	
+		}
+		
+	}
+class RemoveButtonActionListener implements ActionListener
+{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		    String sub=(String)EditSubjectGui.getSubComboBox().getSelectedItem();
+			String category=(String) EditSubjectGui.getcategorylist().getSelectedValue();
+		if(category==null) EditSubjectGui.getCategory_Warning().setText("you must choose subject's category");
 		else
 		{
-			val = new Validate_textFields();
-			addsubjectGUI.setAllCategories(categoriesvec);
-			addsub.ShowAllComponentsIfFlag1();
-			addsub.AddbuttonApplyactionListener(new ButtonApplyActionListener());
-			addsub.addButtonCancelFromCreateNewSubjActionListener(new ButtonCancelActionListener());
-			addsub.AddTextSubjIdMouseListener(new TextSubjIdMouseListener());
-			addsub.AddTextSubjNameMouseListener(new TextSubjNameMouseListener());
-			addsub.addWindowListener(new CustomWindowListener());
-			addsub.addButtonAddCategoryActionListener(new AddCategoryActionListener());
-			addsub.addButtonRemoveCategoryActionListener(new RemoveCategoryActionListener());
+			Map<String, Object> params = new HashMap<String, Object>();
+				params.put("msg", "RemoveSubjects");
+				params.put("SubName",sub);
+				params.put("CatName", category);
+				Envelope envelope = new Envelope(params);
+				App.client.setCurrentController(subjectController);
+				sendToServer(envelope);	
 		}
-		System.out.println("flag is " + flag);*/
+		
 	}
 	
-	class ButtonApplyActionListener implements ActionListener
+}
+	
+class ButtonApplyActionListener implements ActionListener
 	{
 	
 		
@@ -254,6 +359,7 @@ public SubjectController(AddSubjectGUI addsub) {
 		else
 		msg = (String) ((Envelope)message).getParams().get("msg");
 		
+		
 		switch (msg)
 		{
 			case "CreateNewSubjectOK":
@@ -281,6 +387,52 @@ public SubjectController(AddSubjectGUI addsub) {
 				
 				JOptionPane.showMessageDialog(null,"This subject name is already affiliated to " + catmsg + " in the DataBase!","Error", JOptionPane.ERROR_MESSAGE);
 				break;
+			case "AlldisSubjectsInDB":
+				ArrayList<String> subjects = (ArrayList<String>)((Envelope)message).getParams().get("subjects");
+				if(!subjects.isEmpty())
+				{
+					JComboBox s=EditSubjectGui.getSubComboBox();
+					for(int i=0;i<subjects.size();i++)
+						s.addItem(subjects.get(i));
+				}
+				break;
+			case "relevantCat":
+				ArrayList<String> incategories = (ArrayList<String>)((Envelope)message).getParams().get("incategories");
+				 DefaultListModel listModel=EditSubjectGui.getlistmodel();
+				 listModel.clear();
+				if(!incategories.isEmpty())
+					for(int i=0;i<incategories.size();i++)
+						listModel.addElement(incategories.get(i));
+				ArrayList<String> outcategories = (ArrayList<String>)((Envelope)message).getParams().get("outcategories");
+				JComboBox s=EditSubjectGui.getCatComboBox();
+				s.removeAllItems();
+				for(int i=0;i<outcategories.size();i++)
+					s.addItem(outcategories.get(i));
+				s.addItem("none");
+				s.setSelectedItem("none");
+				break;
+			case "editsubjectOK":
+				JOptionPane.showMessageDialog(null,"This subject edited successfully");
+				this.EditSubjectGui.dispose();
+				new ManageBooksController(new ManageBooksGUI());
+				break;
+			case "editsubjectERROR":
+				JOptionPane.showMessageDialog(null,"ERROR occuerd in the DataBase!","Error", JOptionPane.ERROR_MESSAGE);
+				this.EditSubjectGui.dispose();
+				new ManageBooksController(new ManageBooksGUI());
+				break;
+			case "subjectalreadyexist":
+				String sub=(String) ((Envelope)message).getParams().get("newsub");
+				String category=(String) ((Envelope)message).getParams().get("newcategory");
+				JOptionPane.showMessageDialog(null,"This subject "+ sub+" is already exit in "+category,"Error", JOptionPane.ERROR_MESSAGE);
+				
+				break;
+			case "SubjectRemoved":
+				JOptionPane.showMessageDialog(null,"subject was removed successfuly!");
+				EditSubjectGui.dispose();
+				new ManageBooksController(new ManageBooksGUI());	
+				break;
+				
 			case "AllCategoriesInDB":
 				categories = (ArrayList<String>)((Envelope)message).getParams().get("categories");
 				System.out.println("categories" + categories);

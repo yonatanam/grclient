@@ -1089,6 +1089,31 @@ public class EchoServer extends AbstractServer
 				params.put("msg", "UserOrdersData");
 				client.sendToClient(envelope);
 				break;
+			case "getOrderBooksData":
+				String orderID = (String) en.getParams().get("orderid");
+				String query1 = "SELECT B.booktitle FROM book_orders BO, books B WHERE BO.bookid = B.bookid AND BO.orderid='"+orderID+"'";
+				res = stmt.executeQuery(query1);
+				Vector<Object> booksColumnNames1 = new Vector<Object>();
+				Vector<Object> booksData1 = new Vector<Object>();
+				ResultSetMetaData bomd = res.getMetaData();
+				int booksColumnCount1 = bomd.getColumnCount();
+				for (int i = 1; i <= booksColumnCount1; i++)
+					booksColumnNames1.addElement( bomd.getColumnName(i) );
+				while (res.next())
+				{
+					Vector<Object> row = new Vector<Object>(booksColumnCount1);
+					for (int i = 1; i <= booksColumnCount1; i++)
+					{
+						row.addElement( res.getObject(i) );
+					}
+					booksData1.addElement( row );
+				}
+				params.put("booksColumnNames", booksColumnNames1);
+				params.put("booksData", booksData1);
+				params.put("msg", "OrderBooksData");
+				client.sendToClient(envelope);
+				break;
+				
 			}
 
 		} catch (Exception x) {

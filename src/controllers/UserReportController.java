@@ -40,6 +40,7 @@ public class UserReportController extends AbstractController {
 		userReportController = this;  //IMPORTANT
 		urg.addButtonBackFromUserReportActionListener(new BackFromUserReportListener());
 		urg.addButtonViewOrdersActionListener(new ViewOrdersActionListener());
+		urg.addButtonViewBooksActionListener(new ViewBooksActionListener());
 		urg.addWindowListener(new CustomWindowListener());
 		fetchUsersData();
 
@@ -77,6 +78,26 @@ public class UserReportController extends AbstractController {
 		}
 	}
 
+	class ViewBooksActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e){
+			try
+			{
+				String orderID = (String)userReportGUI.getOrdersData().getValueAt(userReportGUI.getOrdersData().getSelectedRow(), 0);
+				Map<String,Object> params = new HashMap<String,Object>();
+				params.put("msg", "getOrderBooksData");
+				params.put("orderid", orderID);
+				Envelope envelope = new Envelope(params);
+				App.client.setCurrentController(getUserReportController());
+				sendToServer(envelope);
+			}
+			catch (Exception ex)
+			{
+				JOptionPane.showMessageDialog(null,"Order wasn't selected!","Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+
 	public void fetchUsersData()
 	{
 		Map<String,Object> params = new HashMap<String,Object>();
@@ -84,7 +105,6 @@ public class UserReportController extends AbstractController {
 		Envelope envelope = new Envelope(params);
 		App.client.setCurrentController(getUserReportController());
 		sendToServer(envelope);
-
 	}
 
 	public void handleDBResult(Object message)
@@ -103,6 +123,12 @@ public class UserReportController extends AbstractController {
 			Vector<Object> ordersData = (Vector<Object>) en.getParams().get("ordersData");
 			userReportGUI.populateOrdersTable(ordersColumnNames, ordersData);
 			break;
+		case "OrderBooksData":
+			Vector<Object> booksColumnNames = (Vector<Object>) en.getParams().get("booksColumnNames");
+			Vector<Object> booksData = (Vector<Object>) en.getParams().get("booksData");
+			userReportGUI.populateBooksTable(booksColumnNames, booksData);
+			break;
+
 		}
 	}
 

@@ -23,6 +23,7 @@ import client.App;
 
 import java.awt.Color;
 import javax.swing.JComboBox;
+import javax.swing.SwingConstants;
 
 public class UserReportGUI extends JFrame {
 
@@ -38,6 +39,7 @@ public class UserReportGUI extends JFrame {
 
 	private UserMenu userMenu;
 	private JButton btnViewOrders;
+	private JButton btnViewBooks;
 	private JTable table;
 
 	public UserReportGUI() {
@@ -127,7 +129,18 @@ public class UserReportGUI extends JFrame {
 		getContentPane().add(btnViewOrders);
 
 
-
+		btnViewBooks = new JButton("View books");
+		btnViewBooks.setVerticalTextPosition(JButton.CENTER);
+		btnViewBooks.setIcon(new ImageIcon(imgLogin));
+		btnViewBooks.setOpaque(false);
+		btnViewBooks.setHorizontalTextPosition(JButton.CENTER);
+		btnViewBooks.setForeground(Color.WHITE);
+		btnViewBooks.setFont(new Font("Arial", Font.BOLD, 15));
+		btnViewBooks.setContentAreaFilled(false);
+		btnViewBooks.setBorderPainted(false);
+		btnViewBooks.setBounds(25, 457, 131, 41);
+		getContentPane().add(btnViewBooks);
+		
 		setLocationRelativeTo(null);
 		setVisible(true);
 
@@ -138,6 +151,8 @@ public class UserReportGUI extends JFrame {
 		Image img1 = new ImageIcon(this.getClass().getResource("/bgWithoutLogo.png")).getImage();
 		bg.setIcon(new ImageIcon(img1));
 		getContentPane().add(bg);
+		
+
 
 
 
@@ -153,6 +168,10 @@ public class UserReportGUI extends JFrame {
 	public void addButtonBackFromUserReportActionListener(ActionListener e)
 	{
 		BackButton.addActionListener(e);
+	}
+	public void addButtonViewBooksActionListener(ActionListener e)
+	{
+		btnViewBooks.addActionListener(e);
 	}
 
 	/**End action listeners*/
@@ -243,6 +262,4 @@ public class UserReportGUI extends JFrame {
 	public void setUserMenu(UserMenu userMenu) {
 		this.userMenu = userMenu;
 	}
-	/**End setters and getters*/
-
 }

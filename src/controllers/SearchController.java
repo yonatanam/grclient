@@ -3,6 +3,8 @@ package controllers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,6 +22,7 @@ import controllers.AbstractController.CustomWindowListener;
 import gui.EditReviewGUI;
 import gui.MainWindowGUI;
 import gui.SearchGUI;
+import gui.SearchType;
 import gui.ShoppingCartGUI;
 import gui.ReadWorkerGUI;
 import models.Book;
@@ -30,10 +33,10 @@ public class SearchController extends AbstractController {
 	private SearchGUI searchGUI;
 	private SearchController searchController;
 	private String searchStr;
+	private Map<String,String> array;
 
 
-
-	public SearchController(SearchGUI sg, String searchStr) {
+	public SearchController(SearchGUI sg, String searchStr,SearchType t) {
 
 		this.searchGUI =sg;
 		searchController = this;  //IMPORTANT
@@ -41,8 +44,22 @@ public class SearchController extends AbstractController {
 		sg.addButtonBackFromSearchGUIActionListener(new BackFromSearchGUIListener());
 		sg.addButtonAddToCartActionListener(new AddToCartActionListener());
 		sg.addButtonCheckoutActionListner(new CheckOutActionListener());
+		
 		sg.addWindowListener(new CustomWindowListener());
-		fetchSearchData();
+		fetchSearchData(t);
+
+	}
+	public SearchController(SearchGUI sg,Map<String,String> s,SearchType t) {
+
+		this.searchGUI =sg;
+		searchController = this;  //IMPORTANT
+		this.array  = s;
+		sg.addButtonBackFromSearchGUIActionListener(new BackFromSearchGUIListener());
+		sg.addButtonAddToCartActionListener(new AddToCartActionListener());
+		sg.addButtonCheckoutActionListner(new CheckOutActionListener());
+		
+		sg.addWindowListener(new CustomWindowListener());
+		fetchSearchData(t);
 
 	}
 
@@ -97,16 +114,75 @@ public class SearchController extends AbstractController {
 	}
 	
 
-	public void fetchSearchData()
+	public void fetchSearchData(SearchType t)
 	{
+		
+		String[]	temp;	
+		ArrayList<String>	many ;	
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("msg", "getSimpleSearchData");
-		params.put("simpleSearchStr", searchStr);
+		switch(t)
+		{
+		case By_Category:
+			params.put("inc", 0);	
+			temp=searchStr.split(";");
+			many = new ArrayList<String>(Arrays.asList(temp));	
+			params.put("data",many);
+			params.put("searchby",t);
+			break;			
+		case By_Name:
+			params.put("inc", 1);	
+			params.put("data", searchStr);	
+			params.put("searchby", t);			
+			break;
+		case By_Author:
+			params.put("inc", 0);	
+			temp=searchStr.split(";");
+			many = new ArrayList<String>(Arrays.asList(temp));	
+			params.put("data",many);
+			params.put("searchby",t);
+			break;
+		case By_Synop:
+			params.put("inc", 1);	
+			//many = new ArrayList<String>(Arrays.asList(temp));
+			params.put("data",searchStr);
+			params.put("searchby",t);	
+			break;
+		case By_Content:
+			params.put("inc", 1);	
+			params.put("data",searchStr);
+			params.put("searchby",t);	
+			break;
+		case By_Lang:
+			params.put("inc", 0);	
+			temp=searchStr.split(";");
+			many = new ArrayList<String>(Arrays.asList(temp));	
+			params.put("data",many);
+			params.put("searchby",t);			
+			break;
+		case By_KeyWords:
+			params.put("inc", 1);	
+			temp=searchStr.split(";");
+			many = new ArrayList<String>(Arrays.asList(temp));	
+			params.put("data",many);
+			params.put("searchby",t);
+			break;	
+		case Any_Type:
+			params.put("inc", 1);				
+			params.put("data",this.array);
+			params.put("searchby",t);
+			break;	
+			
+		}
+		
+		
+		
 		Envelope envelope = new Envelope(params);
 		App.client.setCurrentController(getSearchController());
 		sendToServer(envelope);
 
 	}
+
 
 	public void handleDBResult(Object message)
 	{	

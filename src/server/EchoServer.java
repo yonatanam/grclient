@@ -38,6 +38,7 @@ import javax.swing.table.DefaultTableModel;
 
 import client.App;
 import controllers.Functions;
+import gui.SearchType;
 import models.LoginModel;
 import models.Book;
 import models.Envelope;
@@ -58,6 +59,7 @@ public class EchoServer extends AbstractServer
 	 * The default port to listen on.
 	 */
 	final public static int DEFAULT_PORT = 5555;
+	private static final String Controller = null;
 
 	//Constructors ****************************************************
 
@@ -106,7 +108,7 @@ public class EchoServer extends AbstractServer
 				int rcount = getRowCount(res);
 				if (rcount == 0) 
 				{ //If not exists  
-					controller.Print("User "+userName+" tried to login");
+					ServerController.Print("User "+userName+" tried to login");
 					params.put("msg", "NoSuchUser");
 					client.sendToClient(envelope);
 					break;
@@ -119,21 +121,21 @@ public class EchoServer extends AbstractServer
 					if (status.equals("LOGGED_IN"))
 					{
 						params.put("msg", "AlreadyLoggedIn");
-						controller.Print("User "+userName+" tried to login while already being logged in");
+						ServerController.Print("User "+userName+" tried to login while already being logged in");
 						client.sendToClient(envelope);
 						break;
 					}
 					if (status.equals("SUSPENDED"))
 					{
 						params.put("msg", "UserSuspended");
-						controller.Print("User "+userName+" is suspended and tried to login");
+						ServerController.Print("User "+userName+" is suspended and tried to login");
 						client.sendToClient(envelope);
 						break;
 					}
 					if (status.equals("BLOCKED"))
 					{
 						params.put("msg", "UserBlocked");
-						controller.Print("User "+userName+" is blocked and tried to login");
+						ServerController.Print("User "+userName+" is blocked and tried to login");
 						client.sendToClient(envelope);
 						break;
 					}
@@ -191,7 +193,7 @@ public class EchoServer extends AbstractServer
 				String user = (String) en.getParams().get("username");
 				if(server.GoogleMail.main(2,user,conn)==1)
 					//client.sendToClient("ForgotPassword");
-					controller.Print("Mail was sent!");
+					ServerController.Print("Mail was sent!");
 				else
 					client.sendToClient("ForgotPasswordFalse");	
 				break;
@@ -373,7 +375,7 @@ public class EchoServer extends AbstractServer
 						long threadnum = res.getLong("threadnum");
 						for (Thread x : clientThreadList)
 						{
-							controller.Print("Thread id: "+ x.getId());
+							ServerController.Print("Thread id: "+ x.getId());
 							if (x.getId() == threadnum)
 								((ConnectionToClient)x).sendToClient(envelope2);
 						}
@@ -1039,22 +1041,155 @@ public class EchoServer extends AbstractServer
 			case "getSimpleSearchData":
 				/**Simple search via booktitle only*/
 				Statement stmt2 = conn.createStatement();
-		     	String simpleSearchStr = (String)en.getParams().get("simpleSearchStr");
-				res = stmt.executeQuery("SELECT bookid,booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE booktitle like '%"+simpleSearchStr+"%' AND incatalog='YES'");	
+				SearchType t = (SearchType)en.getParams().get("searchby");
+				ResultSet ressearch = null;
+				switch(t)
+				{
+				case Any_Type:
+					int orflag=0;
+					Map<String,String> arr=(Map<String,String>)en.getParams().get("data");
+					String bigquery="SELECT distinct bookid,booktitle, booklang,synopsis,toc,keywords,format,price  from books where ( ";
+					if(arr.containsKey("synopsis"))
+					{
+						bigquery=bigquery+" (synopsis like '%"+arr.get("synopsis")+"%') ";
+						orflag=1;
+					}
+					if(arr.containsKey("category"))
+					{
+						String[] tempcat=arr.get("category").split(";");
+						String tempcat1=" (select categoryid from categories where category_name like '%"+tempcat[0]+"%'";
+						for(int i=1;i<tempcat.length;i++)
+							tempcat1=tempcat1+ " or category_name like '%"+tempcat[i]+"%'";					
+						tempcat1=tempcat1+")";  					
+					tempcat1="(select distinct bookid from book_categories where categoryid in "+ tempcat1+" )";
+					if(orflag==1)
+						bigquery=bigquery+" or ";
+					bigquery=bigquery+" (bookid in "+tempcat1+")";
+					orflag=1;
+					
+					}
+					if(arr.containsKey("language"))
+					{
+						String[] templang=arr.get("language").split(";");
+						if(orflag==1)
+							bigquery=bigquery+" or (booklang like '%"+templang[0]+"%')";
+						else bigquery=bigquery+" (booklang like '%"+templang[0]+"%')";
+						for(int i=1;i<templang.length;i++)
+							bigquery=bigquery+ " or (booklang like '%"+templang[i]+"%')";		
+						orflag=1;
+					}
+					if(arr.containsKey("toc"))
+					{
+						if(orflag==1)
+							bigquery=bigquery+" or ";
+						bigquery=bigquery+" (toc like '%"+arr.get("toc")+"%')";
+						orflag=1;
+					}
+					if(arr.containsKey("author"))
+					{
+						String[] tempauthor=arr.get("author").split(";");
+						String tempauthor1=" (select authorid from authors where authorname like '%"+tempauthor[0]+"%'";
+						for(int i=1;i<tempauthor.length;i++)
+							tempauthor1=tempauthor1+ " or authorname like '%"+tempauthor[i]+"%'";					
+						tempauthor1=tempauthor1+")";  					
+						tempauthor1="(select distinct bookid from book_authors where authorid in "+ tempauthor1+" )";
+						if(orflag==1)
+							bigquery=bigquery+" or ";
+						bigquery=bigquery+" (bookid in "+tempauthor1+")";				
+						orflag=1;
+					}
+					if(arr.containsKey("keywords"))
+					{
+						String[]	tempkeyword=arr.get("keywords").split(";");	
+						if(orflag==1)
+							bigquery=bigquery+" or ";
+						 bigquery=bigquery +" keywords like '%;"+tempkeyword[0]+";%'";
+						for(int i=1;i<tempkeyword.length;i++)
+							bigquery=bigquery+ " or (keywords like '%;"+tempkeyword[i]+";%')";		
+												
+					}
+					bigquery=bigquery+ " ) and incatalog='YES'";
+					try{
+					ressearch=stmt.executeQuery(bigquery);
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
+					break;	
+				case By_Category:	
+					ArrayList<String> many=(ArrayList<String>)en.getParams().get("data");
+					String tempcat=" (select categoryid from categories where category_name like '%"+many.get(0)+"%'";
+					for(int i=1;i<many.size();i++)
+						tempcat=tempcat+ " or category_name like '%"+many.get(i)+"%'";					
+					tempcat=tempcat+")";  					
+				tempcat="(select distinct bookid from book_categories where categoryid in "+ tempcat+" )";
+				tempcat="SELECT bookid,booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE incatalog='YES' and bookid in "+tempcat;
+				ressearch=stmt.executeQuery(tempcat);
+					break;			
+				case By_Name:	
+					String bookName = (String)en.getParams().get("data");
+					ressearch = stmt.executeQuery("SELECT bookid,booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE booktitle like '%"+bookName+"%' AND incatalog='YES'");
+					break;
+				case By_Author:	
+					 many=(ArrayList<String>)en.getParams().get("data");
+					String tempauthor=" (select authorid from authors where authorname like '%"+many.get(0)+"%'";
+					for(int i=1;i<many.size();i++)
+						tempauthor=tempauthor+ " or authorname like '%"+many.get(i)+"%'";					
+					tempauthor=tempauthor+")";  					
+					tempauthor="(select distinct bookid from book_authors where authorid in "+ tempauthor+" )";
+				
+					tempauthor="SELECT bookid,booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE incatalog='YES' and bookid in "+tempauthor;
+				
+					ressearch=stmt.executeQuery(tempauthor);
+					break;
+					
+				case By_Synop:		
+					String syn = (String)en.getParams().get("data");
+					ressearch = stmt.executeQuery("SELECT bookid,booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE synopsis like '%"+syn+"%' AND incatalog='YES'");
+					break;
+				case By_Content:
+					String toc = (String)en.getParams().get("data");
+					ressearch = stmt.executeQuery("SELECT bookid,booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE toc like '%"+toc+"%' AND incatalog='YES'");
+					break;
+				case By_Lang:
+					 many=(ArrayList<String>)en.getParams().get("data");
+						String templang="SELECT bookid,booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE ( booklang like '%"+many.get(0)+"%'";
+						for(int i=1;i<many.size();i++)
+							templang=templang+ " or booklang like '%"+many.get(i)+"%'";		
+						templang=templang+ ") and incatalog='YES'";						
+					ressearch=stmt.executeQuery(templang);
+					
+					break;
+				case By_KeyWords:					
+					 many=(ArrayList<String>)en.getParams().get("data");
+					String tempkey="SELECT bookid,booktitle, booklang,synopsis,toc,keywords,format,price  from books WHERE ( keywords like '%;"+many.get(0)+";%'";
+					for(int i=1;i<many.size();i++)
+						tempkey=tempkey+ " or keywords like '%;"+many.get(i)+";%'";		
+					tempkey=tempkey+ ") and incatalog='YES'";
+				ressearch=stmt.executeQuery(tempkey);
+					
+					break;
+				}
+		     	
+		     	
 				Vector<Object> booksColumnNames = new Vector<Object>();
 				Vector<Object> booksData = new Vector<Object>();
-				ResultSetMetaData bsd = res.getMetaData();
+				ResultSetMetaData bsd = ressearch.getMetaData();
 				int booksColumnCount = bsd.getColumnCount();
 				for (int i = 1; i <= booksColumnCount; i++)
 					booksColumnNames.addElement( bsd.getColumnName(i) );
-				while (res.next())
+				while (ressearch.next())
 				{
-					String sql = "INSERT INTO book_searches VALUES ('"+res.getString("bookid")+"','"+formattedDate+"')";
+					if((Integer)en.getParams().get("inc")==1)
+					{
+					String sql = "INSERT INTO book_searches VALUES ('"+ressearch.getString("bookid")+"','"+formattedDate+"')";
 					stmt2.executeUpdate(sql);
+					}
 					Vector<Object> row = new Vector<Object>(booksColumnCount);
 					for (int i = 1; i <= booksColumnCount; i++)
 					{
-						row.addElement( res.getObject(i) );
+						row.addElement( ressearch.getObject(i) );
 						//TODO Add matching books to book searches
 					}
 					booksData.addElement( row );
@@ -1064,6 +1199,7 @@ public class EchoServer extends AbstractServer
 				params.put("booksData", booksData);
 				params.put("msg", "BooksData");
 				client.sendToClient(envelope);
+		     	
 
 				break;
 			case "getUserOrdersData":
@@ -1167,7 +1303,7 @@ public class EchoServer extends AbstractServer
 	 */
 	protected void serverStarted()
 	{
-		controller.Print("Server listening for connections on port " + DEFAULT_PORT);
+		ServerController.Print("Server listening for connections on port " + DEFAULT_PORT);
 	}
 
 	/**
@@ -1176,7 +1312,7 @@ public class EchoServer extends AbstractServer
 	 */
 	protected void serverStopped()
 	{
-		controller.Print("Server has stopped listening for connections.");
+		ServerController.Print("Server has stopped listening for connections.");
 	}
 
 

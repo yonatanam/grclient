@@ -23,6 +23,7 @@ import client.App;
 import gui.ShoppingCartGUI;
 import gui.MainWindowGUI;
 import gui.SearchGUI;
+import gui.SearchType;
 import models.Book;
 import models.Envelope;
 
@@ -75,7 +76,7 @@ public class ShoppingCartController extends AbstractController
 				new MainWindowController(new MainWindowGUI());
 				
 			else
-				new SearchController(new SearchGUI(), searchStr);
+				new SearchController(new SearchGUI(), searchStr,SearchType.By_Name);
 		}
 	}
 
